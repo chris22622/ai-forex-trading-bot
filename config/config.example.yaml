@@ -1,54 +1,29 @@
-# Trading Configuration Example
-# Copy this to config.yaml and customize for your setup
-
-# Risk Management
+# Copy to config/config.yaml and edit
+seed: 42
+data:
+  provider: mt5
+  timezone: "UTC"
+  symbols: ["EURUSD", "XAUUSD", "Volatility 75 Index"]
+  timeframe: "M15"
+strategy:
+  name: "ai_ensemble"
+  params: 
+    rsi_period: 14
+    rsi_buy: 30
+    rsi_sell: 70
+    ema_fast: 21
+    ema_slow: 55
 risk:
-  max_account_risk_pct: 2.0  # Maximum % of account to risk per trade
-  max_concurrent_trades: 3   # Maximum number of open positions
-  kelly_multiplier: 0.25     # Conservative Kelly Criterion multiplier
-  profit_target: 0.75        # Take profit at $0.75
-  stop_loss: 2.00           # Stop loss at $2.00
-
-# Trading Pairs
-symbols:
-  - "EURUSD"
-  - "GBPUSD"
-  - "USDJPY"
-  - "Volatility 75 Index"  # Deriv synthetic
-
-# Timeframes
-timeframes:
-  primary: "M1"      # 1-minute for scalping
-  secondary: "M5"    # 5-minute for confirmation
-  trend: "H1"        # 1-hour for trend analysis
-
-# AI Model Settings
-ai:
-  confidence_threshold: 0.6  # Minimum prediction confidence
-  ensemble_weights:
-    technical: 0.4
-    fundamental: 0.3
-    sentiment: 0.3
-  retrain_frequency: 100     # Retrain after N trades
-
-# MetaTrader 5
-mt5:
-  demo_mode: true           # Always start in demo mode
-  login: "DEMO_LOGIN"       # Use environment variable
-  password: "DEMO_PASSWORD" # Use environment variable  
-  server: "Deriv-Demo"
-  path: "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
-
-# Notifications
-telegram:
-  enabled: true
-  token: "BOT_TOKEN"        # Use environment variable
-  chat_id: "CHAT_ID"        # Use environment variable
-  notify_trades: true
-  notify_balance: true
-
-# Performance Monitoring
-monitoring:
-  log_level: "INFO"
-  save_trades: true
-  backup_frequency: 24      # Hours between backups
+  balance_start: 10000
+  risk_per_trade_pct: 0.5
+  max_daily_loss_pct: 2.0
+  max_consecutive_losses: 3
+  cooldown_minutes_after_stopout: 60
+execution:
+  slippage_pips: 1.0
+  tp_rr: 1.5
+  hard_stop_pips: 20
+logging:
+  folder: "out"
+  csv_trades: "out/trades.csv"
+  csv_equity: "out/equity.csv"
