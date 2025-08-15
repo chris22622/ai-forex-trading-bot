@@ -1,0 +1,54 @@
+# Trading Configuration Example
+# Copy this to config.yaml and customize for your setup
+
+# Risk Management
+risk:
+  max_account_risk_pct: 2.0  # Maximum % of account to risk per trade
+  max_concurrent_trades: 3   # Maximum number of open positions
+  kelly_multiplier: 0.25     # Conservative Kelly Criterion multiplier
+  profit_target: 0.75        # Take profit at $0.75
+  stop_loss: 2.00           # Stop loss at $2.00
+
+# Trading Pairs
+symbols:
+  - "EURUSD"
+  - "GBPUSD"
+  - "USDJPY"
+  - "Volatility 75 Index"  # Deriv synthetic
+
+# Timeframes
+timeframes:
+  primary: "M1"      # 1-minute for scalping
+  secondary: "M5"    # 5-minute for confirmation
+  trend: "H1"        # 1-hour for trend analysis
+
+# AI Model Settings
+ai:
+  confidence_threshold: 0.6  # Minimum prediction confidence
+  ensemble_weights:
+    technical: 0.4
+    fundamental: 0.3
+    sentiment: 0.3
+  retrain_frequency: 100     # Retrain after N trades
+
+# MetaTrader 5
+mt5:
+  demo_mode: true           # Always start in demo mode
+  login: "DEMO_LOGIN"       # Use environment variable
+  password: "DEMO_PASSWORD" # Use environment variable  
+  server: "Deriv-Demo"
+  path: "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+
+# Notifications
+telegram:
+  enabled: true
+  token: "BOT_TOKEN"        # Use environment variable
+  chat_id: "CHAT_ID"        # Use environment variable
+  notify_trades: true
+  notify_balance: true
+
+# Performance Monitoring
+monitoring:
+  log_level: "INFO"
+  save_trades: true
+  backup_frequency: 24      # Hours between backups
