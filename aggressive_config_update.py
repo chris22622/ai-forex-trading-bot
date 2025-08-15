@@ -56,8 +56,8 @@ MAX_LOT_SIZE = 0.10          # Maximum 0.10 lots
 MIN_LOT_SIZE = 0.02          # Minimum 0.02 lots (was 0.01)
 
 # Telegram Settings
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8024680623:AAEc0wNz5ALSrY8yb4PMWS0Wh95zz9IHUXE')
-TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '7159936456')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', 'your-telegram-bot-token-here')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', 'your-chat-id-here')
 
 # Trading Symbols (Deriv Synthetic Indices)
 SYMBOLS = [

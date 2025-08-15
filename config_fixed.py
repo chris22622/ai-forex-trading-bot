@@ -60,8 +60,8 @@ MIN_LOT_SIZE = 0.01          # Minimum 0.01 lots (back to ultra safe)
 MT5_LOT_SIZE = 0.01          # Default lot size for MT5 integration
 
 # Telegram Settings
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8024680623:AAEc0wNz5ALSrY8yb4PMWS0Wh95zz9IHUXE')
-TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', '7543942571')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', 'your-telegram-bot-token-here')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID', 'your-chat-id-here')
 
 # Technical Indicators Settings
 EMA_FAST = 12

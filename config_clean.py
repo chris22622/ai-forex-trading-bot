@@ -38,8 +38,8 @@ LIVE_BALANCE_CHECK_INTERVAL = 30   # Check balance every 30 seconds
 LIVE_MIN_BALANCE = 80.0           # Stop trading if balance drops below $80
 
 # ==================== TELEGRAM CONFIGURATION ====================
-TELEGRAM_BOT_TOKEN = "8024680623:AAEc0wNz5ALSrY8yb4PMWS0Wh95zz9IHUXE"
-TELEGRAM_CHAT_ID = "7543942571"
+TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN_HERE"
+TELEGRAM_CHAT_ID = "YOUR_CHAT_ID_HERE"
 ENABLE_TELEGRAM_ALERTS = True  # ✅ ENABLED for live trading notifications
 
 # Check if Telegram should be disabled
