@@ -54,39 +54,12 @@ Issues = "https://github.com/chris22622/ai-forex-trading-bot/issues"
 
 [tool.black]
 line-length = 100
-target-version = ["py38", "py39", "py310", "py311"]
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-  # directories
-  \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | build
-  | dist
-)/
-'''
+target-version = ["py311"]
 
 [tool.ruff]
-target-version = "py38"
 line-length = 100
-select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    "I",  # isort
-    "B",  # flake8-bugbear
-]
-ignore = [
-    "E203",  # whitespace before ':'
-    "E266",  # too many leading '#' for block comment
-    "E501",  # line too long, handled by black
-    "B008",  # do not perform function calls in argument defaults
-    "C901",  # too complex
-]
+select = ["E","F","I","B"]
+ignore = ["E203","E266"]
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
