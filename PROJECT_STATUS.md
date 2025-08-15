@@ -8,6 +8,22 @@
 
 ---
 
+## 🚨 **SECURITY UPDATE - AUGUST 14, 2025**
+
+### **🛡️ Critical Security Issue Resolved**
+- **Issue**: Telegram bot token was accidentally exposed in public repository
+- **Action Taken**: Immediately removed all hardcoded tokens and chat IDs
+- **Status**: ✅ **FIXED** - All sensitive data now uses environment variables
+- **Recommendation**: User must revoke old token and generate new one via @BotFather
+
+### **🔐 Security Measures Implemented**
+- ✅ All sensitive data moved to environment variables
+- ✅ Placeholder values in all configuration files
+- ✅ Comprehensive .gitignore prevents future leaks
+- ✅ Security policy documentation updated
+
+---
+
 ## ✅ **COMPLETED TASKS**
 
 ### 🏗️ **1. Professional Directory Structure**
