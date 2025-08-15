@@ -2,14 +2,16 @@
 Minimal MT5 Integration Test
 """
 
-import MetaTrader5 as mt5
 import asyncio
 import logging
-from typing import Optional
+import os
 
 # Import config for MT5 credentials
 import sys
-import os
+from typing import Optional
+
+import MetaTrader5 as mt5
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from config import MT5_LOGIN, MT5_PASSWORD, MT5_SERVER
 
@@ -23,32 +25,32 @@ if not logger.handlers:
 
 class SimpleMT5Interface:
     """Minimal MT5 Interface for testing"""
-    
+
     def __init__(self):
         self.connected = False
         logger.info("SimpleMT5Interface created")
-        
+
     async def initialize(self) -> bool:
         """Initialize MT5 connection"""
         try:
             logger.info("Initializing MT5...")
-            
+
             # Run MT5 init in executor to avoid blocking
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(None, mt5.initialize)
-            
+
             if result:
                 logger.info("✅ MT5 initialized successfully")
-                
+
                 # Attempt login with credentials
                 logger.info(f"Attempting login with account: {MT5_LOGIN}")
                 login_result = await loop.run_in_executor(
                     None, mt5.login, MT5_LOGIN, MT5_PASSWORD, MT5_SERVER
                 )
-                
+
                 if login_result:
                     logger.info("✅ Successfully logged in to MT5")
-                    
+
                     # Get account info
                     account_info = await loop.run_in_executor(None, mt5.account_info)
                     if account_info:
@@ -68,11 +70,11 @@ class SimpleMT5Interface:
                 error = await loop.run_in_executor(None, mt5.last_error)
                 logger.error(f"❌ MT5 initialization failed: {error}")
                 return False
-                
+
         except Exception as e:
             logger.error(f"❌ MT5 initialization error: {e}")
             return False
-    
+
     async def get_account_balance(self) -> float:
         """Get account balance"""
         try:
@@ -84,7 +86,7 @@ class SimpleMT5Interface:
         except Exception as e:
             logger.error(f"Error getting balance: {e}")
             return 0.0
-    
+
     async def get_current_price(self, symbol: str) -> Optional[float]:
         """Get current price for symbol"""
         try:
@@ -101,17 +103,17 @@ class SimpleMT5Interface:
 async def test_simple_mt5():
     """Test the simple MT5 interface"""
     print("🔧 Testing Simple MT5 Interface...")
-    
+
     interface = SimpleMT5Interface()
     print("✅ Interface created")
-    
+
     success = await interface.initialize()
     print(f"Connection result: {success}")
-    
+
     if success:
         balance = await interface.get_account_balance()
         print(f"Balance: ${balance:.2f}")
-        
+
         price = await interface.get_current_price("Volatility 75 Index")
         print(f"V75 Price: {price}")
 

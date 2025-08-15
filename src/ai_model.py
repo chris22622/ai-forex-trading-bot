@@ -40,9 +40,7 @@ class TradingAI:
     def __init__(self):
         # Use safe config loading with fallbacks
         self.model_type = (
-            getattr(config, "AI_MODEL_TYPE", "randomforest")
-            if config
-            else "randomforest"
+            getattr(config, "AI_MODEL_TYPE", "randomforest") if config else "randomforest"
         )
         self.confidence_threshold = CONFIDENCE_THRESHOLD_01  # Use 0..1 scale everywhere
         self.prediction_history: List[Dict[str, Any]] = []
@@ -77,9 +75,7 @@ class TradingAI:
             ema_slow = indicator_data.get("ema_slow")
             current_price = indicator_data.get("price")
 
-            if all(
-                [ema_fast is not None, ema_slow is not None, current_price is not None]
-            ):
+            if all([ema_fast is not None, ema_slow is not None, current_price is not None]):
                 features["ema_trend"] = 1.0 if float(ema_fast) > float(ema_slow) else -1.0  # type: ignore
                 features["price_above_ema"] = 1.0 if float(current_price) > float(ema_fast) else 0.0  # type: ignore
                 features["ema_divergence"] = (float(ema_fast) - float(ema_slow)) / float(current_price)  # type: ignore
@@ -92,9 +88,7 @@ class TradingAI:
             if all(x is not None for x in [macd_line, signal_line, histogram]):
                 features["macd_signal"] = 1.0 if float(macd_line) > float(signal_line) else -1.0  # type: ignore
                 hist_val = float(histogram)  # type: ignore
-                features["macd_histogram"] = (
-                    hist_val / abs(hist_val) if hist_val != 0 else 0.0
-                )
+                features["macd_histogram"] = hist_val / abs(hist_val) if hist_val != 0 else 0.0
                 features["macd_strength"] = abs(hist_val)
 
             # Bollinger Bands features (if available)
@@ -102,9 +96,7 @@ class TradingAI:
             bb_middle = indicator_data.get("bb_middle")
             bb_lower = indicator_data.get("bb_lower")
 
-            if all(
-                x is not None for x in [bb_upper, bb_middle, bb_lower, current_price]
-            ):
+            if all(x is not None for x in [bb_upper, bb_middle, bb_lower, current_price]):
                 bb_width = float(bb_upper) - float(bb_lower)  # type: ignore
                 features["bb_position"] = (float(current_price) - float(bb_lower)) / bb_width if bb_width > 0 else 0.5  # type: ignore
                 features["bb_squeeze"] = 1.0 if bb_width < (float(bb_middle) * 0.02) else 0.0  # type: ignore
@@ -115,13 +107,9 @@ class TradingAI:
             features["trend_up"] = 1.0 if patterns.get("uptrend") else 0.0
             features["trend_down"] = 1.0 if patterns.get("downtrend") else 0.0
             features["near_support"] = 1.0 if patterns.get("near_support") else 0.0
-            features["near_resistance"] = (
-                1.0 if patterns.get("near_resistance") else 0.0
-            )
+            features["near_resistance"] = 1.0 if patterns.get("near_resistance") else 0.0
             features["breakout"] = (
-                1.0
-                if patterns.get("breakout_up") or patterns.get("breakout_down")
-                else 0.0
+                1.0 if patterns.get("breakout_up") or patterns.get("breakout_down") else 0.0
             )
 
             # Market strength
@@ -162,9 +150,7 @@ class TradingAI:
 
             # AGGRESSIVE MACD signals - any signal counts
             if "macd_signal" in features:
-                macd_strength = (
-                    abs(features.get("macd_histogram", 0)) * 10
-                )  # 10x more sensitive
+                macd_strength = abs(features.get("macd_histogram", 0)) * 10  # 10x more sensitive
                 if features["macd_signal"] > 0:
                     buy_score += self.feature_weights["macd"] * (1 + macd_strength)
                 else:
@@ -193,9 +179,7 @@ class TradingAI:
 
             # Determine prediction and confidence
             max_score = max(buy_score, sell_score)
-            total_possible = (
-                sum(self.feature_weights.values()) * 2
-            )  # Account for double weights
+            total_possible = sum(self.feature_weights.values()) * 2  # Account for double weights
             confidence = min(1.0, max_score / total_possible)
 
             # AGGRESSIVE: Never return confidence below 0.22
@@ -243,35 +227,21 @@ class TradingAI:
 
             # Technical factor from ensemble
             tech_prediction, tech_confidence = self.simple_ensemble_predict(features)
-            tech_factor = (
-                1
-                if tech_prediction == "BUY"
-                else -1 if tech_prediction == "SELL" else 0
-            )
+            tech_factor = 1 if tech_prediction == "BUY" else -1 if tech_prediction == "SELL" else 0
 
             # Volatility adjustment
-            vol_factor = min(
-                1.0, float(volatility * 100)
-            )  # Higher volatility = higher risk
+            vol_factor = min(1.0, float(volatility * 100))  # Higher volatility = higher risk
 
             # Combined score
-            combined_score = (tech_factor * tech_confidence * 0.7) + (
-                momentum_factor * 0.3
-            )
+            combined_score = (tech_factor * tech_confidence * 0.7) + (momentum_factor * 0.3)
             adjusted_confidence = abs(combined_score) * (
                 1 - vol_factor * 0.3
             )  # Reduce confidence in high volatility
 
-            if (
-                combined_score > 0.3
-                and adjusted_confidence >= self.confidence_threshold
-            ):
+            if combined_score > 0.3 and adjusted_confidence >= self.confidence_threshold:
                 prediction = "BUY"
                 signal_strength = adjusted_confidence
-            elif (
-                combined_score < -0.3
-                and adjusted_confidence >= self.confidence_threshold
-            ):
+            elif combined_score < -0.3 and adjusted_confidence >= self.confidence_threshold:
                 prediction = "SELL"
                 signal_strength = adjusted_confidence
             else:
@@ -293,9 +263,7 @@ class TradingAI:
         if not indicator_data:
             # AGGRESSIVE FALLBACK: Generate a trade anyway based on price history
             if price_history and len(price_history) >= 2:
-                recent_change = (
-                    (price_history[-1] - price_history[-2]) / price_history[-2] * 100
-                )
+                recent_change = (price_history[-1] - price_history[-2]) / price_history[-2] * 100
                 if recent_change > 0.001:  # Tiny upward movement
                     return {
                         "prediction": "BUY",
@@ -326,9 +294,7 @@ class TradingAI:
             prediction, confidence = self.simple_ensemble_predict(features)
             method = "Simple Ensemble"
         elif self.model_type == "ensemble" or self.model_type == "advanced":
-            prediction, confidence = self.advanced_ml_predict(
-                features, price_history or []
-            )
+            prediction, confidence = self.advanced_ml_predict(features, price_history or [])
             method = "Advanced ML"
         else:
             prediction, confidence = self.simple_ensemble_predict(features)
@@ -338,9 +304,7 @@ class TradingAI:
         if confidence <= 0.0:
             # Force minimum confidence based on any movement
             if price_history and len(price_history) >= 2:
-                recent_change = (
-                    abs(price_history[-1] - price_history[-2]) / price_history[-2] * 100
-                )
+                recent_change = abs(price_history[-1] - price_history[-2]) / price_history[-2] * 100
                 confidence = max(0.25, min(0.4, recent_change * 100))  # Boost to 25-40%
 
                 # Ensure we have a real prediction
@@ -420,14 +384,16 @@ class TradingAI:
             )
 
             if reasons:
-                reason_text = f"{prediction} signal with {confidence_desc} confidence ({confidence:.2f}). "
-                reason_text += (
-                    f"Based on: {', '.join(reasons[:3])}"  # Limit to top 3 reasons
+                reason_text = (
+                    f"{prediction} signal with {confidence_desc} confidence ({confidence:.2f}). "
                 )
+                reason_text += f"Based on: {', '.join(reasons[:3])}"  # Limit to top 3 reasons
                 if len(reasons) > 3:
                     reason_text += f" and {len(reasons) - 3} other factors"
             else:
-                reason_text = f"{prediction} with {confidence_desc} confidence - no strong signals detected"
+                reason_text = (
+                    f"{prediction} with {confidence_desc} confidence - no strong signals detected"
+                )
 
             return reason_text
 
@@ -502,22 +468,14 @@ class TradingAI:
         # Calculate recent performance (last 50 predictions)
         if len(self.prediction_history) >= 10:
             recent_predictions = self.prediction_history[-50:]
-            recent_buy_sell = [
-                p for p in recent_predictions if p["prediction"] in ["BUY", "SELL"]
-            ]
+            recent_buy_sell = [p for p in recent_predictions if p["prediction"] in ["BUY", "SELL"]]
 
             report["recent_activity"] = {
                 "total_signals": len(recent_buy_sell),
-                "buy_signals": len(
-                    [p for p in recent_buy_sell if p["prediction"] == "BUY"]
-                ),
-                "sell_signals": len(
-                    [p for p in recent_buy_sell if p["prediction"] == "SELL"]
-                ),
+                "buy_signals": len([p for p in recent_buy_sell if p["prediction"] == "BUY"]),
+                "sell_signals": len([p for p in recent_buy_sell if p["prediction"] == "SELL"]),
                 "avg_confidence": (
-                    np.mean([p["confidence"] for p in recent_buy_sell])
-                    if recent_buy_sell
-                    else 0.0
+                    np.mean([p["confidence"] for p in recent_buy_sell]) if recent_buy_sell else 0.0
                 ),
             }
 
@@ -531,9 +489,7 @@ class TradingAI:
                 "performance_metrics": self.performance_metrics,
                 "model_type": self.model_type,
                 "confidence_threshold": self.confidence_threshold,
-                "prediction_history": self.prediction_history[
-                    -100:
-                ],  # Save last 100 predictions
+                "prediction_history": self.prediction_history[-100:],  # Save last 100 predictions
             }
 
             with open(filepath, "wb") as f:
@@ -551,9 +507,7 @@ class TradingAI:
                 with open(filepath, "rb") as f:
                     model_state = pickle.load(f)
 
-                self.feature_weights = model_state.get(
-                    "feature_weights", self.feature_weights
-                )
+                self.feature_weights = model_state.get("feature_weights", self.feature_weights)
                 self.performance_metrics = model_state.get(
                     "performance_metrics", self.performance_metrics
                 )
@@ -575,9 +529,7 @@ class TradingAI:
 
 
 # Utility functions
-def calculate_prediction_accuracy(
-    predictions: List[Dict[str, Any]], results: List[str]
-) -> float:
+def calculate_prediction_accuracy(predictions: List[Dict[str, Any]], results: List[str]) -> float:
     """Calculate prediction accuracy"""
     if len(predictions) != len(results) or len(predictions) == 0:
         return 0.0
@@ -606,9 +558,7 @@ def optimize_confidence_threshold(
 
     # Test different thresholds
     for threshold in np.arange(0.3, 0.9, 0.1):
-        filtered_predictions = [
-            p for p in prediction_history if p["confidence"] >= threshold
-        ]
+        filtered_predictions = [p for p in prediction_history if p["confidence"] >= threshold]
         if len(filtered_predictions) >= 10:  # Need minimum samples
             accuracy = calculate_prediction_accuracy(
                 filtered_predictions, results[-len(filtered_predictions) :]

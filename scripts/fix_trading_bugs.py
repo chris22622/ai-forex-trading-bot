@@ -15,10 +15,10 @@ Run this to fix all trading issues immediately.
 """
 
 import os
-import sys
 import re
 import shutil
 from datetime import datetime
+
 
 def backup_file(filepath):
     """Create backup of file before modifying"""
@@ -34,28 +34,28 @@ def backup_file(filepath):
 def fix_mt5_integration_encoding():
     """Fix Unicode encoding issue in mt5_integration.py"""
     filepath = "mt5_integration.py"
-    
+
     if not os.path.exists(filepath):
         print(f"❌ File not found: {filepath}")
         return False
-    
+
     print(f"🔧 Fixing Unicode encoding in {filepath}...")
-    
+
     try:
         # Backup first
         backup_file(filepath)
-        
+
         # Read with UTF-8 encoding and write back
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
-        
+
         # Write back with UTF-8 encoding
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(content)
-        
+
         print("✅ Unicode encoding fixed!")
         return True
-        
+
     except Exception as e:
         print(f"❌ Failed to fix encoding: {e}")
         return False
@@ -63,17 +63,17 @@ def fix_mt5_integration_encoding():
 def fix_price_validation_method():
     """Add missing _validate_mt5_ready_for_trading method if not properly indented"""
     filepath = "mt5_integration.py"
-    
+
     if not os.path.exists(filepath):
         print(f"❌ File not found: {filepath}")
         return False
-    
+
     print(f"🔧 Checking validation method in {filepath}...")
-    
+
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         # Check if the method exists and is properly indented
         if "async def _validate_mt5_ready_for_trading(self)" in content:
             print("✅ Validation method exists and is properly defined")
@@ -82,7 +82,7 @@ def fix_price_validation_method():
             print("⚠️ Validation method needs to be added/fixed")
             # The method exists based on our grep search, so this is likely an indentation issue
             return True
-            
+
     except Exception as e:
         print(f"❌ Failed to check validation method: {e}")
         return False
@@ -90,38 +90,38 @@ def fix_price_validation_method():
 def fix_main_trading_loop():
     """Fix the main trading loop to handle None prices properly"""
     filepath = "main.py"
-    
+
     if not os.path.exists(filepath):
         print(f"❌ File not found: {filepath}")
         return False
-    
+
     print(f"🔧 Fixing trading loop price handling in {filepath}...")
-    
+
     try:
         backup_file(filepath)
-        
+
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         # Fix the price handling in the trading loop
         old_pattern = r'(if not current_price:.*?)continue'
         new_code = '''if not current_price or current_price <= 1.0:
                             logger.error("❌ Cannot get valid price - skipping this cycle")
                             await asyncio.sleep(5)
                             continue'''
-        
+
         content = re.sub(old_pattern, new_code, content, flags=re.DOTALL)
-        
+
         # Also fix any remaining price fallback of 1.0
         content = content.replace('return 1.0', 'return None')
         content = content.replace('price = 1.0', 'price = None')
-        
+
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(content)
-        
+
         print("✅ Trading loop price handling fixed!")
         return True
-        
+
     except Exception as e:
         print(f"❌ Failed to fix trading loop: {e}")
         return False
@@ -228,10 +228,10 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 '''
-    
+
     with open("test_trading_fixes.py", "w", encoding="utf-8") as f:
         f.write(test_content)
-    
+
     print("✅ Test script created: test_trading_fixes.py")
 
 def main():
@@ -240,13 +240,13 @@ def main():
     print("=" * 40)
     print(f"📅 Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
-    
+
     fixes = [
         ("Unicode Encoding", fix_mt5_integration_encoding),
         ("Price Validation", fix_price_validation_method),
         ("Trading Loop", fix_main_trading_loop),
     ]
-    
+
     results = []
     for name, fix_func in fixes:
         print(f"🔧 Applying {name} fix...")
@@ -258,25 +258,25 @@ def main():
             print(f"❌ {name}: CRASHED - {e}")
             results.append((name, False))
         print()
-    
+
     # Create test script
     create_comprehensive_test()
-    
+
     print("📊 FIX RESULTS:")
     print("=" * 20)
     for name, result in results:
         print(f"{'✅' if result else '❌'} {name}")
-    
+
     all_fixed = all(result for _, result in results)
     print(f"\\n{'🎉 ALL FIXES APPLIED!' if all_fixed else '⚠️ SOME FIXES FAILED'}")
-    
+
     if all_fixed:
         print("\\n🚀 NEXT STEPS:")
         print("1. Run: python test_trading_fixes.py")
         print("2. Restart the bot")
         print("3. Check for real trades in MT5 terminal")
         print("\\n💰 Your bot should now trade successfully!")
-    
+
     return all_fixed
 
 if __name__ == "__main__":

@@ -18,10 +18,10 @@ if action == "SELL":
     # SELL profits when price goes down
     profit = (entry_price - current_price) * 0.0001 * amount  # Simple pip calculation
 else:
-    # BUY profits when price goes up  
+    # BUY profits when price goes up
     profit = (current_price - entry_price) * 0.0001 * amount
 
-print(f"📊 Trade Analysis:")
+print("📊 Trade Analysis:")
 print(f"   Action: {action}")
 print(f"   Entry Price: {entry_price}")
 print(f"   Current Price: {current_price}")
@@ -32,10 +32,10 @@ print(f"   Calculated Profit: ${profit:+.4f}")
 
 if profit > 0:
     print("🟢 This would be a WINNING trade!")
-    print(f"💰 Profit would update win rate and confidence tracking")
+    print("💰 Profit would update win rate and confidence tracking")
 else:
     print("🔴 This would be a LOSING trade!")
-    print(f"💸 Loss would update loss tracking")
+    print("💸 Loss would update loss tracking")
 
 print("\n✅ Manual trade analysis completed!")
 print("The bot should automatically close trades and update stats when implemented.")

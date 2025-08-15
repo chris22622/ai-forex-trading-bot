@@ -5,7 +5,6 @@ Optimized for accounts under $100 to enable actual growth
 """
 
 import os
-from datetime import datetime
 
 # 🛡️ SAFER TRADING SETTINGS FOR $42 ACCOUNT (Post-Drawdown Protection)
 TRADE_AMOUNT = 0.5          # $0.50 trades (0.01 lots) - ULTRA SAFE

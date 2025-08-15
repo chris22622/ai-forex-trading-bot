@@ -3,8 +3,9 @@
 Simple MT5 Order Test with Fixed Parameters
 """
 
-import MetaTrader5 as mt5
 import time
+
+import MetaTrader5 as mt5
 
 print("🔧 FIXED MT5 Order Test")
 print("=" * 40)
@@ -73,12 +74,12 @@ request = {
     "type_filling": mt5.ORDER_FILLING_FOK,
 }
 
-print(f"\nOrder Parameters:")
+print("\nOrder Parameters:")
 print(f"  Volume: {volume}")
 print(f"  Price: {price}")
 print(f"  Magic: {magic}")
 print(f"  Deviation: {deviation}")
-print(f"  Filling: FOK")
+print("  Filling: FOK")
 
 # Clear any previous errors
 mt5.last_error()
@@ -88,12 +89,12 @@ result = mt5.order_send(request)
 
 if result is None:
     error = mt5.last_error()
-    print(f"❌ Order send returned None")
+    print("❌ Order send returned None")
     print(f"   Last Error: {error}")
 else:
-    print(f"Order Result:")
+    print("Order Result:")
     print(f"  Return Code: {result.retcode}")
-    
+
     if result.retcode == mt5.TRADE_RETCODE_DONE:
         print(f"  🎉 SUCCESS! Ticket: {result.order}")
         print(f"  Volume: {result.volume}")

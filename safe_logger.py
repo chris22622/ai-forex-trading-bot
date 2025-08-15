@@ -3,9 +3,10 @@ Safe logging utility for Windows compatibility
 Removes emoji characters that cause UnicodeEncodeError on Windows cp1252 encoding
 """
 
-import re
 import logging
+import re
 from typing import Any
+
 
 def safe_log_message(message: str) -> str:
     """
@@ -23,10 +24,10 @@ def safe_log_message(message: str) -> str:
         "\U000024C2-\U0001F251"  # enclosed characters
         "\U0001F900-\U0001F9FF"  # supplemental symbols
         "\U0001FA70-\U0001FAFF"  # symbols and pictographs extended-A
-        "]+", 
+        "]+",
         flags=re.UNICODE
     )
-    
+
     # Replace emojis with text equivalents
     replacements = {
         '🚀': '[START]',
@@ -97,44 +98,44 @@ def safe_log_message(message: str) -> str:
         '🟣': '[PURPLE]',
         '🟤': '[BROWN]',
     }
-    
+
     # Replace known emojis first
     safe_message = message
     for emoji, replacement in replacements.items():
         safe_message = safe_message.replace(emoji, replacement)
-    
+
     # Remove any remaining emoji/unicode characters
     safe_message = emoji_pattern.sub('', safe_message)
-    
+
     # Clean up extra spaces
     safe_message = ' '.join(safe_message.split())
-    
+
     return safe_message
 
 class SafeLogger:
     """
     Safe logger wrapper that ensures Windows compatibility
     """
-    
+
     def __init__(self, logger: logging.Logger):
         self.logger = logger
-    
+
     def info(self, message: str, *args: Any, **kwargs: Any) -> None:
         safe_message = safe_log_message(str(message))
         self.logger.info(safe_message, *args, **kwargs)
-    
+
     def error(self, message: str, *args: Any, **kwargs: Any) -> None:
         safe_message = safe_log_message(str(message))
         self.logger.error(safe_message, *args, **kwargs)
-    
+
     def warning(self, message: str, *args: Any, **kwargs: Any) -> None:
         safe_message = safe_log_message(str(message))
         self.logger.warning(safe_message, *args, **kwargs)
-    
+
     def debug(self, message: str, *args: Any, **kwargs: Any) -> None:
         safe_message = safe_log_message(str(message))
         self.logger.debug(safe_message, *args, **kwargs)
-    
+
     def critical(self, message: str, *args: Any, **kwargs: Any) -> None:
         safe_message = safe_log_message(str(message))
         self.logger.critical(safe_message, *args, **kwargs)

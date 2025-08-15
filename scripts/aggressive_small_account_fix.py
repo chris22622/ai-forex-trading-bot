@@ -4,28 +4,28 @@
 Fix the ultra-conservative position sizing that's killing small accounts
 """
 
-import sys
 import os
+
 
 def apply_aggressive_fix():
     """Apply aggressive position sizing fix for small accounts"""
-    
+
     # Read the main.py file
     main_file = "main.py"
     if not os.path.exists(main_file):
         print("❌ main.py not found!")
         return False
-    
+
     with open(main_file, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     # Find the position sizing method
     old_method = '''    def _calculate_position_size_for_symbol(self, confidence: float, symbol: str) -> float:
         """🛡️ ULTRA-SAFE position sizing to prevent large losses"""
         try:
             # �️ MUCH SMALLER positions until consistently profitable
             base_risk = self.current_balance * 0.005  # Only 0.5% risk per trade!'''
-    
+
     new_method = '''    def _calculate_position_size_for_symbol(self, confidence: float, symbol: str) -> float:
         """🚀 AGGRESSIVE position sizing for small accounts to enable growth"""
         try:
@@ -65,7 +65,7 @@ def apply_aggressive_fix():
             else:
                 # Original conservative logic for larger accounts (>$100)
                 base_risk = self.current_balance * 0.005  # Only 0.5% risk per trade!'''
-    
+
     # Apply the fix
     if old_method in content:
         content = content.replace(old_method, new_method)
@@ -91,13 +91,13 @@ def apply_aggressive_fix():
                     logger.warning(f"🔥 MEDIUM ACCOUNT MODE: 8% risk = ${base_risk:.2f}")
             else:
                 base_risk = self.current_balance * 0.005  # Only 0.5% risk per trade for large accounts!'''
-            
+
             content = content.replace(alt_pattern, new_calc)
             print("✅ Applied aggressive risk calculation fix!")
         else:
             print("❌ Could not find position sizing method to fix!")
             return False
-    
+
     # Also fix the profit targets for small accounts
     profit_targets_fix = '''
     # 🚀 AGGRESSIVE PROFIT TARGETS FOR SMALL ACCOUNTS
@@ -116,17 +116,17 @@ def apply_aggressive_fix():
             
         logger.warning(f"🚀 SMALL ACCOUNT TARGETS: Profit=${self.quick_profit_target}, Loss=${self.max_loss_per_trade}, Time={self.max_trade_age_minutes}min")
     '''
-    
+
     # Find a good place to add this - look for __init__ method
     init_pattern = 'self.starting_balance = starting_balance'
     if init_pattern in content:
         content = content.replace(init_pattern, init_pattern + profit_targets_fix)
         print("✅ Applied aggressive profit targets for small accounts!")
-    
+
     # Write the fixed file
     with open(main_file, 'w', encoding='utf-8') as f:
         f.write(content)
-    
+
     print("\n🚀 AGGRESSIVE SMALL ACCOUNT FIX APPLIED!")
     print("=" * 50)
     print("📊 CHANGES MADE:")
@@ -138,11 +138,11 @@ def apply_aggressive_fix():
     print("  - Longer time limits for small accounts")
     print("\n💡 Your $20 account will now use:")
     print("  - 15% risk = $3.00 per trade")
-    print("  - 0.05 lot size positions") 
+    print("  - 0.05 lot size positions")
     print("  - $3.00 profit targets")
     print("  - $4.00 stop losses")
     print("\n🚀 RESTART THE BOT TO APPLY CHANGES!")
-    
+
     return True
 
 if __name__ == "__main__":

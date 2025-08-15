@@ -4,11 +4,10 @@
 Update config.py with settings optimized for small account growth
 """
 
-import os
 
 def update_config_for_small_accounts():
     """Update config.py with aggressive settings for small accounts"""
-    
+
     config_content = '''#!/usr/bin/env python3
 """
 🚀 AGGRESSIVE CONFIGURATION FOR SMALL ACCOUNT GROWTH
@@ -93,7 +92,7 @@ print(f"🔥 Risk Percentage: {BASE_RISK_PERCENTAGE*100}%")
     # Write the new config
     with open('config.py', 'w', encoding='utf-8') as f:
         f.write(config_content)
-    
+
     print("🚀 AGGRESSIVE CONFIG APPLIED!")
     print("=" * 50)
     print("📊 NEW SETTINGS FOR YOUR $20 ACCOUNT:")
@@ -104,13 +103,13 @@ print(f"🔥 Risk Percentage: {BASE_RISK_PERCENTAGE*100}%")
     print("  📈 Risk per Trade: 15% = $3.00")
     print("  🔄 Max Concurrent: 5 trades (was 3)")
     print("  🚫 Profit Protection: $15 (was $5)")
-    
+
     print("\n🚀 THESE SETTINGS WILL TRANSFORM YOUR BOT!")
     print("✅ Much bigger position sizes")
     print("✅ Higher profit targets worth pursuing")
     print("✅ More trading opportunities")
     print("✅ Realistic growth potential")
-    
+
     return True
 
 if __name__ == "__main__":

@@ -4,8 +4,9 @@ MT5 Auto-Trading Fix Script
 This script will help diagnose and fix MT5 auto-trading issues
 """
 import asyncio
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
@@ -19,7 +20,7 @@ async def diagnose_mt5_trading():
     """Diagnose MT5 trading issues and provide solutions"""
     print("🔍 MT5 AUTO-TRADING DIAGNOSTIC")
     print("=" * 50)
-    
+
     try:
         # Initialize MT5
         print("📝 Step 1: Initializing MT5...")
@@ -31,16 +32,16 @@ async def diagnose_mt5_trading():
             print("   2. Login to your Deriv account in MT5")
             print("   3. Keep MT5 terminal open")
             return False
-        
+
         print("✅ MT5 initialized successfully")
-        
+
         # Check terminal info
         print("\n📝 Step 2: Checking terminal settings...")
         terminal_info = mt5.terminal_info()
         if terminal_info:
             trade_allowed = getattr(terminal_info, 'trade_allowed', False)
             print(f"🔍 Trade Allowed: {trade_allowed}")
-            
+
             if not trade_allowed:
                 print("\n❌ AUTO-TRADING IS DISABLED!")
                 print("📋 TO ENABLE AUTO-TRADING:")
@@ -55,7 +56,7 @@ async def diagnose_mt5_trading():
                 return False
             else:
                 print("✅ AUTO-TRADING IS ENABLED!")
-        
+
         # Check account info
         print("\n📝 Step 3: Checking account...")
         account_info = mt5.account_info()
@@ -64,7 +65,7 @@ async def diagnose_mt5_trading():
             print(f"✅ Server: {account_info.server}")
             print(f"✅ Balance: ${account_info.balance:.2f}")
             print(f"✅ Trade Allowed: {account_info.trade_allowed}")
-            
+
             if not account_info.trade_allowed:
                 print("❌ Account trading is disabled!")
                 print("📋 Check your account permissions with Deriv support")
@@ -72,18 +73,18 @@ async def diagnose_mt5_trading():
         else:
             print("❌ Could not get account info")
             return False
-        
+
         # Check symbols
         print("\n📝 Step 4: Checking trading symbols...")
         symbols = mt5.symbols_get()
         if symbols:
             volatility_symbols = [s.name for s in symbols if 'Volatility' in s.name]
             print(f"✅ Found {len(volatility_symbols)} Volatility symbols")
-            
+
             if volatility_symbols:
                 test_symbol = volatility_symbols[0]
                 print(f"🎯 Testing symbol: {test_symbol}")
-                
+
                 # Check symbol info
                 symbol_info = mt5.symbol_info(test_symbol)
                 if symbol_info:
@@ -91,16 +92,16 @@ async def diagnose_mt5_trading():
                     print(f"✅ Symbol trade mode: {symbol_info.trade_mode}")
                     print(f"✅ Min volume: {symbol_info.volume_min}")
                     print(f"✅ Max volume: {symbol_info.volume_max}")
-                    
+
                     # Test order placement (dry run)
-                    print(f"\n📝 Step 5: Testing order placement...")
+                    print("\n📝 Step 5: Testing order placement...")
                     print("⚠️ This is a DRY RUN - no real trade will be placed")
-                    
+
                     # Get current price
                     tick = mt5.symbol_info_tick(test_symbol)
                     if tick:
                         print(f"✅ Current price: {tick.bid} / {tick.ask}")
-                        
+
                         # Prepare test order (but don't send it)
                         request = {
                             "action": mt5.TRADE_ACTION_DEAL,
@@ -116,10 +117,10 @@ async def diagnose_mt5_trading():
                             "type_time": mt5.ORDER_TIME_GTC,
                             "type_filling": mt5.ORDER_FILLING_IOC,
                         }
-                        
+
                         print("✅ Order parameters are valid")
                         print("📋 If auto-trading is enabled, real orders should work")
-                        
+
                         return True
                     else:
                         print("❌ Could not get price data")
@@ -133,7 +134,7 @@ async def diagnose_mt5_trading():
         else:
             print("❌ No symbols available")
             return False
-            
+
     except Exception as e:
         print(f"❌ Diagnostic error: {e}")
         return False
@@ -144,17 +145,17 @@ async def main():
     """Main diagnostic function"""
     print("🧪 MT5 AUTO-TRADING DIAGNOSTIC TOOL")
     print("This tool will help you fix MT5 trading issues\n")
-    
+
     result = await diagnose_mt5_trading()
-    
+
     if result:
-        print(f"\n🎉 SUCCESS! MT5 is ready for auto-trading!")
-        print(f"✅ Your bot should now be able to place real trades")
-        print(f"📱 Run your trading bot to test real order placement")
+        print("\n🎉 SUCCESS! MT5 is ready for auto-trading!")
+        print("✅ Your bot should now be able to place real trades")
+        print("📱 Run your trading bot to test real order placement")
     else:
-        print(f"\n❌ ISSUES FOUND! Please fix the problems above")
-        print(f"🔧 Follow the instructions to enable auto-trading")
-        print(f"📞 Contact Deriv support if account issues persist")
+        print("\n❌ ISSUES FOUND! Please fix the problems above")
+        print("🔧 Follow the instructions to enable auto-trading")
+        print("📞 Contact Deriv support if account issues persist")
 
 if __name__ == "__main__":
     asyncio.run(main())

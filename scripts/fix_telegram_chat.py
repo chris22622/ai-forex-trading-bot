@@ -4,15 +4,16 @@
 This script helps resolve the "Chat not found" error by guiding you through the setup.
 """
 
+
 import requests
-import json
-import os
+
 from config import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+
 
 def check_bot_info():
     """Check if the bot token is valid"""
     print("🔍 Checking bot information...")
-    
+
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getMe"
     try:
         response = requests.get(url, timeout=10)
@@ -37,7 +38,7 @@ def check_bot_info():
 def get_chat_updates():
     """Get recent messages to find the chat ID"""
     print("\n🔍 Checking for recent messages...")
-    
+
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getUpdates"
     try:
         response = requests.get(url, timeout=10)
@@ -50,12 +51,12 @@ def get_chat_updates():
                         chat = update['message']['chat']
                         chat_id = chat['id']
                         chat_type = chat['type']
-                        
+
                         if chat_type == 'private':
                             first_name = chat.get('first_name', 'Unknown')
                             username = chat.get('username', 'No username')
                             recent_chats.add((chat_id, first_name, username))
-                
+
                 if recent_chats:
                     print(f"✅ Found {len(recent_chats)} recent chat(s):")
                     for chat_id, name, username in recent_chats:
@@ -80,13 +81,13 @@ def get_chat_updates():
 def test_send_message(chat_id):
     """Test sending a message to the chat"""
     print(f"\n🧪 Testing message to chat ID: {chat_id}")
-    
+
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     data = {
         'chat_id': chat_id,
         'text': '🤖 Hello! Your trading bot is now connected!\n\n✅ Chat ID configured successfully\n📱 You will now receive trading notifications'
     }
-    
+
     try:
         response = requests.post(url, data=data, timeout=10)
         if response.status_code == 200:
@@ -107,24 +108,24 @@ def test_send_message(chat_id):
 def main():
     print("🔧 TELEGRAM CHAT FIX TOOL")
     print("=" * 50)
-    
+
     # Step 1: Check bot
     if not check_bot_info():
         print("\n❌ Bot token is invalid. Please check your TELEGRAM_BOT_TOKEN in config.py")
         return
-    
+
     # Step 2: Get current chat ID from config
     print(f"\n📋 Current chat ID in config: {TELEGRAM_CHAT_ID}")
-    
+
     # Step 3: Test current chat ID
     if test_send_message(TELEGRAM_CHAT_ID):
         print("\n🎉 SUCCESS! Your Telegram setup is working correctly!")
         return
-    
+
     # Step 4: If failed, look for recent chats
     print("\n⚠️ Current chat ID failed. Searching for recent messages...")
     recent_chats = get_chat_updates()
-    
+
     if recent_chats:
         print("\n💡 SOLUTION FOUND!")
         print("Recent chats detected. Try updating your config.py with one of these chat IDs:")
@@ -138,7 +139,7 @@ def main():
         print("3. Send ANY message to the bot (like 'Hello' or '/start')")
         print("4. Run this script again to get your chat ID")
         print("5. Update TELEGRAM_CHAT_ID in config.py with the new chat ID")
-    
+
     print("\n" + "=" * 50)
 
 if __name__ == "__main__":

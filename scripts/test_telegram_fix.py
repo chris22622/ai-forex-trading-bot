@@ -14,27 +14,27 @@ os.environ['ENABLE_TELEGRAM_ALERTS'] = 'False'
 async def test_telegram_fix():
     """Test the Telegram conflict resolution"""
     print("🔧 Testing Telegram conflict resolution...")
-    
+
     try:
         # Import the main module
         import main
         print("✅ Main module imported successfully")
-        
+
         # Test creating a bot instance
         bot = main.DerivTradingBot()
         print("✅ Bot instance created successfully")
-        
+
         # Test Telegram command handler
         telegram_handler = bot.telegram_handler
         print("✅ Telegram handler created successfully")
-        
+
         # Check if Telegram is properly disabled
         if hasattr(telegram_handler, 'is_monitoring'):
             print(f"📊 Telegram monitoring status: {telegram_handler.is_monitoring}")
-        
+
         print("🎯 All Telegram conflict fixes working correctly!")
         return True
-        
+
     except Exception as e:
         print(f"❌ Error during testing: {e}")
         import traceback

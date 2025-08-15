@@ -4,8 +4,8 @@ Choose between WebSocket API or MetaTrader 5 execution
 """
 
 import asyncio
-import sys
 import os
+import sys
 from datetime import datetime
 
 # Add current directory to path
@@ -28,20 +28,20 @@ def print_execution_options():
     print("🔗 CHOOSE EXECUTION METHOD:")
     print("=" * 40)
     print()
-    
+
     print("1. 🌐 WEBSOCKET API (Original)")
     print("   • Direct connection to Deriv API")
     print("   • Requires working internet & API tokens")
     print("   • May have connection issues")
     print()
-    
+
     print("2. 📊 METATRADER 5 (Recommended)")
     print("   • Uses MT5 terminal for execution")
     print("   • More stable connection")
     print("   • Visual trading interface")
     print("   • Requires MT5 with Deriv account")
     print()
-    
+
     print("3. 🧪 OFFLINE DEMO")
     print("   • Simulated trading without real connections")
     print("   • For testing bot logic")
@@ -55,11 +55,11 @@ async def launch_websocket_bot():
         print("=" * 35)
         print("⚠️  This requires working API connection...")
         print()
-        
+
         # Import and run original bot
         from main import main as websocket_main
         await websocket_main()
-        
+
     except Exception as e:
         print(f"❌ WebSocket bot error: {e}")
         print("\n💡 TIP: Try MetaTrader 5 option if connection fails")
@@ -69,7 +69,7 @@ async def launch_mt5_bot():
     try:
         print("\n📊 LAUNCHING MT5 BOT")
         print("=" * 30)
-        
+
         # Check if MT5 is available
         try:
             import MetaTrader5 as mt5  # type: ignore
@@ -82,16 +82,16 @@ async def launch_mt5_bot():
                 print("4. Restart MT5 and try again")
                 return
             mt5.shutdown()  # type: ignore
-            
+
         except ImportError:
             print("❌ MetaTrader5 library not installed")
             print("   Run: pip install MetaTrader5")
             return
-        
+
         # Import and run MT5 bot
         from main_mt5 import main as mt5_main
         await mt5_main()
-        
+
     except Exception as e:
         print(f"❌ MT5 bot error: {e}")
         import traceback
@@ -102,11 +102,11 @@ async def launch_offline_demo():
     try:
         print("\n🧪 LAUNCHING OFFLINE DEMO")
         print("=" * 32)
-        
+
         # Import and run offline demo
         from ultimate_offline_demo import main as demo_main
         await demo_main()
-        
+
     except Exception as e:
         print(f"❌ Demo error: {e}")
 
@@ -126,37 +126,37 @@ async def main():
     """Main launcher function"""
     print_welcome()
     print_execution_options()
-    
+
     while True:
         try:
             print("❓ SELECT OPTION:")
             choice = input("Enter your choice (1-3, or 'q' to quit): ").strip().lower()
-            
+
             if choice in ['q', 'quit', 'exit']:
                 print("👋 Goodbye!")
                 break
-                
+
             elif choice == "1":
                 await launch_websocket_bot()
                 break
-                
+
             elif choice == "2":
                 await launch_mt5_bot()
                 break
-                
+
             elif choice == "3":
                 await launch_offline_demo()
                 break
-                
+
             elif choice == "help":
                 print_quick_setup_mt5()
                 continue
-                
+
             else:
                 print("❌ Invalid choice. Please enter 1, 2, 3, or 'q'")
                 print("   Type 'help' for MT5 setup guide")
                 continue
-                
+
         except KeyboardInterrupt:
             print("\n👋 Goodbye!")
             break

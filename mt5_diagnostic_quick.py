@@ -3,25 +3,26 @@
 Quick MT5 Diagnostic - Check connection and order capabilities
 """
 
+
 import MetaTrader5 as mt5
-import time
+
 
 def check_mt5_comprehensive():
     print("🔍 MT5 COMPREHENSIVE DIAGNOSTIC")
     print("=" * 50)
-    
+
     # 1. Initialize MT5
     print("\n1. MT5 INITIALIZATION:")
     init_result = mt5.initialize()
     print(f"   Initialize result: {init_result}")
-    
+
     if not init_result:
         print(f"   ❌ Initialization failed: {mt5.last_error()}")
         return
-    
+
     # 2. Version info
     print(f"\n2. MT5 VERSION: {mt5.version()}")
-    
+
     # 3. Terminal info
     print("\n3. TERMINAL INFO:")
     terminal = mt5.terminal_info()
@@ -59,7 +60,7 @@ def check_mt5_comprehensive():
         print(f"   Screen DPI: {terminal.screen_dpi}")
     else:
         print(f"   ❌ Terminal info failed: {mt5.last_error()}")
-    
+
     # 4. Account info
     print("\n4. ACCOUNT INFO:")
     account = mt5.account_info()
@@ -89,7 +90,7 @@ def check_mt5_comprehensive():
         print(f"   Company: {account.company}")
     else:
         print(f"   ❌ Account info failed: {mt5.last_error()}")
-    
+
     # 5. Check symbol info
     print("\n5. SYMBOL INFO (Volatility 75 Index):")
     symbol = "Volatility 75 Index"
@@ -191,7 +192,7 @@ def check_mt5_comprehensive():
         print(f"   Path: {symbol_info.path}")
     else:
         print(f"   ❌ Symbol info failed: {mt5.last_error()}")
-    
+
     # 6. Test order send with minimal parameters
     print("\n6. TEST ORDER SEND:")
     if symbol_info:
@@ -207,15 +208,15 @@ def check_mt5_comprehensive():
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": mt5.ORDER_FILLING_IOC,
         }
-        
+
         print(f"   Test request: {request}")
         result = mt5.order_send(request)
         print(f"   Order result: {result}")
         print(f"   Last error: {mt5.last_error()}")
-        
+
         if result is None:
             print("   ❌ order_send returned None - this is the issue!")
-            
+
             # Try different filling modes
             for filling_mode in [mt5.ORDER_FILLING_FOK, mt5.ORDER_FILLING_IOC, mt5.ORDER_FILLING_RETURN]:
                 request["type_filling"] = filling_mode
@@ -225,7 +226,7 @@ def check_mt5_comprehensive():
                 if result and result.retcode == mt5.TRADE_RETCODE_DONE:
                     print(f"   ✅ Success with filling mode {filling_mode}!")
                     break
-    
+
     # 7. Check positions
     print("\n7. CURRENT POSITIONS:")
     positions = mt5.positions_get()
@@ -235,7 +236,7 @@ def check_mt5_comprehensive():
             print(f"   Position: {pos.symbol} {pos.type} {pos.volume} @ {pos.price_open}")
     else:
         print("   No positions found")
-    
+
     # 8. Check orders
     print("\n8. CURRENT ORDERS:")
     orders = mt5.orders_get()
@@ -245,9 +246,9 @@ def check_mt5_comprehensive():
             print(f"   Order: {order.symbol} {order.type} {order.volume} @ {order.price_open}")
     else:
         print("   No pending orders found")
-    
+
     print(f"\n9. FINAL ERROR CHECK: {mt5.last_error()}")
-    
+
     # Cleanup
     mt5.shutdown()
     print("\n✅ Diagnostic complete!")

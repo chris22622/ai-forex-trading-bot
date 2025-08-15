@@ -3,8 +3,8 @@
 Simple test for trade tracking functionality
 """
 
-import sys
 import os
+import sys
 
 # Add the current directory to Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -25,10 +25,10 @@ session_stats = {
 def update_trade_result(profit, confidence):
     """Simple trade result update"""
     is_win = profit > 0
-    
+
     session_stats['total_trades'] += 1
     session_stats['total_profit'] += profit
-    
+
     if is_win:
         session_stats['wins'] += 1
         session_stats['confidence_wins'].append(confidence)
@@ -41,7 +41,7 @@ def update_trade_result(profit, confidence):
 # Test trades
 print("\n📊 Simulating trades...")
 update_trade_result(2.30, 0.80)  # Win
-update_trade_result(-6.32, 0.75)  # Loss  
+update_trade_result(-6.32, 0.75)  # Loss
 update_trade_result(1.85, 0.85)  # Win
 
 # Print results

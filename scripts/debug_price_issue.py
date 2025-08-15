@@ -3,13 +3,16 @@
 
 import asyncio
 import sys
+
 sys.path.append('.')
-from mt5_integration import MT5TradingInterface
 import MetaTrader5 as mt5
+
+from mt5_integration import MT5TradingInterface
+
 
 async def test_price_retrieval():
     print("🔍 Testing price retrieval issue...")
-    
+
     # Test 1: Direct MT5
     print("\n1. Direct MT5 test:")
     if mt5.initialize():
@@ -21,16 +24,16 @@ async def test_price_retrieval():
             print(f"   Direct MT5 price: {tick.bid}")
         if info:
             print(f"   Direct MT5 bid/ask: {info.bid}/{info.ask}")
-    
+
     # Test 2: Through MT5TradingInterface
     print("\n2. Through MT5TradingInterface:")
     interface = MT5TradingInterface()
     init_result = await interface.initialize()
     print(f"   Interface initialized: {init_result}")
-    
+
     price = await interface.get_current_price('Volatility 10 Index')
     print(f"   Interface price: {price}")
-    
+
     # Test 3: Symbol mapping
     print("\n3. Symbol mapping test:")
     try:

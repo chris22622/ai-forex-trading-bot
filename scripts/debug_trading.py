@@ -5,14 +5,15 @@ Run this while the main bot is running to see why trades aren't happening
 """
 
 import asyncio
-import sys
 import os
+import sys
 
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Import the debug function from main
 from main import debug_trading_status
+
 
 async def run_debug():
     """Run trading status debug"""

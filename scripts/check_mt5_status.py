@@ -16,19 +16,19 @@ print("✅ Connected to MT5 terminal")
 # Check current account
 account_info = mt5.account_info()
 if account_info:
-    print(f"📊 Currently logged in account:")
+    print("📊 Currently logged in account:")
     print(f"   Login: {account_info.login}")
     print(f"   Server: {account_info.server}")
     print(f"   Balance: ${account_info.balance:.2f}")
     print(f"   Name: {account_info.name}")
-    
+
     # Check if it's your demo account
     if account_info.login == 31899532:
         print("✅ Your demo account is already logged in!")
     else:
         print(f"⚠️ Different account logged in. Expected: 31899532, Found: {account_info.login}")
         print("🔄 Attempting to login to your demo account...")
-        
+
         # Try to login to your account
         authorized = mt5.login(31899532, password="Goon22622$", server="Deriv-Demo")
         if authorized:

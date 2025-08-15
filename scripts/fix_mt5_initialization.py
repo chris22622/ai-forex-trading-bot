@@ -4,11 +4,10 @@ MT5 Initialization Diagnostics and Fix Tool
 This script helps diagnose and fix MT5 initialization issues
 """
 
-import sys
-import os
 import asyncio
 import traceback
 from datetime import datetime
+
 
 def print_header():
     print("=" * 80)
@@ -55,11 +54,11 @@ def check_mt5_terminal():
     print("\\n🖥️ CHECKING MT5 TERMINAL...")
     try:
         import MetaTrader5 as mt5
-        
+
         # Try to initialize
         if mt5.initialize():
             print("✅ MT5 terminal is running and accessible")
-            
+
             # Get account info
             account_info = mt5.account_info()
             if account_info:
@@ -67,19 +66,19 @@ def check_mt5_terminal():
                 print(f"   Server: {account_info.server}")
                 print(f"   Balance: ${account_info.balance:.2f}")
                 print(f"   Currency: {account_info.currency}")
-            
+
             # Check symbols
             symbols = mt5.symbols_get()
             if symbols:
                 print(f"   Available symbols: {len(symbols)}")
-            
+
             mt5.shutdown()
             return True
         else:
             print("❌ Cannot initialize MT5 terminal")
             print("💡 Fix: Make sure MetaTrader 5 is running and logged in")
             return False
-            
+
     except Exception as e:
         print(f"❌ Error checking MT5 terminal: {e}")
         print("💡 Fix: Install/restart MetaTrader 5 application")
@@ -90,15 +89,15 @@ async def test_mt5_interface():
     print("\\n🧪 TESTING MT5 TRADING INTERFACE...")
     try:
         from mt5_integration import MT5TradingInterface
-        
+
         interface = MT5TradingInterface()
         print("✅ MT5TradingInterface created successfully")
-        
+
         # Test initialization
         success = await interface.initialize()
         if success:
             print("✅ MT5TradingInterface initialized successfully")
-            
+
             # Test getting balance
             try:
                 balance = await interface.get_account_balance()
@@ -108,7 +107,7 @@ async def test_mt5_interface():
                     print("⚠️ Account balance is None")
             except Exception as e:
                 print(f"❌ Error getting balance: {e}")
-            
+
             # Test getting price
             try:
                 price = await interface.get_current_price("Volatility 75 Index")
@@ -118,12 +117,12 @@ async def test_mt5_interface():
                     print("⚠️ No price data available")
             except Exception as e:
                 print(f"❌ Error getting price: {e}")
-            
+
             return True
         else:
             print("❌ MT5TradingInterface initialization failed")
             return False
-            
+
     except Exception as e:
         print(f"❌ Error testing MT5TradingInterface: {e}")
         traceback.print_exc()
@@ -157,17 +156,17 @@ def provide_solutions():
 async def main():
     """Main diagnostic function"""
     print_header()
-    
+
     # Run all checks
     mt5_package_ok = check_mt5_package()
     mt5_integration_ok = check_mt5_integration()
     mt5_terminal_ok = check_mt5_terminal()
-    
+
     if mt5_package_ok and mt5_integration_ok:
         mt5_interface_ok = await test_mt5_interface()
     else:
         mt5_interface_ok = False
-    
+
     # Summary
     print("\\n📊 DIAGNOSTIC SUMMARY:")
     print("=" * 50)
@@ -175,15 +174,15 @@ async def main():
     print(f"MT5 Integration:     {'✅ OK' if mt5_integration_ok else '❌ FAILED'}")
     print(f"MT5 Terminal:        {'✅ OK' if mt5_terminal_ok else '❌ FAILED'}")
     print(f"MT5 Interface:       {'✅ OK' if mt5_interface_ok else '❌ FAILED'}")
-    
+
     all_ok = mt5_package_ok and mt5_integration_ok and mt5_terminal_ok and mt5_interface_ok
-    
+
     if all_ok:
         print("\\n🎉 ALL CHECKS PASSED! MT5 should work correctly.")
     else:
         print("\\n⚠️ Issues found. See solutions below.")
         provide_solutions()
-    
+
     print("\\n" + "=" * 80)
 
 if __name__ == "__main__":

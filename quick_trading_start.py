@@ -6,10 +6,12 @@ Ultra-aggressive trading bot with immediate execution
 
 import asyncio
 import logging
-from main import DerivTradingBot
 
 # Disable Telegram for immediate trading
 import os
+
+from main import DerivTradingBot
+
 os.environ['DISABLE_TELEGRAM'] = 'true'
 
 async def main():
@@ -22,17 +24,17 @@ async def main():
     print("   - Force trading after: 3 price points")
     print("   - Ultra-fast fallback: 5 price points")
     print("🔥 LET'S MAKE MONEY!")
-    
+
     # Create and start bot
     bot = DerivTradingBot()
-    
+
     try:
         # Skip Telegram initialization - focus on trading!
         print("⚡ Skipping Telegram - PURE TRADING MODE")
-        
+
         # Start trading immediately
         await bot.start()
-        
+
     except KeyboardInterrupt:
         print("\n🛑 Bot stopped by user")
     except Exception as e:

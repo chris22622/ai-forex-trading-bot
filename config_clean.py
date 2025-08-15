@@ -68,7 +68,7 @@ DURATION_UNIT = "t"
 DEFAULT_SYMBOL = "Volatility 10 Index"  # 🛡️ SAFEST: Most stable for live trading
 AVAILABLE_SYMBOLS = [
     "Volatility 10 Index",    # PRIMARY: Most conservative, lowest volatility
-    "Volatility 25 Index",    # SECONDARY: Moderate volatility  
+    "Volatility 25 Index",    # SECONDARY: Moderate volatility
     "Volatility 50 Index",    # TERTIARY: Medium volatility
     "Volatility 75 Index",    # QUATERNARY: Higher volatility (backup only)
     "Volatility 100 Index"    # QUINARY: Highest volatility (emergency only)
@@ -189,25 +189,25 @@ SIMULATION_SPEED = 1.0
 def validate_config():
     """Validate configuration settings"""
     errors = []
-    
+
     if not DERIV_API_TOKEN or len(DERIV_API_TOKEN) < 10:
         errors.append("❌ DERIV_API_TOKEN not properly set")
-    
+
     if TELEGRAM_ENABLED and (not TELEGRAM_BOT_TOKEN or len(TELEGRAM_BOT_TOKEN) < 10):
         errors.append("❌ TELEGRAM_BOT_TOKEN not properly set")
-    
+
     if TELEGRAM_ENABLED and (not TELEGRAM_CHAT_ID or len(str(TELEGRAM_CHAT_ID)) < 5):
         errors.append("❌ TELEGRAM_CHAT_ID not properly set")
-    
+
     if TRADE_AMOUNT <= 0:
         errors.append("❌ TRADE_AMOUNT must be positive")
-    
+
     if DEFAULT_SYMBOL not in AVAILABLE_SYMBOLS:
         errors.append(f"❌ DEFAULT_SYMBOL '{DEFAULT_SYMBOL}' not in AVAILABLE_SYMBOLS list")
-    
+
     # Create log directory
     os.makedirs(LOG_DIR, exist_ok=True)
-    
+
     return errors
 
 if __name__ == "__main__":

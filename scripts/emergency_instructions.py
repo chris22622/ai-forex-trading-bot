@@ -4,7 +4,6 @@ This modifies the main.py file to add a direct call for emergency startup
 """
 
 # Simple script to add emergency startup call to main.py
-import os
 
 script_content = '''
 # EMERGENCY STARTUP - Add this to the end of main.py temporarily

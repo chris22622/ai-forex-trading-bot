@@ -3,14 +3,15 @@
 
 import asyncio
 
+
 async def test_direct_mt5():
     print("🔧 Testing MT5 directly...")
-    
+
     # Test 1: Import MetaTrader5
     try:
         import MetaTrader5 as mt5
         print("✅ MetaTrader5 imported")
-        
+
         # Test connection
         if mt5.initialize():
             print("✅ MT5 terminal connected")
@@ -22,19 +23,19 @@ async def test_direct_mt5():
             print(f"❌ MT5 connection failed: {error}")
     except Exception as e:
         print(f"❌ MetaTrader5 error: {e}")
-    
+
     # Test 2: Import mt5_integration
     try:
         from mt5_integration import MT5TradingInterface
         print("✅ mt5_integration imported")
-        
+
         interface = MT5TradingInterface()
         print("✅ MT5TradingInterface created")
-        
+
         # Test initialization
         result = await interface.initialize()
         print(f"Interface Initialize: {result}")
-        
+
         if result:
             balance = await interface.get_account_balance()
             print(f"Interface Balance: ${balance:.2f}")
@@ -43,7 +44,7 @@ async def test_direct_mt5():
         else:
             print("❌ MT5 interface failed to initialize")
             return False
-            
+
     except Exception as e:
         print(f"❌ mt5_integration error: {e}")
         return False

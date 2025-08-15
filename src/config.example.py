@@ -13,9 +13,7 @@ ENABLE_TELEGRAM_NOTIFICATIONS = True
 
 # ⚠️ CRITICAL SAFETY SETTING ⚠️
 # Set to False for LIVE TRADING with real money!
-DEMO_MODE = (
-    True  # True = Demo training (unlimited risk), False = Live trading (protected)
-)
+DEMO_MODE = True  # True = Demo training (unlimited risk), False = Live trading (protected)
 
 # 🎯 TRADING SETTINGS
 TRADE_AMOUNT = 50.0  # Trade amount in USD

@@ -4,9 +4,8 @@ Direct test of fixed main bot place_mt5_trade method
 Synchronous version like the working simple_order_test.py
 """
 
-import sys
 import os
-import time
+import sys
 
 # Add current directory to Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -17,9 +16,10 @@ print("=" * 50)
 # Read and check if we can import main bot
 try:
     import inspect
+
     from main import TradingBot
     print("✅ Successfully imported TradingBot")
-    
+
     # Check if place_mt5_trade method exists
     if hasattr(TradingBot, 'place_mt5_trade'):
         print("✅ place_mt5_trade method exists in TradingBot")
@@ -29,7 +29,7 @@ try:
     else:
         print("❌ place_mt5_trade method not found!")
         exit(1)
-        
+
 except Exception as e:
     print(f"❌ ERROR importing TradingBot: {e}")
     import traceback
@@ -44,7 +44,7 @@ print("📉 When triggered by a real signal in the main bot")
 # Show what we fixed
 print("\n🔧 FIXES APPLIED TO MAIN BOT:")
 print("✅ Removed complex lot size calculations")
-print("✅ Simplified to use MT5 interface's calculate_valid_lot_size()")  
+print("✅ Simplified to use MT5 interface's calculate_valid_lot_size()")
 print("✅ Removed problematic SL/TP calculations")
 print("✅ Delegated trade execution to working MT5 integration")
 print("✅ Fixed variable scope issues (sl_price, tp_price)")

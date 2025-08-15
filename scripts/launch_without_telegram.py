@@ -17,14 +17,15 @@ if __name__ == "__main__":
     print("💡 This version runs without Telegram to avoid conflicts")
     print("💡 MT5 trading and AI features are fully functional")
     print("=" * 60)
-    
+
     try:
-        from main import main
         import asyncio
-        
+
+        from main import main
+
         # Run the main bot
         asyncio.run(main())
-        
+
     except KeyboardInterrupt:
         print("\n⏹️ Bot stopped by user")
     except Exception as e:

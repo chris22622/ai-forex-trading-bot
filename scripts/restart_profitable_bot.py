@@ -5,8 +5,8 @@ Restarts the bot with optimized profitable settings
 """
 
 import asyncio
-import sys
 import os
+import sys
 from datetime import datetime
 
 # Add current directory to path
@@ -44,10 +44,10 @@ async def restart_profitable_bot():
     try:
         print("🔄 RESTARTING BOT WITH PROFITABLE SETTINGS...")
         print("")
-        
+
         # Import and restart bot
         from main import main as start_bot
-        
+
         print("🚀 Starting bot with new profitable configuration...")
         print("📊 Monitor closely for the first few trades")
         print("💡 Bot will now:")
@@ -59,10 +59,10 @@ async def restart_profitable_bot():
         print("")
         print("🛡️ PROFIT PROTECTION ACTIVE AT $5!")
         print("")
-        
+
         # Start the bot
         await start_bot()
-        
+
     except KeyboardInterrupt:
         print("⏸️ Bot stopped by user")
     except Exception as e:
@@ -74,12 +74,12 @@ def main():
     print("🚀 PROFITABLE BOT RESTART")
     print(f"   Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("")
-    
+
     display_profitable_settings()
-    
+
     # Ask for confirmation
     response = input("🤔 Ready to restart bot with profitable settings? (y/n): ").lower().strip()
-    
+
     if response in ['y', 'yes']:
         print("")
         print("✅ Starting profitable bot...")

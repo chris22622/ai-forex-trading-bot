@@ -6,27 +6,28 @@ Check MT5 status and connection details
 
 import MetaTrader5 as mt5
 
+
 def diagnose_mt5():
     """Diagnose MT5 connection issues"""
     print("🔍 MT5 DIAGNOSTIC REPORT")
     print("=" * 50)
-    
+
     # Check if MT5 package is available
     print(f"📦 MT5 Package Available: {mt5 is not None}")
-    
+
     # Try to initialize
     print("🚀 Initializing MT5...")
     if not mt5.initialize():
         print("❌ MT5 initialization failed")
         print(f"   Error: {mt5.last_error()}")
         return False
-    
+
     print("✅ MT5 initialized successfully")
-    
+
     # Get version info
     version = mt5.version()
     print(f"📋 MT5 Version: {version}")
-    
+
     # Get terminal info
     terminal = mt5.terminal_info()
     if terminal:
@@ -34,7 +35,7 @@ def diagnose_mt5():
         print(f"🏢 Company: {terminal.company}")
         print(f"📁 Data Path: {terminal.data_path}")
         print(f"🌐 Connected: {terminal.connected}")
-    
+
     # Try to get account info without login
     account = mt5.account_info()
     if account:
@@ -43,7 +44,7 @@ def diagnose_mt5():
         print(f"🏦 Server: {account.server}")
     else:
         print("❌ No account connected")
-    
+
     # Check available symbols
     symbols = mt5.symbols_get()
     if symbols:
@@ -60,7 +61,7 @@ def diagnose_mt5():
                 print(f"   {i+1}. {symbol.name}")
     else:
         print("❌ No symbols available")
-    
+
     mt5.shutdown()
     return True
 

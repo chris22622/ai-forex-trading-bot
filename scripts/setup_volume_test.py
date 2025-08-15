@@ -3,8 +3,9 @@
 Force a high-confidence trade signal to test volume guard in action
 """
 
-import sys
 import os
+import sys
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Configure environment to force a trade

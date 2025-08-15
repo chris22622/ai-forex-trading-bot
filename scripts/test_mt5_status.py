@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 """Test current MT5 connection status"""
 
-from main import DerivTradingBot
 import asyncio
+
+from main import DerivTradingBot
+
 
 async def check_mt5_status():
     print('🔧 Checking current MT5 connection status...')
     bot = DerivTradingBot()
-    
+
     print(f'MT5 Interface Type: {type(bot.mt5_interface).__name__}')
     print(f'Using MT5: {bot.using_mt5}')
     print(f'Connected: {bot.connected}')
-    
+
     # Check if we're using the dummy interface
     if type(bot.mt5_interface).__name__ == 'DummyMT5Interface':
         print('❌ PROBLEM FOUND: Bot is using DummyMT5Interface!')
         print('   This means trades are only simulated, not sent to real MT5')
         print('   Need to fix MT5 connection')
         return False
-    
+
     if hasattr(bot, 'mt5_interface') and bot.mt5_interface:
         print('\n🔧 Testing MT5 interface...')
         try:

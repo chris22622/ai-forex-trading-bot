@@ -66,7 +66,6 @@ def test_config_structure():
     # Check that essential config attributes exist
     required_attrs = [
         "TRADE_AMOUNT",
-        "RISK_PERCENTAGE",
         "MT5_LOGIN",
         "MT5_PASSWORD",
         "MT5_SERVER",

@@ -51,9 +51,7 @@ class TechnicalIndicators:
             return None
 
         try:
-            rsi_indicator = ta.momentum.RSIIndicator(
-                close=self.df["close"], window=period
-            )
+            rsi_indicator = ta.momentum.RSIIndicator(close=self.df["close"], window=period)
             rsi_values = rsi_indicator.rsi()
             return rsi_values.iloc[-1] if not rsi_values.empty else None
         except Exception as e:
@@ -197,9 +195,7 @@ class TechnicalIndicators:
             patterns["breakout_down"] = current_price < recent_low
 
             # Consolidation
-            patterns["consolidating"] = price_range < (
-                current_price * 0.01
-            )  # Less than 1% range
+            patterns["consolidating"] = price_range < (current_price * 0.01)  # Less than 1% range
 
         except Exception as e:
             print(f"Error detecting patterns: {e}")
@@ -244,15 +240,9 @@ class TechnicalIndicators:
             # MACD Signal
             macd_data = self.calculate_macd()
             if all(macd_data.values()):
-                if (
-                    macd_data["macd"] > macd_data["signal"]
-                    and macd_data["histogram"] > 0
-                ):
+                if macd_data["macd"] > macd_data["signal"] and macd_data["histogram"] > 0:
                     signals["macd_signal"] = "BUY"
-                elif (
-                    macd_data["macd"] < macd_data["signal"]
-                    and macd_data["histogram"] < 0
-                ):
+                elif macd_data["macd"] < macd_data["signal"] and macd_data["histogram"] < 0:
                     signals["macd_signal"] = "SELL"
 
             # Bollinger Bands Signal

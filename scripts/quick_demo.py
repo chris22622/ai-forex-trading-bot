@@ -5,10 +5,10 @@ Showcasing all 11 advanced features
 """
 
 import asyncio
-import random
 import json
-from datetime import datetime, timedelta
 import os
+import random
+from datetime import datetime
 
 # Try importing our enhanced modules with fallbacks
 try:
@@ -38,18 +38,18 @@ class QuickDemo:
             'trades': [],
             'performance': {}
         }
-        
+
     async def run_comprehensive_demo(self):
         print("🚀 ENHANCED TRADING BOT - QUICK DEMO")
         print("=" * 50)
-        
+
         # Feature 1: Dynamic Position Sizing
         print("\n1️⃣ Dynamic Position Sizing Demo")
         for confidence in [45, 65, 85, 95]:
             size = self.calculate_dynamic_position_size(confidence)
             print(f"   Confidence: {confidence}% → Position Size: ${size:.2f}")
         self.session_data['features_tested'].append('dynamic_position_sizing')
-        
+
         # Feature 2: Multi-Strategy Selection
         print("\n2️⃣ Multi-Strategy Selection Demo")
         strategies = ['Momentum', 'Reversal', 'Breakout', 'Scalping']
@@ -57,7 +57,7 @@ class QuickDemo:
             market_condition = random.choice(['Trending', 'Sideways', 'Volatile'])
             print(f"   {strategy} Strategy → Market: {market_condition}")
         self.session_data['features_tested'].append('multi_strategy')
-        
+
         # Feature 3: Market Condition Analysis
         print("\n3️⃣ Market Condition Analysis Demo")
         conditions = ['TRENDING_UP', 'TRENDING_DOWN', 'SIDEWAYS', 'VOLATILE']
@@ -65,7 +65,7 @@ class QuickDemo:
             volatility = random.uniform(0.1, 2.5)
             print(f"   Market: {condition} → Volatility: {volatility:.2f}%")
         self.session_data['features_tested'].append('market_analysis')
-        
+
         # Feature 4: AI Ensemble Predictions
         print("\n4️⃣ AI Ensemble Predictions Demo")
         if ai_available:
@@ -78,14 +78,14 @@ class QuickDemo:
                 confidence = random.uniform(60, 95)
                 print(f"   Model {i+1}: {action} (Confidence: {confidence:.1f}%)")
         self.session_data['features_tested'].append('ai_ensemble')
-        
+
         # Feature 5: Reinforcement Learning
         print("\n5️⃣ Reinforcement Learning Demo")
         print("   🧠 RL Agent: Q-Learning with DQN backup")
         print("   📈 State Space: Price, RSI, MA, Volume")
         print("   🎯 Reward Function: Profit/Loss + Risk Penalty")
         self.session_data['features_tested'].append('reinforcement_learning')
-        
+
         # Feature 6: Risk Management
         print("\n6️⃣ Advanced Risk Management Demo")
         if risk_available:
@@ -94,7 +94,7 @@ class QuickDemo:
         print("   📊 Position Limits: $500 max")
         print("   ⏰ Cooldown: 5 minutes after 3 losses")
         self.session_data['features_tested'].append('risk_management')
-        
+
         # Feature 7: Multi-Timeframe Analysis
         print("\n7️⃣ Multi-Timeframe Analysis Demo")
         timeframes = ['1m', '5m', '15m', '1h']
@@ -102,7 +102,7 @@ class QuickDemo:
             trend = random.choice(['UP', 'DOWN', 'NEUTRAL'])
             print(f"   {tf} Timeframe: {trend} trend")
         self.session_data['features_tested'].append('multi_timeframe')
-        
+
         # Feature 8: Confidence Heatmap
         print("\n8️⃣ Trade Confidence Heatmap Demo")
         heatmap_data = []
@@ -111,7 +111,7 @@ class QuickDemo:
             heatmap_data.append((hour, confidence))
             print(f"   {hour:02d}:00 → Confidence: {confidence:.1f}%")
         self.session_data['features_tested'].append('confidence_heatmap')
-        
+
         # Feature 9: Backtesting Engine
         print("\n9️⃣ Advanced Backtesting Demo")
         if backtesting_available:
@@ -120,24 +120,24 @@ class QuickDemo:
         print("   📈 Win Rate: 68.5%")
         print("   💰 Sharpe Ratio: 1.45")
         self.session_data['features_tested'].append('backtesting')
-        
+
         # Feature 10: Telegram Integration
         print("\n🔟 Telegram Bot Integration Demo")
         print("   📱 Commands: /status, /balance, /stop, /strategy")
         print("   🔔 Notifications: Trade alerts, Risk warnings")
         print("   📊 Real-time: Position updates")
         self.session_data['features_tested'].append('telegram_integration')
-        
+
         # Feature 11: Session Analytics
         print("\n1️⃣1️⃣ Session Analytics Demo")
         await self.generate_session_summary()
         self.session_data['features_tested'].append('session_analytics')
-        
+
         print("\n" + "=" * 50)
         print("🎉 ALL 11 ENHANCED FEATURES DEMONSTRATED!")
         print("🚀 System Ready for Live Trading!")
         print("=" * 50)
-        
+
     def calculate_dynamic_position_size(self, confidence):
         """Dynamic position sizing based on confidence"""
         base_size = 100
@@ -149,20 +149,20 @@ class QuickDemo:
             return base_size * 0.75
         else:
             return base_size
-    
+
     async def generate_session_summary(self):
         """Generate comprehensive session summary"""
         self.session_data['end_time'] = datetime.now().isoformat()
         self.session_data['duration'] = str(datetime.now() - datetime.fromisoformat(self.session_data['start_time']))
         self.session_data['features_count'] = len(self.session_data['features_tested'])
-        
+
         # Save summary
         os.makedirs('logs', exist_ok=True)
         summary_file = f"logs/quick_demo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        
+
         with open(summary_file, 'w') as f:
             json.dump(self.session_data, f, indent=2)
-        
+
         print(f"   📋 Session Summary: {summary_file}")
         print(f"   ⏱️ Duration: {self.session_data['duration']}")
         print(f"   ✅ Features Tested: {self.session_data['features_count']}/11")

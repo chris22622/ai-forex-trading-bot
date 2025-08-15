@@ -18,9 +18,7 @@ logger = logging.getLogger(__name__)
 # Set up basic logging if not already configured
 if not logger.handlers:
     handler = logging.StreamHandler()
-    formatter = logging.Formatter(
-        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.setLevel(logging.INFO)
@@ -65,9 +63,7 @@ try:
     symbol_manager = BulletproofSymbolManager()
     logger.info("✅ Bulletproof symbol mapping integrated into MT5")
 except ImportError:
-    logger.warning(
-        "⚠️ Bulletproof patches not available, using emergency symbol mapping"
-    )
+    logger.warning("⚠️ Bulletproof patches not available, using emergency symbol mapping")
 
     class EmergencySymbolManager:
         def get_safe_symbol(self, symbol):
@@ -182,14 +178,10 @@ class MT5TradingInterface:
 
             # Login with credentials if provided (run in executor to avoid blocking)
             if MT5_LOGIN and MT5_PASSWORD and MT5_SERVER:
-                logger.info(
-                    f"🔐 Logging in to {MT5_SERVER} with account {MT5_LOGIN}..."
-                )
+                logger.info(f"🔐 Logging in to {MT5_SERVER} with account {MT5_LOGIN}...")
                 authorized = await loop.run_in_executor(
                     None,
-                    lambda: mt5.login(
-                        MT5_LOGIN, password=MT5_PASSWORD, server=MT5_SERVER
-                    ),
+                    lambda: mt5.login(MT5_LOGIN, password=MT5_PASSWORD, server=MT5_SERVER),
                 )
                 if not authorized:
                     error = await loop.run_in_executor(None, mt5.last_error)
@@ -356,15 +348,11 @@ class MT5TradingInterface:
         """Get current price for a symbol - ENHANCED WITH BETTER ERROR REPORTING"""
         try:
             if not self.initialized:
-                logger.warning(
-                    f"⚠️ MT5 not initialized when requesting price for {symbol}"
-                )
+                logger.warning(f"⚠️ MT5 not initialized when requesting price for {symbol}")
                 await self.initialize()
 
             if not self.connected:
-                logger.warning(
-                    f"⚠️ MT5 not connected when requesting price for {symbol}"
-                )
+                logger.warning(f"⚠️ MT5 not connected when requesting price for {symbol}")
                 return None
 
             # BULLETPROOF SYMBOL MAPPING - Convert synthetic symbols to MT5-compatible ones
@@ -392,9 +380,7 @@ class MT5TradingInterface:
                 for alt_symbol in alternatives:
                     alt_info = mt5.symbol_info(alt_symbol)
                     if alt_info is not None:
-                        logger.info(
-                            f"✅ Found alternative symbol: {alt_symbol} for {symbol}"
-                        )
+                        logger.info(f"✅ Found alternative symbol: {alt_symbol} for {symbol}")
                         effective_symbol = alt_symbol
                         break
                 else:
@@ -456,9 +442,7 @@ class MT5TradingInterface:
                             f"⚠️ All prices are zero for {effective_symbol} (attempt {attempt + 1})"
                         )
                 else:
-                    logger.warning(
-                        f"⚠️ No tick data for {effective_symbol} (attempt {attempt + 1})"
-                    )
+                    logger.warning(f"⚠️ No tick data for {effective_symbol} (attempt {attempt + 1})")
 
                 if attempt < 4:
                     await asyncio.sleep(0.5)  # Longer wait between retries
@@ -487,9 +471,7 @@ class MT5TradingInterface:
 
             symbol_info = mt5.symbol_info(effective_symbol)
             if symbol_info is None:
-                logger.warning(
-                    f"⚠️ MT5 symbol {effective_symbol} not found, using safe defaults"
-                )
+                logger.warning(f"⚠️ MT5 symbol {effective_symbol} not found, using safe defaults")
                 # Return safe defaults instead of None to prevent crashes
                 return {
                     "volume_min": 0.01,
@@ -507,36 +489,23 @@ class MT5TradingInterface:
                 "volume_step": getattr(symbol_info, "volume_step", 0.01),
                 "point": getattr(symbol_info, "point", 0.00001),
                 "digits": getattr(symbol_info, "digits", 5),
-                "trade_contract_size": getattr(
-                    symbol_info, "trade_contract_size", 100000
-                ),
+                "trade_contract_size": getattr(symbol_info, "trade_contract_size", 100000),
             }
 
             # Validate that all values are not None and are reasonable
             if result["volume_min"] is None or result["volume_min"] <= 0:
-                logger.warning(
-                    f"⚠️ Invalid volume_min for {effective_symbol}, using default 0.01"
-                )
+                logger.warning(f"⚠️ Invalid volume_min for {effective_symbol}, using default 0.01")
                 result["volume_min"] = 0.01
 
-            if (
-                result["volume_max"] is None
-                or result["volume_max"] <= result["volume_min"]
-            ):
-                logger.warning(
-                    f"⚠️ Invalid volume_max for {effective_symbol}, using default 100.0"
-                )
+            if result["volume_max"] is None or result["volume_max"] <= result["volume_min"]:
+                logger.warning(f"⚠️ Invalid volume_max for {effective_symbol}, using default 100.0")
                 result["volume_max"] = 100.0
 
             if result["volume_step"] is None or result["volume_step"] <= 0:
-                logger.warning(
-                    f"⚠️ Invalid volume_step for {effective_symbol}, using default 0.01"
-                )
+                logger.warning(f"⚠️ Invalid volume_step for {effective_symbol}, using default 0.01")
                 result["volume_step"] = 0.01
 
-            logger.debug(
-                f"📊 Symbol info for {symbol} (MT5: {effective_symbol}): {result}"
-            )
+            logger.debug(f"📊 Symbol info for {symbol} (MT5: {effective_symbol}): {result}")
             return result
 
         except Exception as e:
@@ -569,21 +538,15 @@ class MT5TradingInterface:
             # Ensure minimum constraints
             if volume < min_vol:
                 adjusted_volume = min_vol
-                logger.info(
-                    f"📊 Volume {volume} too small, adjusted to minimum: {adjusted_volume}"
-                )
+                logger.info(f"📊 Volume {volume} too small, adjusted to minimum: {adjusted_volume}")
             elif volume > max_vol:
                 adjusted_volume = max_vol
-                logger.info(
-                    f"📊 Volume {volume} too large, adjusted to maximum: {adjusted_volume}"
-                )
+                logger.info(f"📊 Volume {volume} too large, adjusted to maximum: {adjusted_volume}")
             else:
                 # Round to valid step size
                 adjusted_volume = round(volume / step) * step
                 if adjusted_volume != volume:
-                    logger.info(
-                        f"📊 Volume adjusted for step size: {volume} → {adjusted_volume}"
-                    )
+                    logger.info(f"📊 Volume adjusted for step size: {volume} → {adjusted_volume}")
 
             # Final validation
             is_valid = (
@@ -601,9 +564,7 @@ class MT5TradingInterface:
             # Return conservative defaults
             return True, max(0.01, min(volume, 1.0))
 
-    def _validate_symbol_info(
-        self, symbol_info: Dict[str, Any], symbol: str
-    ) -> Dict[str, Any]:
+    def _validate_symbol_info(self, symbol_info: Dict[str, Any], symbol: str) -> Dict[str, Any]:
         """Validate and sanitize symbol info to prevent KeyError crashes"""
         try:
             # Define safe defaults
@@ -649,9 +610,7 @@ class MT5TradingInterface:
             logger.error(f"❌ Error validating symbol info for {symbol}: {e}")
             return defaults
 
-    async def calculate_valid_lot_size(
-        self, symbol: str, desired_amount: float
-    ) -> float:
+    async def calculate_valid_lot_size(self, symbol: str, desired_amount: float) -> float:
         """Calculate valid lot size based on symbol specifications - BULLETPROOF VERSION"""
         try:
             # Map to MT5 symbol first
@@ -660,14 +619,10 @@ class MT5TradingInterface:
 
             # Get real-time symbol info from MT5
             loop = asyncio.get_event_loop()
-            symbol_info = await loop.run_in_executor(
-                None, mt5.symbol_info, effective_symbol
-            )
+            symbol_info = await loop.run_in_executor(None, mt5.symbol_info, effective_symbol)
 
             if symbol_info is None:
-                logger.warning(
-                    f"⚠️ Symbol {effective_symbol} not found, using ultra-safe defaults"
-                )
+                logger.warning(f"⚠️ Symbol {effective_symbol} not found, using ultra-safe defaults")
                 return 0.001  # Ultra-conservative fallback
 
             # Extract REAL MT5 symbol limits
@@ -684,9 +639,7 @@ class MT5TradingInterface:
             if "Volatility" in effective_symbol:
                 # For Deriv Volatility indices: Use minimum volume (often 0.5 for these symbols)
                 calculated_lot = volume_min  # Start with actual minimum required by MT5
-                logger.info(
-                    f"🎯 Using MT5 minimum volume for {effective_symbol}: {calculated_lot}"
-                )
+                logger.info(f"🎯 Using MT5 minimum volume for {effective_symbol}: {calculated_lot}")
             elif "Boom" in effective_symbol or "Crash" in effective_symbol:
                 # For Boom/Crash: Use minimum volume
                 calculated_lot = volume_min
@@ -746,9 +699,7 @@ class MT5TradingInterface:
             loop = asyncio.get_event_loop()
 
             # Get real-time symbol info directly from MT5
-            symbol_info = await loop.run_in_executor(
-                None, mt5.symbol_info, effective_symbol
-            )
+            symbol_info = await loop.run_in_executor(None, mt5.symbol_info, effective_symbol)
             if symbol_info is None:
                 logger.warning(
                     f"⚠️ Symbol {effective_symbol} not found, trying common Deriv alternatives..."
@@ -766,9 +717,7 @@ class MT5TradingInterface:
                 for alt_symbol in alternatives:
                     if alt_symbol != effective_symbol:
                         logger.info(f"🔄 Trying alternative: {alt_symbol}")
-                        symbol_info = await loop.run_in_executor(
-                            None, mt5.symbol_info, alt_symbol
-                        )
+                        symbol_info = await loop.run_in_executor(None, mt5.symbol_info, alt_symbol)
                         if symbol_info is not None:
                             effective_symbol = alt_symbol
                             logger.info(f"✅ Found working symbol: {effective_symbol}")
@@ -797,9 +746,7 @@ class MT5TradingInterface:
                     return None
 
             # Get fresh price directly from MT5 (now that symbol is visible)
-            tick = await loop.run_in_executor(
-                None, mt5.symbol_info_tick, effective_symbol
-            )
+            tick = await loop.run_in_executor(None, mt5.symbol_info_tick, effective_symbol)
             if tick is None:
                 logger.error(
                     f"❌ Cannot get price for {effective_symbol} - symbol may not be visible"
@@ -815,9 +762,7 @@ class MT5TradingInterface:
                 logger.info(
                     f"📊 SIMULATING trade (MT5_REAL_TRADING=False): {action} {effective_symbol}"
                 )
-                return await self._simulate_trade(
-                    action, effective_symbol, amount, price
-                )
+                return await self._simulate_trade(action, effective_symbol, amount, price)
 
             # STEP 3.5: CRITICAL MT5 TRADING DIAGNOSTICS
             terminal_info = await loop.run_in_executor(None, mt5.terminal_info)
@@ -829,9 +774,7 @@ class MT5TradingInterface:
                         "❌ AUTO-TRADING NOT ENABLED! Go to MT5 Tools → Options → Expert Advisors → Allow automated trading"
                     )
                     logger.info("🔄 Falling back to simulation mode for this trade")
-                    return await self._simulate_trade(
-                        action, effective_symbol, amount, price
-                    )
+                    return await self._simulate_trade(action, effective_symbol, amount, price)
 
             # STEP 4: BULLETPROOF LOT SIZE CALCULATION
             lot_size = await self.calculate_valid_lot_size(symbol, amount)
@@ -879,23 +822,17 @@ class MT5TradingInterface:
 
             # STEP 6: ATTEMPT ORDER WITH MULTIPLE FILLING TYPES
             # First, check what filling types the symbol supports
-            symbol_info = await loop.run_in_executor(
-                None, mt5.symbol_info, effective_symbol
-            )
+            symbol_info = await loop.run_in_executor(None, mt5.symbol_info, effective_symbol)
             if symbol_info:
                 filling_mode = getattr(symbol_info, "filling_mode", None)
-                logger.info(
-                    f"📋 Symbol {effective_symbol} filling mode: {filling_mode}"
-                )
+                logger.info(f"📋 Symbol {effective_symbol} filling mode: {filling_mode}")
 
             for i, filling_type in enumerate(filling_types):
                 try:
                     logger.info(
                         f"� PLACING REAL MT5 ORDER (Attempt {i+1}): {action} {effective_symbol}"
                     )
-                    logger.info(
-                        f"📊 Volume: {lot_size}, Price: {price}, Filling: {filling_type}"
-                    )
+                    logger.info(f"📊 Volume: {lot_size}, Price: {price}, Filling: {filling_type}")
 
                     request = {
                         "action": mt5.TRADE_ACTION_DEAL,
@@ -920,9 +857,7 @@ class MT5TradingInterface:
                         logger.warning(
                             f"⚠️ Symbol {effective_symbol} not visible, re-adding to Market Watch..."
                         )
-                        await loop.run_in_executor(
-                            None, mt5.symbol_select, effective_symbol, True
-                        )
+                        await loop.run_in_executor(None, mt5.symbol_select, effective_symbol, True)
 
                     # ENHANCED: Pre-order validation and fixing
                     # Check if MT5 is properly connected and ready
@@ -938,9 +873,7 @@ class MT5TradingInterface:
                     #     continue
 
                     # Get last error before sending order
-                    await loop.run_in_executor(
-                        None, mt5.last_error
-                    )  # Clear any previous errors
+                    await loop.run_in_executor(None, mt5.last_error)  # Clear any previous errors
 
                     # Send order - Fixed the argument passing issue
                     def _send_order():
@@ -956,12 +889,8 @@ class MT5TradingInterface:
                         )
 
                         # ENHANCED: Try alternative order method when order_send returns None
-                        logger.info(
-                            f"🔄 Trying alternative order method for attempt {i+1}"
-                        )
-                        result = await self._try_alternative_order_method(
-                            request, effective_symbol
-                        )
+                        logger.info(f"🔄 Trying alternative order method for attempt {i+1}")
+                        result = await self._try_alternative_order_method(request, effective_symbol)
 
                         if result is None:
                             # Additional diagnostics
@@ -973,9 +902,7 @@ class MT5TradingInterface:
                                     f"🔍 Symbol Debug - Visible: {symbol_check.visible}, Trade Mode: {symbol_check.trade_mode}"
                                 )
 
-                            terminal_check = await loop.run_in_executor(
-                                None, mt5.terminal_info
-                            )
+                            terminal_check = await loop.run_in_executor(None, mt5.terminal_info)
                             if terminal_check:
                                 logger.error(
                                     f"🔍 Terminal Debug - Connected: {terminal_check.connected}, Trade Allowed: {terminal_check.trade_allowed}"
@@ -1026,9 +953,7 @@ class MT5TradingInterface:
                             10019,
                             10021,
                         ]:  # Market closed, no money, no quotes
-                            logger.error(
-                                f"❌ Fatal error {result.retcode}, not retrying"
-                            )
+                            logger.error(f"❌ Fatal error {result.retcode}, not retrying")
                             break
 
                 except Exception as e:
@@ -1051,9 +976,7 @@ class MT5TradingInterface:
 
         trade_ticket = int(time.time() * 1000)  # Unique ticket
 
-        logger.info(
-            f"📊 MT5 Trade SIMULATED: {action} {symbol} at {price} (Amount: ${amount})"
-        )
+        logger.info(f"📊 MT5 Trade SIMULATED: {action} {symbol} at {price} (Amount: ${amount})")
 
         return {
             "ticket": trade_ticket,
@@ -1135,9 +1058,7 @@ class MT5TradingInterface:
             if symbol_info:
                 # Return mid price (average of bid and ask)
                 price = (symbol_info.bid + symbol_info.ask) / 2.0
-                logger.debug(
-                    f"💰 Price for {symbol} (MT5: {effective_symbol}): {price}"
-                )
+                logger.debug(f"💰 Price for {symbol} (MT5: {effective_symbol}): {price}")
                 return price
 
             logger.error(f"❌ Cannot get price for {symbol} - MT5 connection issue")
@@ -1183,20 +1104,13 @@ class MT5TradingInterface:
 
             # 🔧 ENHANCED LOT SIZE CALCULATION FOR DERIV INDICES
             # For Deriv Volatility indices: Use proper lot size calculations
-            if (
-                "Volatility" in effective_symbol
-                or "volatility" in effective_symbol.lower()
-            ):
+            if "Volatility" in effective_symbol or "volatility" in effective_symbol.lower():
                 # For Volatility indices: Simplified calculation based on typical Deriv requirements
                 # Use risk amount as a base but ensure proper minimum lot sizes
-                lot_size = (
-                    risk_amount / 50.0
-                )  # More reasonable calculation for volatility indices
+                lot_size = risk_amount / 50.0  # More reasonable calculation for volatility indices
 
                 # Ensure reasonable minimum for volatility indices (Deriv typically needs at least 0.1)
-                lot_size = max(
-                    lot_size, 0.1
-                )  # Increased minimum for Deriv compatibility
+                lot_size = max(lot_size, 0.1)  # Increased minimum for Deriv compatibility
 
             elif "Boom" in effective_symbol or "Crash" in effective_symbol:
                 # For Boom/Crash indices: Use larger minimum lots
@@ -1209,19 +1123,13 @@ class MT5TradingInterface:
                 lot_size = max(lot_size, 0.01)
 
             # Safely extract symbol specifications with defaults (more conservative)
-            min_lot = getattr(
-                symbol_info, "volume_min", 0.1
-            )  # Increased default minimum
+            min_lot = getattr(symbol_info, "volume_min", 0.1)  # Increased default minimum
             max_lot = getattr(symbol_info, "volume_max", 100.0)
-            lot_step = getattr(
-                symbol_info, "volume_step", 0.1
-            )  # Increased default step
+            lot_step = getattr(symbol_info, "volume_step", 0.1)  # Increased default step
 
             # Validate extracted values (more conservative fallbacks)
             if min_lot is None or max_lot is None or lot_step is None:
-                logger.warning(
-                    f"⚠️ Invalid symbol specs for {symbol}, using safe defaults"
-                )
+                logger.warning(f"⚠️ Invalid symbol specs for {symbol}, using safe defaults")
                 min_lot, max_lot, lot_step = (
                     0.1,
                     100.0,
@@ -1292,14 +1200,10 @@ class MT5TradingInterface:
                 return None
 
             if result.retcode != mt5.TRADE_RETCODE_DONE:
-                logger.error(
-                    f"❌ Buy order failed: {result.retcode} - {result.comment}"
-                )
+                logger.error(f"❌ Buy order failed: {result.retcode} - {result.comment}")
                 return None
 
-            logger.info(
-                f"✅ Buy order placed: {symbol} {lot_size} lots at ${price:.5f}"
-            )
+            logger.info(f"✅ Buy order placed: {symbol} {lot_size} lots at ${price:.5f}")
 
             return {
                 "order": result.order,
@@ -1363,14 +1267,10 @@ class MT5TradingInterface:
                 return None
 
             if result.retcode != mt5.TRADE_RETCODE_DONE:
-                logger.error(
-                    f"❌ Sell order failed: {result.retcode} - {result.comment}"
-                )
+                logger.error(f"❌ Sell order failed: {result.retcode} - {result.comment}")
                 return None
 
-            logger.info(
-                f"✅ Sell order placed: {symbol} {lot_size} lots at ${price:.5f}"
-            )
+            logger.info(f"✅ Sell order placed: {symbol} {lot_size} lots at ${price:.5f}")
 
             return {
                 "order": result.order,
@@ -1425,9 +1325,7 @@ class MT5TradingInterface:
             # First verify the position exists and get its details
             position = mt5.positions_get(ticket=ticket)
             if not position:
-                logger.warning(
-                    f"⚠️ Position {ticket} not found - might already be closed"
-                )
+                logger.warning(f"⚠️ Position {ticket} not found - might already be closed")
                 return True  # Consider it successfully closed if not found
 
             pos = position[0]
@@ -1468,9 +1366,7 @@ class MT5TradingInterface:
                 "type_filling": mt5.ORDER_FILLING_IOC,  # Immediate or Cancel
             }
 
-            logger.info(
-                f"🔒 Close request for {ticket}: {symbol} {volume} lots at {price}"
-            )
+            logger.info(f"🔒 Close request for {ticket}: {symbol} {volume} lots at {price}")
 
             # Send the close order
             result = mt5.order_send(request)
@@ -1530,9 +1426,7 @@ class MT5TradingInterface:
 
                     logger.error(f"❌ All close methods failed for {ticket}")
                     logger.error(f"   Method 1 error: {result.retcode}")
-                    logger.error(
-                        f"   Method 2 error: {result2.retcode if result2 else 'None'}"
-                    )
+                    logger.error(f"   Method 2 error: {result2.retcode if result2 else 'None'}")
                     logger.error(
                         f"   Method 3 error: {result3.retcode if 'result3' in locals() and result3 else 'None'}"
                     )
@@ -1643,9 +1537,7 @@ class MT5TradingBot:
                         # Update original bot's price history
                         self.original_bot.price_history.append(price)
                         if len(self.original_bot.price_history) > 1000:
-                            self.original_bot.price_history = (
-                                self.original_bot.price_history[-500:]
-                            )
+                            self.original_bot.price_history = self.original_bot.price_history[-500:]
 
                         # Update indicators
                         self.original_bot.indicators.update_price_data(price, timestamp)
@@ -1681,9 +1573,7 @@ class MT5TradingBot:
             # Calculate lot size based on amount
             lot_size = self.mt5.calculate_lot_size(symbol, amount)
 
-            logger.info(
-                f"🎯 Placing MT5 trade: {action} {symbol} ${amount} ({lot_size} lots)"
-            )
+            logger.info(f"🎯 Placing MT5 trade: {action} {symbol} ${amount} ({lot_size} lots)")
 
             # Place order
             if action == "BUY":
@@ -1735,9 +1625,7 @@ class MT5TradingBot:
 
             # Check for closed positions (trades that were in active_trades but no longer in MT5)
             closed_trades = []
-            for contract_id, trade_data in list(
-                self.original_bot.active_trades.items()
-            ):
+            for contract_id, trade_data in list(self.original_bot.active_trades.items()):
                 if "mt5_deal" in trade_data:
                     deal_id = str(trade_data["mt5_deal"])
                     if deal_id not in current_deals:
@@ -1759,9 +1647,7 @@ class MT5TradingBot:
                 # Create result for original bot
                 result = {
                     "status": "won" if close_profit > 0 else "lost",
-                    "payout": (
-                        trade_data["amount"] + close_profit if close_profit > 0 else 0
-                    ),
+                    "payout": (trade_data["amount"] + close_profit if close_profit > 0 else 0),
                     "profit_loss": close_profit,
                     "exit_price": 0,  # MT5 handles this differently
                 }
@@ -1773,9 +1659,7 @@ class MT5TradingBot:
                 if contract_id in self.original_bot.active_trades:
                     del self.original_bot.active_trades[contract_id]
 
-                logger.info(
-                    f"📊 MT5 position closed: {contract_id} P&L: ${close_profit:.2f}"
-                )
+                logger.info(f"📊 MT5 position closed: {contract_id} P&L: ${close_profit:.2f}")
 
         except Exception as e:
             logger.error(f"❌ Error checking MT5 positions: {e}")
@@ -1827,12 +1711,8 @@ class MT5TradingBot:
                 return False
 
             if not symbol_info.visible:
-                logger.warning(
-                    f"⚠️ Symbol {symbol} not visible, trying to add to Market Watch"
-                )
-                if not await loop.run_in_executor(
-                    None, mt5.symbol_select, symbol, True
-                ):
+                logger.warning(f"⚠️ Symbol {symbol} not visible, trying to add to Market Watch")
+                if not await loop.run_in_executor(None, mt5.symbol_select, symbol, True):
                     logger.error(f"❌ Cannot make symbol {symbol} visible")
                     return False
 
@@ -1895,18 +1775,12 @@ class MT5TradingBot:
                 # Create modified request with fresh data
                 modified_request = request.copy()
                 modified_request["price"] = (
-                    symbol_info.bid
-                    if request["type"] == mt5.ORDER_TYPE_SELL
-                    else symbol_info.ask
+                    symbol_info.bid if request["type"] == mt5.ORDER_TYPE_SELL else symbol_info.ask
                 )
                 modified_request["deviation"] = 50  # Increase deviation
-                modified_request["type_filling"] = (
-                    mt5.ORDER_FILLING_RETURN
-                )  # Try RETURN filling
+                modified_request["type_filling"] = mt5.ORDER_FILLING_RETURN  # Try RETURN filling
 
-                result = await loop.run_in_executor(
-                    None, mt5.order_send, modified_request
-                )
+                result = await loop.run_in_executor(None, mt5.order_send, modified_request)
                 if result is not None:
                     logger.info("✅ Method 2 successful: Modified parameters worked")
                     return result

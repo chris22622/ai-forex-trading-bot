@@ -54,7 +54,7 @@ result = mt5.order_send(request)
 
 if result is None:
     error = mt5.last_error()
-    print(f"❌ order_send returned None")
+    print("❌ order_send returned None")
     print(f"❌ Last error: {error}")
 else:
     print(f"✅ Result received: {result}")
