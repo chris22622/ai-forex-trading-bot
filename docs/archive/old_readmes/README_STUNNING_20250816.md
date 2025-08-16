@@ -22,26 +22,6 @@
 
 ---
 
-## 📚 **Table of Contents**
-
-- [🚀 Quick Start](#-quick-start---demo-mode)
-- [🌟 Why This Bot Stands Out](#-why-this-bot-stands-out)
-- [🛠️ Tech Stack](#️-modern-tech-stack)
-- [🎮 Interactive Demo](#-interactive-demo)
-- [📊 Trading Modes](#-trading-modes)
-- [🏗️ System Architecture](#️-system-architecture)
-- [🚀 Platform Compatibility](#-platform-compatibility)
-- [⚡ Installation](#-quick-installation)
-- [🎯 Usage Examples](#-usage-examples)
-- [📈 Performance Metrics](#-performance-metrics)
-- [🛡️ Risk Management](#️-risk-management)
-- [🤝 Contributing](#-contributing)
-- [📚 Documentation](#-documentation)
-- [⚠️ Disclaimer](#️-disclaimer)
-- [📄 License](#-license)
-
----
-
 ## 🚀 **Quick Start - Demo Mode**
 
 Experience the power immediately - **no MetaTrader5 required for demo!**
@@ -93,9 +73,8 @@ streamlit run ui/streamlit_app.py
 
 </div>
 
-**Core Technologies:**
 - 🐍 **Python 3.10+** - Modern runtime environment
-- 🎨 **Streamlit** - Interactive web dashboard & UI
+- 🎨 **Streamlit** - Interactive web dashboard
 - 📊 **Plotly** - Professional charting & visualization  
 - 🤖 **scikit-learn** - Machine learning ensemble models
 - 💹 **MetaTrader5 API** - Live trading integration (Windows)
