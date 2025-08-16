@@ -8,12 +8,13 @@ import asyncio
 import random
 from typing import Any, Dict, List, Optional
 
+from telegram_bot import NotificationManager
+from utils import format_currency, performance_tracker, trade_logger
+
 from ai_model import TradingAI
 
 # Import our modules
 from indicators import TechnicalIndicators
-from telegram_bot import NotificationManager
-from utils import format_currency, performance_tracker, trade_logger
 
 
 class BotDemo:

@@ -22,11 +22,6 @@ warnings.filterwarnings("ignore", message=".*seaborn.*")
 warnings.filterwarnings("ignore", message=".*ReportLab.*")
 
 # Import our modules
-from ai_model import TradingAI
-from config import *
-from indicators import TechnicalIndicators
-from mt5_integration import MT5TradingInterface
-from safe_logger import get_safe_logger
 from telegram_bot import NotificationManager
 from utils import (
     check_risk_limits,
@@ -34,6 +29,12 @@ from utils import (
     trade_logger,
     validate_trade_parameters,
 )
+
+from ai_model import TradingAI
+from config import *
+from indicators import TechnicalIndicators
+from mt5_integration import MT5TradingInterface
+from safe_logger import get_safe_logger
 
 # Use safe logger for Windows compatibility
 logger = get_safe_logger(__name__)

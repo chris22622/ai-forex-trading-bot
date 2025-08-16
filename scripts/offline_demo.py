@@ -9,14 +9,14 @@ import time
 from typing import Any, Dict, List
 
 import numpy as np
+from telegram_bot import NotificationManager
+from utils import trade_logger
 
 from ai_model import TradingAI
 from indicators import TechnicalIndicators
 
 # Import bot components
 from safe_logger import get_safe_logger
-from telegram_bot import NotificationManager
-from utils import trade_logger
 
 logger = get_safe_logger(__name__)
 

@@ -1,5 +1,12 @@
-import os, time, queue, threading, subprocess, sys, json, pathlib, random
+import pathlib
+import queue
+import random
+import subprocess
+import sys
+import threading
+import time
 from datetime import datetime
+
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -23,9 +30,10 @@ if "mode" not in st.session_state:
 if "log_q" not in st.session_state:
     st.session_state.log_q = queue.Queue()
 if "data" not in st.session_state:
-    st.session_state.data = pd.DataFrame(columns=["time","price"])
+    st.session_state.data = pd.DataFrame(columns=["time", "price"])
 
 stop_event = threading.Event()
+
 
 # --- Logging helper ---
 def log(msg: str):
@@ -36,6 +44,7 @@ def log(msg: str):
         st.session_state.log_q.put_nowait(line)
     except queue.Full:
         pass
+
 
 # --- Demo engine (no MT5 required) ---
 def demo_engine(stop: threading.Event, symbol: str, profit_target: float, stop_loss: float):
@@ -50,7 +59,7 @@ def demo_engine(stop: threading.Event, symbol: str, profit_target: float, stop_l
 
         # Fake signals/logs
         if random.random() < 0.06:
-            direction = random.choice(["LONG","SHORT"])
+            direction = random.choice(["LONG", "SHORT"])
             conf = round(random.uniform(0.35, 0.9), 2)
             log(f"DEMO: signal {direction} @ {price} (confidence={conf})")
 
@@ -59,6 +68,7 @@ def demo_engine(stop: threading.Event, symbol: str, profit_target: float, stop_l
 
         time.sleep(0.5)
     log("DEMO: engine stopped")
+
 
 # --- Live engine (tries to run your bot) ---
 def live_engine(stop: threading.Event):
@@ -87,7 +97,9 @@ def live_engine(stop: threading.Event):
             # Fallback: subprocess
             cmd = [sys.executable, "-m", "src.main"]
             log(f"LIVE: launching subprocess: {' '.join(cmd)}")
-            with subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, cwd=ROOT) as p:
+            with subprocess.Popen(
+                cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, cwd=ROOT
+            ) as p:
                 while not stop.is_set():
                     line = p.stdout.readline()
                     if not line:
@@ -104,6 +116,7 @@ def live_engine(stop: threading.Event):
         log(f"LIVE: failed to start — {e}")
     log("LIVE: engine stopped")
 
+
 # --- Sidebar controls ---
 with st.sidebar:
     st.header("Controls")
@@ -116,7 +129,9 @@ with st.sidebar:
     stopb = colB.button("■ Stop", use_container_width=True, disabled=not st.session_state.running)
     st.divider()
     st.markdown("**Notes**")
-    st.markdown("- Demo works anywhere.\n- Live requires Windows + MetaTrader5 installed + your bot configured.")
+    st.markdown(
+        "- Demo works anywhere.\n- Live requires Windows + MetaTrader5 installed + your bot configured."
+    )
 
 # --- Start/Stop handlers ---
 if start and not st.session_state.running:
@@ -124,7 +139,9 @@ if start and not st.session_state.running:
     stop_event.clear()
     st.session_state.data = st.session_state.data.iloc[0:0]
     if st.session_state.mode == "Demo":
-        t = threading.Thread(target=demo_engine, args=(stop_event, symbol, profit_target, stop_loss), daemon=True)
+        t = threading.Thread(
+            target=demo_engine, args=(stop_event, symbol, profit_target, stop_loss), daemon=True
+        )
     else:
         t = threading.Thread(target=live_engine, args=(stop_event,), daemon=True)
     t.start()
@@ -137,7 +154,7 @@ if stopb and st.session_state.running:
     log("UI: stop clicked")
 
 # --- Layout: chart + logs ---
-lc, rc = st.columns([2,1], vertical_alignment="top")
+lc, rc = st.columns([2, 1], vertical_alignment="top")
 with lc:
     st.subheader("Price (Demo stream or Live logs-derived)")
     if st.session_state.data.empty:
@@ -152,12 +169,14 @@ with rc:
     # Tail logs & queue items
     log_box = st.empty()
     last = []
+
     def tail_file(path, n=200):
         try:
             lines = path.read_text(encoding="utf-8").splitlines()
             return lines[-n:]
         except Exception:
             return []
+
     # refresh region
     tail = tail_file(LOG_FILE, 200)
     while True:

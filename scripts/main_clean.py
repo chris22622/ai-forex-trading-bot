@@ -27,11 +27,12 @@ warnings.filterwarnings("ignore", category=UserWarning)
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 # Import our modules
+from telegram_bot import NotificationManager
+
 from ai_model import TradingAI
 from config import *
 from indicators import TechnicalIndicators
 from safe_logger import get_safe_logger
-from telegram_bot import NotificationManager
 
 logger = get_safe_logger(__name__)
 

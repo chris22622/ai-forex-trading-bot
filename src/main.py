@@ -4008,33 +4008,43 @@ class TradingBot:
             DANGER_ZONE = 300  # Warning zone
             MINIMUM_FREE_MARGIN = 10  # Must have $10 free margin minimum
 
+            # Initialize margin variables with safe defaults
+            equity = balance
+            free_margin = balance * 0.8  # Conservative estimate
+            margin_level = 999999  # Safe default
+
             logger.info(
-                f"💰 Margin Check: Balance=${balance:.2f}, Equity=${equity:.2f}, Free=${free_margin:.2f}, Level={margin_level:.1f}%"
+                f"💰 Margin Check: Balance=${balance:.2f}, Equity=${equity:.2f}, "
+                f"Free=${free_margin:.2f}, Level={margin_level:.1f}%"
             )
 
             # 🚨 EMERGENCY STOP CONDITIONS
             if margin_level < MARGIN_CALL_LEVEL:
                 logger.error(
-                    f"🚨 MARGIN CALL DANGER! Level {margin_level:.1f}% < {MARGIN_CALL_LEVEL}% - STOPPING ALL TRADING!"
+                    f"🚨 MARGIN CALL DANGER! Level {margin_level:.1f}% < "
+                    f"{MARGIN_CALL_LEVEL}% - STOPPING ALL TRADING!"
                 )
                 return False
 
             if free_margin < MINIMUM_FREE_MARGIN:
                 logger.error(
-                    f"🚨 LOW FREE MARGIN! ${free_margin:.2f} < ${MINIMUM_FREE_MARGIN} - STOPPING ALL TRADING!"
+                    f"🚨 LOW FREE MARGIN! ${free_margin:.2f} < ${MINIMUM_FREE_MARGIN} - "
+                    f"STOPPING ALL TRADING!"
                 )
                 return False
 
             # Warning zone
             if margin_level < DANGER_ZONE:
                 logger.warning(
-                    f"⚠️ MARGIN WARNING: Level {margin_level:.1f}% < {DANGER_ZONE}% - Trading with extreme caution!"
+                    f"⚠️ MARGIN WARNING: Level {margin_level:.1f}% < {DANGER_ZONE}% - "
+                    f"Trading with extreme caution!"
                 )
                 return True  # Still allow trading but with warning
 
             # All good
             logger.info(
-                f"✅ MARGIN SAFE: Level {margin_level:.1f}% > {DANGER_ZONE}%, Free=${free_margin:.2f}"
+                f"✅ MARGIN SAFE: Level {margin_level:.1f}% > {DANGER_ZONE}%, "
+                f"Free=${free_margin:.2f}"
             )
             return True
 
@@ -4227,7 +4237,7 @@ class TradingBot:
 
                 # Calculate spread using symbol info
                 spread_points = symbol_info.get("spread", 0)
-            except:
+            except Exception:
                 # Only bypass spread check in emergency mode
                 if ENABLE_EMERGENCY_TRADING:
                     logger.warning(f"⚠️ EMERGENCY MODE: Bypassing spread check error for {symbol}")
@@ -4817,7 +4827,8 @@ class TradingBot:
             # Calculate recent volatility for position sizing
             recent_volatility = await self._calculate_recent_volatility(symbol)
 
-            # Get optimal position size using Kelly Criterion + volatility with CORRECT confidence scale
+            # Get optimal position size using Kelly Criterion + volatility
+            # with CORRECT confidence scale
             optimal_position_size = self.advanced_position_sizer.calculate_optimal_size(
                 symbol=symbol,
                 confidence=validated_confidence,  # ✅ Normalized to 0-1 scale
@@ -4829,7 +4840,8 @@ class TradingBot:
             position_size = min(base_position_size, optimal_position_size)
 
             logger.info(
-                f"📊 SIZING FIX: Raw confidence {confidence:.3f} → Validated {validated_confidence:.1%} → Final size {position_size:.3f}"
+                f"📊 SIZING FIX: Raw confidence {confidence:.3f} → "
+                f"Validated {validated_confidence:.1%} → Final size {position_size:.3f}"
             )
             logger.info(
                 f"📊 POSITION SIZING: Base: {base_position_size:.2f}, "
@@ -4850,7 +4862,8 @@ class TradingBot:
                 position_size = 0.01
 
             logger.info(
-                f"🚀 PLACING HFT TRADE: {action} on {symbol}: {trade_vol} lots (Confidence: {confidence:.0%})"
+                f"🚀 PLACING HFT TRADE: {action} on {symbol}: {trade_vol} lots "
+                f"(Confidence: {confidence:.0%})"
             )
 
             # 🚀 HFT UPGRADE: Use Ultra-Fast Order Manager for sub-5ms execution
@@ -5030,7 +5043,8 @@ class TradingBot:
                     # 🚀 NO MORE CONSERVATIVE LIMITS - GO BIG!
                     lot_size = min(optimal_size, 2.50)  # 🚀 Cap at maximum aggressive size!
                     logger.debug(
-                        f"📊 SIZING FIX: Raw confidence {confidence:.3f} → Normalized {normalized_confidence:.1f} → Size {lot_size:.3f}"
+                        f"📊 SIZING FIX: Raw confidence {confidence:.3f} → "
+                        f"Normalized {normalized_confidence:.1f} → Size {lot_size:.3f}"
                     )
 
                 except Exception as sizer_error:
@@ -5083,7 +5097,7 @@ class TradingBot:
             wins = sum(1 for result in self.win_rate_tracker if result == "win")
             total = len(self.win_rate_tracker)
             return wins / total if total > 0 else 0.5
-        except:
+        except Exception:
             return 0.5
 
     def _count_recent_wins(self, lookback: int = 10) -> int:
@@ -5091,7 +5105,7 @@ class TradingBot:
         try:
             recent_trades = list(self.win_rate_tracker)[-lookback:]
             return sum(1 for result in recent_trades if result == "win")
-        except:
+        except Exception:
             return 0
 
     async def _send_trade_notification(self, action: str, amount: float, confidence: float):
@@ -5557,7 +5571,7 @@ class TradingBot:
                 position_info = await self.mt5_interface.get_position_info(mt5_ticket)
                 if position_info:
                     return float(getattr(position_info, "profit", 0.0))
-        except:
+        except Exception:
             pass
         return 0.0
 
@@ -5814,7 +5828,7 @@ class TradingBot:
             try:
                 current_price = await self._get_current_price_for_symbol(symbol)
                 exit_price = current_price or entry_price or 0.0
-            except:
+            except Exception:
                 exit_price = entry_price or 0.0
 
             # Clean symbol name

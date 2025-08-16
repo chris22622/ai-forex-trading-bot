@@ -10,8 +10,9 @@ import sys
 # Add current directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from config import ENABLE_TELEGRAM_ALERTS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from enhanced_telegram_notifier import EnhancedTelegramNotifier, TradeRecord
+
+from config import ENABLE_TELEGRAM_ALERTS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
 
 def test_enhanced_notifications():

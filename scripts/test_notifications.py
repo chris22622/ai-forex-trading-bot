@@ -11,8 +11,9 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 try:
-    from config import ENABLE_TELEGRAM_ALERTS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
     from enhanced_telegram_notifier import EnhancedTelegramNotifier, TradeRecord
+
+    from config import ENABLE_TELEGRAM_ALERTS, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
     print("🚀 Testing Enhanced Telegram Notifications...")
     print(f"✅ Bot Token configured: {'Yes' if TELEGRAM_BOT_TOKEN else 'No'}")

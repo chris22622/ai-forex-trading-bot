@@ -7,8 +7,9 @@ Quick test to verify all components work correctly
 import asyncio
 from datetime import datetime
 
-from config import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 from enhanced_telegram_notifier import EnhancedTelegramNotifier, TradeRecord
+
+from config import TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
 
 
 async def test_enhanced_notifications():

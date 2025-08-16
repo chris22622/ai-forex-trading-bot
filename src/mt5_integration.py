@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional, Tuple
 # Import MetaTrader5 conditionally for cross-platform compatibility
 try:
     import MetaTrader5 as mt5  # type: ignore
+
     mt5_available = True
 except ImportError:
     mt5_available = False
@@ -45,12 +46,8 @@ MT5_DEFAULT_SYMBOL = "Volatility 10 Index"
 # Try to import from config, but don't let it block initialization
 try:
     from config import (
-        MT5_DEFAULT_SYMBOL,
-        MT5_DEMO_MODE,
         MT5_LOGIN,
-        MT5_LOT_SIZE,
         MT5_MAGIC_NUMBER,
-        MT5_MAX_LOT_SIZE,
         MT5_PASSWORD,
         MT5_REAL_TRADING,
         MT5_SERVER,
@@ -789,7 +786,7 @@ class MT5TradingInterface:
             # Double-check lot size against REAL MT5 limits
             volume_min = getattr(symbol_info, "volume_min", 0.001)
             volume_max = getattr(symbol_info, "volume_max", 1.0)
-            volume_step = getattr(symbol_info, "volume_step", 0.001)
+            # volume_step = getattr(symbol_info, "volume_step", 0.001)  # Unused
 
             # Final lot size validation
             if lot_size < volume_min or lot_size > volume_max:
@@ -1053,27 +1050,6 @@ class MT5TradingInterface:
         except Exception as e:
             logger.error(f"❌ Error getting equity: {e}")
             return 0.0
-
-    async def get_current_price(self, symbol: str) -> Optional[float]:
-        """Get current price for symbol"""
-        try:
-            # BULLETPROOF SYMBOL MAPPING - Convert synthetic symbols to MT5-compatible ones
-            effective_symbol = symbol_manager.get_safe_symbol(symbol)
-            logger.debug(f"🔄 Getting price for: {symbol} → {effective_symbol}")
-
-            symbol_info = mt5.symbol_info(effective_symbol)
-            if symbol_info:
-                # Return mid price (average of bid and ask)
-                price = (symbol_info.bid + symbol_info.ask) / 2.0
-                logger.debug(f"💰 Price for {symbol} (MT5: {effective_symbol}): {price}")
-                return price
-
-            logger.error(f"❌ Cannot get price for {symbol} - MT5 connection issue")
-            # FIXED: Return None instead of 1.0 fallback to prevent bad trades
-            return None
-        except Exception as e:
-            logger.error(f"❌ Error getting price for {symbol}: {e}")
-            return None
 
     async def get_price_history(
         self, symbol: str, timeframe: int = mt5.TIMEFRAME_M1, count: int = 100
@@ -1553,7 +1529,7 @@ class MT5TradingBot:
                         self.original_bot.update_multi_timeframe_data(price, timestamp)
 
                         # Update balance
-                        balance = await self.mt5.get_current_balance()
+                        # balance = await self.mt5.get_current_balance()  # Unused
                         equity = await self.mt5.get_current_equity()
                         self.original_bot.current_balance = (
                             equity  # Use equity as it includes unrealized P&L
