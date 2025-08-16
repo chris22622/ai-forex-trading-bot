@@ -130,7 +130,9 @@ with st.sidebar:
     st.divider()
     st.markdown("**Notes**")
     st.markdown(
-        "- Demo works anywhere.\n- Live requires Windows + MetaTrader5 installed + your bot configured."
+                "- Demo works anywhere.\n- Live requires Windows +
+            MetaTrader5 installed +
+            your bot configured."
     )
 
 # --- Start/Stop handlers ---

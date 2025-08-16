@@ -47,7 +47,10 @@ def emergency_fix_config():
 
         # 3. Make sure AI confidence is reasonable (not 0.05 which causes emergency mode)
         if 'AI_CONFIDENCE_THRESHOLD = 0.05' in content:
-            content = content.replace('AI_CONFIDENCE_THRESHOLD = 0.05', 'AI_CONFIDENCE_THRESHOLD = 0.65')
+                        content = content.replace(
+                'AI_CONFIDENCE_THRESHOLD = 0.05',
+                'AI_CONFIDENCE_THRESHOLD = 0.65'
+            )
             fixes_applied.append("AI_CONFIDENCE_THRESHOLD: 0.05 → 0.65")
 
         # Write fixed config

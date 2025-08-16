@@ -113,7 +113,8 @@ async def check_bot_status():
     if bot.active_trades:
         print("📋 Active Trades:")
         for trade_id, trade in bot.active_trades.items():
-            print(f"   🔸 {trade_id}: {trade.get('action', 'Unknown')} {trade.get('symbol', 'Unknown')}")
+            f"   🔸 {trade_id}"
+            f" {trade.get('action', 'Unknown')} {trade.get('symbol', 'Unknown')}"
 
     return True
 

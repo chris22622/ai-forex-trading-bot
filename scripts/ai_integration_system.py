@@ -56,7 +56,12 @@ except ImportError:
 class AIModelManager:
     """Manages all AI models and provides unified predictions"""
 
-    def __init__(self, initial_balance: float = 1000.0, enable_features: Optional[Dict[str, bool]] = None):
+        def __init__(
+        self,
+        initial_balance: float = 1000.0,
+        enable_features: Optional[Dict[str,
+        bool]] = None
+    )
         self.initial_balance = initial_balance
 
         # Feature flags
@@ -632,7 +637,11 @@ class AIModelManager:
 
         return correct_predictions / len(recent_trades)
 
-    def run_backtest(self, historical_data: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+        def run_backtest(
+        self,
+        historical_data: Optional[List[Dict[str,
+        Any]]] = None
+    )
         """Run backtest on historical data"""
 
         if 'backtesting' not in self.models:

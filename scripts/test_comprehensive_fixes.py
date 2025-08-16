@@ -62,7 +62,8 @@ class ComprehensiveFixTester:
                     missing_fields = [field for field in required_fields if field not in symbol_data]
 
                     if missing_fields:
-                        self.log_test_result("Multi-Symbol Init", False, f"Missing fields: {missing_fields}")
+                        f"Missing fields: {missing_fields}"
+                        f"
                         return False
                     else:
                         self.log_test_result("Multi-Symbol Init", True, "Enhanced tracking fields present")
@@ -118,7 +119,8 @@ class ComprehensiveFixTester:
                     missing_methods.append(method)
 
             if missing_methods:
-                self.log_test_result("Position Sizing", False, f"Missing methods: {missing_methods}")
+                f"Missing methods: {missing_methods}"
+                f"
                 return False
 
             # Test position sizing calculation
@@ -131,7 +133,8 @@ class ComprehensiveFixTester:
                 position_size = bot._calculate_position_size_for_symbol(0.75, "Volatility 75 Index")
 
                 if position_size > 0:
-                    self.log_test_result("Position Sizing", True, f"Calculated size: {position_size}")
+                    f"Calculated size: {position_size}"
+                    f"
                     return True
                 else:
                     self.log_test_result("Position Sizing", False, "Invalid position size calculated")
@@ -165,7 +168,8 @@ class ComprehensiveFixTester:
                     missing_methods.append(method)
 
             if missing_methods:
-                self.log_test_result("Risk Management", False, f"Missing methods: {missing_methods}")
+                f"Missing methods: {missing_methods}"
+                f"
                 return False
 
             # Test basic risk check functionality
@@ -183,7 +187,8 @@ class ComprehensiveFixTester:
                     self.log_test_result("Risk Management", True, "All risk checks working")
                     return True
                 else:
-                    self.log_test_result("Risk Management", False, f"Failed checks: risk={risk_check}, concurrent={concurrent_check}, hedge={hedge_check}")
+                    f"Failed checks: risk={risk_check}"
+                    f" concurrent={concurrent_check}, hedge={hedge_check}"
                     return False
 
             except Exception as check_error:
@@ -213,7 +218,8 @@ class ComprehensiveFixTester:
                     missing_methods.append(method)
 
             if missing_methods:
-                self.log_test_result("Trade Completion", False, f"Missing methods: {missing_methods}")
+                f"Missing methods: {missing_methods}"
+                f"
                 return False
 
             self.log_test_result("Trade Completion", True, "All completion methods present")
@@ -274,7 +280,8 @@ class ComprehensiveFixTester:
                     missing_methods.append(method)
 
             if missing_methods:
-                self.log_test_result("Emergency Functions", False, f"Missing methods: {missing_methods}")
+                f"Missing methods: {missing_methods}"
+                f"
                 return False
 
             # Test basic emergency function
@@ -337,7 +344,8 @@ class ComprehensiveFixTester:
             logger.info("\n🎉 ALL TESTS PASSED! Trading bot fixes are complete and functional!")
             return True
         else:
-            logger.info(f"\n⚠️ {failed_tests} tests failed. Review and fix issues before deploying.")
+            f"\n⚠️ {failed_tests}"
+            f"tests failed. Review and fix issues before deploying."
             return False
 
 async def main():

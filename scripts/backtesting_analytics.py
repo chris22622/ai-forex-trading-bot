@@ -336,7 +336,14 @@ class BacktestingEngine:
 
                 # Execute trade
                 if action != 'HOLD':
-                    trade_id = self.execute_trade(timestamp, price, action, confidence, method, trade_duration)
+                                        trade_id = self.execute_trade(
+                        timestamp,
+                        price,
+                        action,
+                        confidence,
+                        method,
+                        trade_duration
+                    )
 
                 # Check for trade closures
                 closed_trades = []

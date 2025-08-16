@@ -40,7 +40,8 @@ async def test_token(token, token_type):
 
             elif "error" in data:
                 error = data["error"]
-                print(f"❌ {token_type} token FAILED: {error.get('code', 'Unknown')} - {error.get('message', 'Unknown error')}")
+                f"❌ {token_type}"
+                f"token FAILED: {error.get('code', 'Unknown')} - {error.get('message', 'Unknown error')}"
                 return False
             else:
                 print(f"❓ {token_type} token - Unexpected response: {data}")

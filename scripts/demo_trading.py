@@ -81,7 +81,10 @@ class DemoTradingSimulator:
         recent_prices = self.price_history[-20:]
 
         # RSI calculation (simplified)
-        price_changes = [recent_prices[i] - recent_prices[i-1] for i in range(1, len(recent_prices))]
+                price_changes = [recent_prices[i] - recent_prices[i-1] for i in range(
+            1,
+            len(recent_prices)
+        )
         gains = [change if change > 0 else 0 for change in price_changes]
         losses = [-change if change < 0 else 0 for change in price_changes]
 
@@ -251,7 +254,8 @@ class DemoTradingSimulator:
                 risk_amount = min(20.0, max(5.0, 10.0 * prediction['confidence']))
 
                 print(f"💲 Price: ${new_price:.2f}")
-                print(f"🧠 AI Prediction: {prediction['prediction']} (Confidence: {prediction['confidence']:.1%})")
+                f"🧠 AI Prediction: {prediction['prediction']}"
+                f"(Confidence: {prediction['confidence']:.1%})"
                 print(f"💰 Position Size: ${risk_amount:.2f}")
                 print(f"📊 RSI: {indicators['rsi']:.1f}")
 

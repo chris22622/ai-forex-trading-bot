@@ -92,8 +92,12 @@ async def simple_trading_bot():
                                         bot.session_stats['total_profit'] += loss
                                         print(f"🔴 LOSS: ${loss:.2f}")
 
-                                    win_rate = bot.session_stats['wins'] / max(1, bot.session_stats['total_trades'])
-                                    print(f"📈 Stats: {bot.session_stats['wins']}W/{bot.session_stats['losses']}L ({win_rate:.1%}), P&L: ${bot.session_stats['total_profit']:+.2f}")
+                                                                        win_rate = bot.session_stats['wins'] / max(
+                                        1,
+                                        bot.session_stats['total_trades']
+                                    )
+                                    f"📈 Stats: {bot.session_stats['wins']}"
+                                    f"/{bot.session_stats['losses']}L ({win_rate:.1%}), P&L: ${bot.session_stats['total_profit']:+.2f}"
                         else:
                             print(f"⚠️ No price data on iteration {i+1}")
 
@@ -107,7 +111,8 @@ async def simple_trading_bot():
             print(f"   Total Trades: {bot.session_stats['total_trades']}")
             print(f"   Wins: {bot.session_stats['wins']}")
             print(f"   Losses: {bot.session_stats['losses']}")
-            print(f"   Win Rate: {bot.session_stats['wins'] / max(1, bot.session_stats['total_trades']):.1%}")
+                        print(f"   Win Rate: {bot.session_stats['wins'] / max(1, "
+            "bot.session_stats['total_trades']):.1%}")
             print(f"   Total P&L: ${bot.session_stats['total_profit']:+.2f}")
             print(f"   Active Trades: {len(bot.active_trades)}")
 

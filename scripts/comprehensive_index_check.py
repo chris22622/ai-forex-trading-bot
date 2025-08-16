@@ -113,7 +113,8 @@ def comprehensive_index_check():
 
             if tick and tick.bid > 0 and tick.ask > 0:
                 spread = tick.ask - tick.bid
-                print(f"✅ ACTIVE   Bid: {tick.bid:>10.2f} Ask: {tick.ask:>10.2f} Spread: {spread:>6.2f}")
+                f"✅ ACTIVE   Bid: {tick.bid:>10.2f}"
+                f"Ask: {tick.ask:>10.2f} Spread: {spread:>6.2f}"
                 active_indices.append({
                     'symbol': symbol,
                     'bid': tick.bid,
@@ -144,17 +145,20 @@ def comprehensive_index_check():
         if volatility_indices:
             print("\n  📈 VOLATILITY INDICES:")
             for idx in volatility_indices:
-                print(f"     - {idx['symbol']:<35} Bid: {idx['bid']:>10.2f} Spread: {idx['spread']:>6.2f}")
+                f"     - {idx['symbol']:<35}"
+                f"Bid: {idx['bid']:>10.2f} Spread: {idx['spread']:>6.2f}"
 
         if boom_crash_indices:
             print("\n  💥 BOOM/CRASH INDICES:")
             for idx in boom_crash_indices:
-                print(f"     - {idx['symbol']:<35} Bid: {idx['bid']:>10.2f} Spread: {idx['spread']:>6.2f}")
+                f"     - {idx['symbol']:<35}"
+                f"Bid: {idx['bid']:>10.2f} Spread: {idx['spread']:>6.2f}"
 
         if other_indices:
             print("\n  🎯 OTHER INDICES:")
             for idx in other_indices:
-                print(f"     - {idx['symbol']:<35} Bid: {idx['bid']:>10.2f} Spread: {idx['spread']:>6.2f}")
+                f"     - {idx['symbol']:<35}"
+                f"Bid: {idx['bid']:>10.2f} Spread: {idx['spread']:>6.2f}"
 
     print(f"\n❌ INACTIVE INDICES ({len(inactive_indices)}):")
     for symbol in inactive_indices:

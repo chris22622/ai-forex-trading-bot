@@ -35,7 +35,8 @@ class MT5OrderFix:
             mt5.shutdown()
             return None
 
-        print(f"✅ Terminal - Connected: {terminal.connected}, Trade Allowed: {terminal.trade_allowed}")
+        f"✅ Terminal - Connected: {terminal.connected}"
+        f" Trade Allowed: {terminal.trade_allowed}"
 
         if not terminal.connected:
             print("❌ Terminal not connected to trade server")
@@ -54,7 +55,8 @@ class MT5OrderFix:
             mt5.shutdown()
             return None
 
-        print(f"✅ Account - Login: {account.login}, Trade Allowed: {account.trade_allowed}, Balance: {account.balance}")
+        f"✅ Account - Login: {account.login}"
+        f" Trade Allowed: {account.trade_allowed}, Balance: {account.balance}"
 
         if not account.trade_allowed:
             print("❌ Trading not allowed for account")

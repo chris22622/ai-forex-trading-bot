@@ -102,7 +102,8 @@ class TradeLogger:
                 writer = csv.DictWriter(file, fieldnames=self.fieldnames)
                 writer.writerow(trade_record)
 
-            logger.info(f"Trade logged: {trade_record['action']} {trade_record['symbol']} - {trade_record['result']}")
+            f"Trade logged: {trade_record['action']}"
+            f"{trade_record['symbol']} - {trade_record['result']}"
 
         except Exception as e:
             logger.error(f"Error logging trade: {e}")
@@ -130,7 +131,9 @@ class TradeLogger:
                             processed_row = dict(row)  # Create a copy
 
                             # Handle all numeric fields safely
-                            numeric_fields = ['amount', 'price', 'confidence', 'profit_loss', 'balance']
+                            numeric_fields = [
+                                'amount', 'price', 'confidence', 'profit_loss', 'balance'
+                            ]
                             for field in numeric_fields:
                                 try:
                                     if field in row and row[field] not in [None, '', 'None']:
@@ -256,7 +259,9 @@ class PerformanceTracker:
             'losses': self.loss_count,
             'win_rate': self.win_count / self.trade_count if self.trade_count > 0 else 0,
             'total_profit': self.total_profit,
-            'avg_profit_per_trade': self.total_profit / self.trade_count if self.trade_count > 0 else 0,
+            'avg_profit_per_trade': (
+                self.total_profit / self.trade_count if self.trade_count > 0 else 0
+            ),
             'consecutive_losses': self.consecutive_losses,
             'max_consecutive_losses': self.max_consecutive_losses,
             'current_balance': self.last_balance,
@@ -311,7 +316,8 @@ def format_duration(seconds: int) -> str:
         minutes = (seconds % 3600) // 60
         return f"{hours}h {minutes}m"
 
-def calculate_profit_loss(entry_price: float, exit_price: float, amount: float, action: str) -> float:
+def calculate_profit_loss(
+    entry_price: float, exit_price: float, amount: float, action: str) -> float:
     """Calculate profit/loss for a trade"""
     if action.upper() == "BUY":
         return amount * (exit_price - entry_price) / entry_price
@@ -404,7 +410,10 @@ def get_system_info() -> Dict[str, Any]:
             'python_version': platform.python_version(),
             'cpu_usage': psutil.cpu_percent(),
             'memory_usage': psutil.virtual_memory().percent,
-            'disk_usage': psutil.disk_usage('/').percent if platform.system() != 'Windows' else psutil.disk_usage('C:').percent
+            'disk_usage': (
+                psutil.disk_usage('/').percent if platform.system() != 'Windows' 
+                else psutil.disk_usage('C:').percent
+            )
         }
     except ImportError:
         return {
@@ -424,10 +433,14 @@ def retry_on_failure(max_retries: int = 3, delay: float = 1.0):
                     return func(*args, **kwargs)
                 except Exception as e:
                     if attempt == max_retries - 1:
-                        logger.error(f"Function {func.__name__} failed after {max_retries} attempts: {e}")
+                        logger.error(
+                            f"Function {func.__name__} failed after {max_retries} attempts: {e}"
+                        )
                         raise
                     else:
-                        logger.warning(f"Function {func.__name__} failed on attempt {attempt + 1}: {e}")
+                        logger.warning(
+                            f"Function {func.__name__} failed on attempt {attempt + 1}: {e}"
+                        )
                         time.sleep(delay * (attempt + 1))  # Exponential backoff
             return None
         return wrapper

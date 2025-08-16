@@ -132,7 +132,11 @@ class TechnicalIndicators:
             print(f"Error calculating Bollinger Bands: {e}")
             return {'upper': None, 'middle': None, 'lower': None}
 
-    def calculate_stochastic(self, k_period: int = 14, d_period: int = 3) -> Dict[str, Optional[float]]:
+        def calculate_stochastic(
+        self,
+        k_period: int = 14,
+        d_period: int = 3
+    )
         """Calculate Stochastic Oscillator"""
         if len(self.df) < k_period + d_period:
             return {'%K': None, '%D': None}

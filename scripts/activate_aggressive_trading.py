@@ -96,7 +96,8 @@ async def activate_aggressive_trading():
             print("\n⚠️ Some checks failed - investigating...")
 
             if not risk_ok:
-                print(f"🔧 Risk limits issue - checking consecutive losses: {bot.consecutive_losses}")
+                f"🔧 Risk limits issue - checking consecutive losses: {bot.consecutive_losses}"
+                f"
             if not concurrent_ok:
                 print(f"🔧 Concurrent trades issue - current: {len(bot.active_trades)}/10")
             if not timing_ok:

@@ -36,7 +36,11 @@ class TradingAI:
 
     def __init__(self):
         # Use safe config loading with fallbacks
-        self.model_type = getattr(config, "AI_MODEL_TYPE", "randomforest") if config else "randomforest"
+                self.model_type = getattr(
+            config,
+            "AI_MODEL_TYPE",
+            "randomforest"
+        )
         self.confidence_threshold = CONFIDENCE_THRESHOLD_01  # Use 0..1 scale everywhere
         self.prediction_history: List[Dict[str, Any]] = []
         self.performance_metrics: Dict[str, Any] = {
@@ -243,7 +247,12 @@ class TradingAI:
             print(f"Error in advanced ML prediction: {e}")
             return self.simple_ensemble_predict(features)
 
-    def predict_trade(self, indicator_data: Dict[str, Any], price_history: Optional[List[float]] = None) -> Dict[str, Any]:
+        def predict_trade(
+        self,
+        indicator_data: Dict[str,
+        Any],
+        price_history: Optional[List[float]] = None
+    )
         """Main prediction function with aggressive fallback"""
         if not indicator_data:
             # AGGRESSIVE FALLBACK: Generate a trade anyway based on price history
@@ -364,12 +373,14 @@ class TradingAI:
             confidence_desc = "high" if confidence > 0.8 else "medium" if confidence > 0.6 else "low"
 
             if reasons:
-                reason_text = f"{prediction} signal with {confidence_desc} confidence ({confidence:.2f}). "
+                f"{prediction}"
+                f"signal with {confidence_desc} confidence ({confidence:.2f}). "
                 reason_text += f"Based on: {', '.join(reasons[:3])}"  # Limit to top 3 reasons
                 if len(reasons) > 3:
                     reason_text += f" and {len(reasons) - 3} other factors"
             else:
-                reason_text = f"{prediction} with {confidence_desc} confidence - no strong signals detected"
+                f"{prediction}"
+                f"with {confidence_desc} confidence - no strong signals detected"
 
             return reason_text
 
@@ -481,9 +492,15 @@ class TradingAI:
                     model_state = pickle.load(f)
 
                 self.feature_weights = model_state.get('feature_weights', self.feature_weights)
-                self.performance_metrics = model_state.get('performance_metrics', self.performance_metrics)
+                                self.performance_metrics = model_state.get(
+                    'performance_metrics',
+                    self.performance_metrics
+                )
                 self.model_type = model_state.get('model_type', self.model_type)
-                self.confidence_threshold = model_state.get('confidence_threshold', self.confidence_threshold)
+                                self.confidence_threshold = model_state.get(
+                    'confidence_threshold',
+                    self.confidence_threshold
+                )
                 self.prediction_history = model_state.get('prediction_history', [])
 
                 print(f"✅ Model loaded from {filepath}")
@@ -525,7 +542,10 @@ def optimize_confidence_threshold(prediction_history: List[Dict[str, Any]], resu
     for threshold in np.arange(0.3, 0.9, 0.1):
         filtered_predictions = [p for p in prediction_history if p['confidence'] >= threshold]
         if len(filtered_predictions) >= 10:  # Need minimum samples
-            accuracy = calculate_prediction_accuracy(filtered_predictions, results[-len(filtered_predictions):])
+                        accuracy = calculate_prediction_accuracy(
+                filtered_predictions,
+                results[-len(filtered_predictions):]
+            )
             if accuracy > best_accuracy:
                 best_accuracy = accuracy
                 best_threshold = threshold
@@ -551,7 +571,8 @@ if __name__ == "__main__":
     }
 
     prediction = ai.predict_trade(sample_indicators)
-    print(f"✅ Test prediction: {prediction['prediction']} (confidence: {prediction['confidence']:.2f})")
+    f"✅ Test prediction: {prediction['prediction']}"
+    f"(confidence: {prediction['confidence']:.2f})"
     print(f"📝 Reason: {prediction['reason']}")
 
     # Test performance report

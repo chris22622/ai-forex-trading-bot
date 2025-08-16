@@ -207,7 +207,10 @@ class FullTradingBotDemo:
         else:
             # Real analysis
             recent_prices = self.price_history[-50:]
-            price_changes = [recent_prices[i] - recent_prices[i-1] for i in range(1, len(recent_prices))]
+                        price_changes = [recent_prices[i] - recent_prices[i-1] for i in range(
+                1,
+                len(recent_prices)
+            )
             positive_changes = sum(1 for change in price_changes if change > 0)
             trend_ratio = positive_changes / len(price_changes)
             volatility = np.std(price_changes) / np.mean(recent_prices) if np.mean(recent_prices) > 0 else 0
@@ -366,7 +369,8 @@ class FullTradingBotDemo:
             })
 
             if hour % 4 == 0:  # Show every 4 hours
-                print(f"  🕐 {hour:02d}:00 | Confidence: {confidence:.1%} | Trades: {heatmap_data[-1]['trades']}")
+                f"  🕐 {hour:02d}"
+                f"00 | Confidence: {confidence:.1%} | Trades: {heatmap_data[-1]['trades']}"
 
         # Calculate stats
         avg_confidence = np.mean([d['confidence'] for d in heatmap_data])
@@ -409,7 +413,8 @@ class FullTradingBotDemo:
                 best_score = score
                 best_strategy = strategy
 
-            print(f"     {strategy}: Win Rate {win_rate:.1%} | P&L ${stats['total_profit']:.1f} | Score {score:.3f}")
+            f"     {strategy}"
+            f" Win Rate {win_rate:.1%} | P&L ${stats['total_profit']:.1f} | Score {score:.3f}"
 
         print(f"  🎯 Selected Strategy: {best_strategy} (Score: {best_score:.3f})")
 

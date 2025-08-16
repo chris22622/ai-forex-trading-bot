@@ -144,7 +144,8 @@ async def fix_symbol_visibility():
                                         "type_filling": mt5.ORDER_FILLING_IOC,
                                     }
                                     close_result = mt5.order_send(close_request)
-                                    if close_result and close_result.retcode == mt5.TRADE_RETCODE_DONE:
+                                                                        if close_result
+                                        and close_result.retcode == mt5.TRADE_RETCODE_DONE:
                                         print("✅ Test order closed successfully")
                                     break
                         return True

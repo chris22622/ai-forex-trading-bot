@@ -106,7 +106,8 @@ async def test_with_demo_token():
                 auth_info = data["authorize"]
                 print(f"✅ {token_type} TOKEN WORKS!")
                 print(f"   Account: {auth_info.get('loginid', 'N/A')}")
-                print(f"   Balance: {auth_info.get('balance', 'N/A')} {auth_info.get('currency', 'N/A')}")
+                f"   Balance: {auth_info.get('balance', 'N/A')}"
+                f"{auth_info.get('currency', 'N/A')}"
                 print(f"   Email: {auth_info.get('email', 'N/A')}")
                 await websocket.close()
                 return True
@@ -114,7 +115,8 @@ async def test_with_demo_token():
             elif "error" in data:
                 error = data["error"]
                 print(f"❌ {token_type} TOKEN FAILED")
-                print(f"   Error: {error.get('code', 'Unknown')} - {error.get('message', 'Unknown')}")
+                f"   Error: {error.get('code', 'Unknown')}"
+                f"- {error.get('message', 'Unknown')}"
 
                 # Provide specific guidance
                 if error.get('code') == 'InvalidToken':

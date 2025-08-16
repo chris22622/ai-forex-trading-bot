@@ -25,7 +25,8 @@ try:
         print(f"  Server: {getattr(bot.mt5_interface, 'server', 'Unknown')}")
         print(f"  Balance: ${bot.current_balance:.2f}")
         print(f"  Demo Mode: {'✅ ACTIVE' if getattr(bot, 'demo_mode', False) else '❌ INACTIVE'}")
-        print(f"  Loss Protection: {'❌ DISABLED' if getattr(bot, 'loss_protection_triggered', False) else '✅ ENABLED'}")
+                print(f"  Loss Protection: {'❌ DISABLED' if getattr(bot, 'loss_protection_triggered', "
+        "False) else '✅ ENABLED'}")
     else:
         print("  Bot Running: ❌ NO")
 

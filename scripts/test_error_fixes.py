@@ -37,7 +37,8 @@ def test_ai_predictions():
 
         # Test pattern recognition with minimal data
         patterns = ai.identify_patterns([1.0, 1.1, 1.05, 1.15])
-        print(f"✅ Pattern recognition: {patterns['prediction']} with confidence {patterns['confidence']:.2f}")
+        f"✅ Pattern recognition: {patterns['prediction']}"
+        f"with confidence {patterns['confidence']:.2f}"
 
     except Exception as e:
         print(f"❌ Enhanced AI test failed: {e}")
@@ -64,7 +65,8 @@ def test_ai_predictions():
             10.0
         )
 
-        print(f"✅ AI Manager prediction with problematic data: {prediction.get('prediction', 'UNKNOWN')}")
+                print(f"✅ AI Manager prediction with problematic data: "
+        "{prediction.get('prediction', 'UNKNOWN')}")
 
     except Exception as e:
         print(f"❌ AI Manager test failed: {e}")
@@ -134,7 +136,8 @@ def test_position_monitoring():
             else:
                 print(f"⚠️ Position {i+1} has invalid types")
 
-        print(f"✅ Position monitoring safety: {valid_positions}/{len(test_positions)} positions valid")
+        f"✅ Position monitoring safety: {valid_positions}"
+        f"{len(test_positions)} positions valid"
 
     except Exception as e:
         print(f"❌ Position monitoring test failed: {e}")

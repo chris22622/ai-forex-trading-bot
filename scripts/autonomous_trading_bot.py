@@ -85,7 +85,8 @@ class AutonomousTradingBot:
                 self.restart_count += 1
 
                 if self.restart_count < self.max_restarts:
-                    logger.info(f"🔄 Restarting bot (attempt {self.restart_count}/{self.max_restarts})")
+                    f"🔄 Restarting bot (attempt {self.restart_count}"
+                    f"{self.max_restarts})"
                     self.bot = None
                     await asyncio.sleep(5)
                 else:
@@ -206,9 +207,14 @@ class AutonomousTradingBot:
             )
 
             # Execute the trade
-            logger.info(f"🎯 AUTONOMOUS TRADE: {action} ${trade_amount:.2f} (Confidence: {confidence:.0%})")
+            f"🎯 AUTONOMOUS TRADE: {action}"
+            f"${trade_amount:.2f} (Confidence: {confidence:.0%})"
 
-            trade_data = await self.bot.simulate_trade(action, self.bot.get_effective_symbol(), trade_amount)
+                        trade_data = await self.bot.simulate_trade(
+                action,
+                self.bot.get_effective_symbol(),
+                trade_amount
+            )
 
             if trade_data:
                 # Send trade notification

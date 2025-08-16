@@ -286,7 +286,8 @@ RECOMMENDED VPN SERVERS:
 
         # Get location info
         location_info = self.get_location_info()
-        logger.info(f"🌍 Your location: {location_info.get('city', 'Unknown')}, {location_info.get('country', 'Unknown')}")
+        f"🌍 Your location: {location_info.get('city', 'Unknown')}"
+        f" {location_info.get('country', 'Unknown')}"
         logger.info(f"🔢 Your IP: {location_info.get('ip', 'Unknown')}")
         logger.info(f"🏢 ISP: {location_info.get('isp', 'Unknown')}")
 

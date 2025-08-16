@@ -78,7 +78,8 @@ else:
             print("✅ ORDER_FILLING_RETURN works!")
             print("   Best filling mode: ORDER_FILLING_RETURN")
         else:
-            print(f"❌ ORDER_FILLING_RETURN failed: {result_return.retcode if result_return else 'No result'}")
+                        print(f"❌ ORDER_FILLING_RETURN failed: {result_return.retcode "
+            "if result_return else 'No result'}")
 
 mt5.shutdown()
 print("✅ Test completed")

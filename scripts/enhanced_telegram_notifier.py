@@ -115,7 +115,12 @@ class TradingStats:
 class EnhancedTelegramNotifier:
     """Enhanced Telegram notifier with beautiful formatting and persistent tracking"""
 
-    def __init__(self, bot_token: Optional[str] = None, chat_id: Optional[str] = None, trades_file: str = "trades_history.json"):
+        def __init__(
+        self,
+        bot_token: Optional[str] = None,
+        chat_id: Optional[str] = None,
+        trades_file: str = "trades_history.json"
+    )
         self.bot_token = bot_token or telegram_bot_token
         self.chat_id = chat_id or telegram_chat_id
         self.trades_file = trades_file
@@ -265,7 +270,8 @@ class EnhancedTelegramNotifier:
                     chunks = [message[i:i+max_length] for i in range(0, len(message), max_length)]
                     success = True
                     for i, chunk in enumerate(chunks):
-                        chunk_msg = f"📄 Part {i+1}/{len(chunks)}:\n{chunk}" if len(chunks) > 1 else chunk
+                        f"📄 Part {i+1}"
+                        f"{len(chunks)}:\n{chunk}"
                         if not self._send_single_chunk(url, chunk_msg):
                             success = False
                             break
@@ -273,12 +279,18 @@ class EnhancedTelegramNotifier:
                             time.sleep(1.5)
 
                     if success:
-                        self.rate_limit_violations = max(0, self.rate_limit_violations - 1)  # Reduce violations on success
+                                                self.rate_limit_violations = max(
+                            0,
+                            self.rate_limit_violations - 1
+                        )
                     return success
                 else:
                     result = self._send_single_chunk(url, message)
                     if result:
-                        self.rate_limit_violations = max(0, self.rate_limit_violations - 1)  # Reduce violations on success
+                                                self.rate_limit_violations = max(
+                            0,
+                            self.rate_limit_violations - 1
+                        )
                     return result
 
             except Exception as e:
@@ -286,7 +298,8 @@ class EnhancedTelegramNotifier:
                 if "429" in error_msg or "too many requests" in error_msg:
                     self.rate_limit_violations += 1
                     delay = retry_delays[min(attempt, len(retry_delays) - 1)]
-                    logging.warning(f"🚫 Rate limit hit (429). Backoff #{self.rate_limit_violations}. Waiting {delay}s...")
+                    f"🚫 Rate limit hit (429). Backoff #{self.rate_limit_violations}"
+                    f" Waiting {delay}s..."
                     if attempt < max_retries - 1:
                         time.sleep(delay)
                         continue
@@ -322,7 +335,8 @@ class EnhancedTelegramNotifier:
                 # Parse retry-after header if available
                 retry_after = response.headers.get('retry-after', '60')
                 self.rate_limit_violations += 1
-                logging.warning(f"🚫 Telegram rate limit (429). Retry after: {retry_after}s. Violations: {self.rate_limit_violations}")
+                f"🚫 Telegram rate limit (429). Retry after: {retry_after}"
+                f". Violations: {self.rate_limit_violations}"
                 raise Exception(f"429 Too Many Requests - retry after {retry_after}s")
             else:
                 logging.error(f"❌ Telegram API error: {response.status_code} - {response.text}")
@@ -528,7 +542,10 @@ class EnhancedTelegramNotifier:
                     self.stats.wins += 1
                     self.stats.consecutive_wins += 1
                     self.stats.consecutive_losses = 0
-                    self.stats.max_consecutive_wins = max(self.stats.max_consecutive_wins, self.stats.consecutive_wins)
+                                        self.stats.max_consecutive_wins = max(
+                        self.stats.max_consecutive_wins,
+                        self.stats.consecutive_wins
+                    )
 
                     if trade.profit_loss > self.stats.best_trade:
                         self.stats.best_trade = trade.profit_loss
@@ -536,7 +553,10 @@ class EnhancedTelegramNotifier:
                     self.stats.losses += 1
                     self.stats.consecutive_losses += 1
                     self.stats.consecutive_wins = 0
-                    self.stats.max_consecutive_losses = max(self.stats.max_consecutive_losses, self.stats.consecutive_losses)
+                                        self.stats.max_consecutive_losses = max(
+                        self.stats.max_consecutive_losses,
+                        self.stats.consecutive_losses
+                    )
 
                     if trade.profit_loss < self.stats.worst_trade:
                         self.stats.worst_trade = trade.profit_loss
@@ -563,8 +583,14 @@ class EnhancedTelegramNotifier:
             daily_profit = sum(t.profit_loss for t in today_trades if t.profit_loss is not None)
             daily_winrate = (daily_wins / daily_total * 100) if daily_total > 0 else 0
 
-            best_today = max([t.profit_loss for t in today_trades if t.profit_loss is not None], default=0)
-            worst_today = min([t.profit_loss for t in today_trades if t.profit_loss is not None], default=0)
+                        best_today = max(
+                [t.profit_loss for t in today_trades if t.profit_loss is not None],
+                default=0
+            )
+                        worst_today = min(
+                [t.profit_loss for t in today_trades if t.profit_loss is not None],
+                default=0
+            )
 
             # Overall performance emoji
             if daily_profit > 10:

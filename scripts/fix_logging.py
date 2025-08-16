@@ -12,7 +12,11 @@ def fix_logging_file(filepath):
             content = f.read()
 
         # Replace self.logger with logger
-        content = re.sub(r'self\.logger\.(info|error|warning|debug|critical)', r'logger.\1', content)
+                content = re.sub(
+            r'self\.logger\.(info|error|warning|debug|critical)',
+            r'logger.\1',
+            content
+        )
 
         # Remove the self.logger assignment line
         content = re.sub(r'\s*self\.logger = self\._setup_logger\(\)\s*\n', '', content)

@@ -36,7 +36,8 @@ def apply_final_trading_fixes():
         # Comment out the MT5 connection check that pauses trading
         content = content.replace(
             "if not self.is_mt5_connected():",
-            "# FIXED: Disable connection check that pauses trading\n                    if False: # not self.is_mt5_connected():"
+                        "# FIXED: Disable connection check that pauses trading\n                    if False: "
+            "# not self.is_mt5_connected():"
         )
 
         # Also fix the paused logic
@@ -142,7 +143,10 @@ def apply_final_trading_fixes():
             # Insert before the last method
             insertion_point = content.rfind("async def start(self)")
             if insertion_point > 0:
-                content = content[:insertion_point] + simple_trading_code + "\\n\\n    " + content[insertion_point:]
+                                content = content[:insertion_point] +
+                    simple_trading_code +
+                    "\\n\\n    " +
+                    content[insertion_point:]
 
                 with open(main_py, 'w', encoding='utf-8') as f:
                     f.write(content)

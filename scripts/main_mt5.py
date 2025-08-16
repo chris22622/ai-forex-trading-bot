@@ -156,7 +156,10 @@ class DerivMT5TradingBot:
                 return MarketCondition.SIDEWAYS
 
             recent_prices = self.price_history[-50:]
-            price_changes = [recent_prices[i] - recent_prices[i-1] for i in range(1, len(recent_prices))]
+                        price_changes = [recent_prices[i] - recent_prices[i-1] for i in range(
+                1,
+                len(recent_prices)
+            )
             positive_changes = sum(1 for change in price_changes if change > 0)
             trend_ratio = positive_changes / len(price_changes)
 
@@ -573,7 +576,8 @@ class DerivMT5TradingBot:
                     })
 
                     logger.info(f"🎯 MT5 Trade executed: {ai_prediction['prediction']} "
-                               f"${dynamic_amount:.2f} (Confidence: {ai_prediction['confidence']:.1%})")
+                               f"${dynamic_amount:.2f}"
+                               f"(Confidence: {ai_prediction['confidence']:.1%})"
 
         except Exception as e:
             logger.error(f"Error in market analysis: {e}")

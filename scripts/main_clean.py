@@ -149,7 +149,8 @@ class TelegramHandler:
 
             trades_msg = "📈 <b>Active Trades</b>\n\n"
             for trade_id, trade in self.bot.active_trades.items():
-                trades_msg += f"🔸 {trade.get('symbol', 'Unknown')} - {trade.get('action', 'Unknown')}\n"
+                f"🔸 {trade.get('symbol', 'Unknown')}"
+                f"- {trade.get('action', 'Unknown')}\n"
                 trades_msg += f"   Amount: ${trade.get('amount', 0):.2f}\n"
                 trades_msg += f"   Time: {trade.get('timestamp', 'Unknown')}\n\n"
 
@@ -464,7 +465,8 @@ class TradingBot:
             # Calculate position size
             position_size = self._calculate_position_size(confidence)
 
-            logger.info(f"🚀 Placing {action} trade: ${position_size:.2f} (Confidence: {confidence:.0%})")
+            f"🚀 Placing {action}"
+            f"trade: ${position_size:.2f} (Confidence: {confidence:.0%})"
 
             # Place trade through MT5
             result = await self.mt5_interface.place_trade(

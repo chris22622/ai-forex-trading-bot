@@ -81,7 +81,10 @@ class PatternRecognition:
             if older_mean != 0:
                 recent_momentum = recent_mean / older_mean
 
-        up_moves = len([i for i in range(1, len(prices)) if prices[i] > prices[i-1]]) / max(len(prices), 1)
+                up_moves = len(
+            [i for i in range(1, len(prices)) if prices[i] > prices[i-1]]) / max(len(prices),
+            1
+        )
         recent_volatility = np.mean(np.abs(returns[-5:])) if len(returns) >= 5 else 0
         new_high = 1 if len(prices) > 1 and prices[-1] > np.max(prices[:-1]) else 0
 
@@ -94,7 +97,11 @@ class PatternRecognition:
 
         return features
 
-    def find_similar_patterns(self, current_sequence: List[float], threshold: float = 0.1) -> List[str]:
+        def find_similar_patterns(
+        self,
+        current_sequence: List[float],
+        threshold: float = 0.1
+    )
         """Find historically similar patterns"""
         if len(self.price_sequences) < 10:
             return []
@@ -595,7 +602,8 @@ class EnsembleAIModel:
             # Update RL model
             if self.rl_manager and indicators and price_history:
                 confidence = 0.7  # Default, should come from original prediction
-                self.rl_manager.update_with_result(result, profit_loss, confidence, indicators, price_history)
+                                self.rl_manager.update_with_result(
+                    result, profit_loss, confidence, indicators, price_history)
 
             # Store training data for ML models
             if indicators and price_history:
@@ -635,7 +643,12 @@ class EnsembleAIModel:
             y = np.array(labels)
 
             # Split data
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+                        X_train, X_test, y_train, y_test = train_test_split(
+                X,
+                y,
+                test_size=0.2,
+                random_state=42
+            )
 
             # Train each model
             trained_models = 0

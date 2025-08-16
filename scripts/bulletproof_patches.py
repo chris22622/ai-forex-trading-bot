@@ -238,7 +238,8 @@ class BulletproofTradingBot:
                 except Exception as trade_error:
                     logger.warning(f"Skipping problematic trade {i}: {trade_error}")
                     # Add a simple error entry instead of crashing
-                    trades_msg += f"<b>Trade #{i}</b>\n🔸 Status: Processing error (ID: {str(contract_id)[:8]}...)\n\n"
+                    f"<b>Trade #{i}"
+                    f"/b>\n🔸 Status: Processing error (ID: {str(contract_id)[:8]}...)\n\n"
                     continue
 
             # Send the message

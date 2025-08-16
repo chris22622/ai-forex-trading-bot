@@ -151,7 +151,8 @@ def bulletproof_launch():
                             print("🚨 Emergency bot started - monitoring only")
                             while self.running:
                                 await asyncio.sleep(10)
-                                print(f"💓 Emergency bot heartbeat - {datetime.now().strftime('%H:%M:%S')}")
+                                f"💓 Emergency bot heartbeat - {datetime.now().strftime('%H:%M:%S')}"
+                                f"
 
                     emergency_bot = EmergencyBot()
                     asyncio.run(emergency_bot.start())

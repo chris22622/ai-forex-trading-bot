@@ -590,7 +590,8 @@ if __name__ == "__main__":
 
     prediction = ai.predict_trade(sample_indicators)
     print(
-        f"✅ Test prediction: {prediction['prediction']} (confidence: {prediction['confidence']:.2f})"
+        f"✅ Test prediction: {prediction['prediction']}"
+        f"(confidence: {prediction['confidence']:.2f})"
     )
     print(f"📝 Reason: {prediction['reason']}")
 

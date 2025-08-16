@@ -79,7 +79,8 @@ async def test_enhancements():
         # Test validation dashboard
         print("\n4. Testing validation dashboard...")
         dashboard = bot.get_validation_dashboard()
-        print(f"   Overall Score: {dashboard['overall_score']}/{dashboard['max_possible_score']} ({dashboard['score_percentage']:.1f}%)")
+        f"   Overall Score: {dashboard['overall_score']}"
+        f"{dashboard['max_possible_score']} ({dashboard['score_percentage']:.1f}%)"
         print(f"   Readiness Level: {dashboard['readiness_level']}")
         print(f"   Achievements: {len(dashboard['achievements'])}")
         print(f"   Blockers: {len(dashboard['blockers'])}")
@@ -127,7 +128,8 @@ async def test_enhancements():
         print("   • Validation dashboard: ✅ Working")
         print("   • Go-live checker: ✅ Working")
         print("   • Telegram commands: ✅ Working")
-        print(f"   • Current readiness: {'🟢 READY' if readiness['ready_for_live'] else '🟡 NOT READY'}")
+        f"   • Current readiness: {'🟢 READY' if readiness['ready_for_live'] else '🟡 NOT READY'}"
+        f"
 
     except Exception as e:
         print(f"❌ Test failed: {e}")

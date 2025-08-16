@@ -341,7 +341,8 @@ async def main():
         # Show detailed results
         if 'vpn_info' in result:
             vpn = result['vpn_info']
-            print(f"\n🌍 Your Location: {vpn.get('city', 'Unknown')}, {vpn.get('country', 'Unknown')}")
+            f"\n🌍 Your Location: {vpn.get('city', 'Unknown')}"
+            f" {vpn.get('country', 'Unknown')}"
             print(f"🔢 Your IP: {vpn.get('ip', 'Unknown')}")
 
         if 'deriv_test' in result:

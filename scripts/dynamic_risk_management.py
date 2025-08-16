@@ -49,7 +49,12 @@ class MarketRegimeDetector:
         logger.setLevel(logging.INFO)
         return logger
 
-    def update_market_data(self, price: float, volume: Optional[float] = None, timestamp: Optional[int] = None):
+        def update_market_data(
+        self,
+        price: float,
+        volume: Optional[float] = None,
+        timestamp: Optional[int] = None
+    )
         """Update market data for regime detection"""
         self.price_history.append(price)
 
@@ -120,7 +125,11 @@ class MarketRegimeDetector:
         # Reversal detection
         if len(prices) >= 10:
             recent_trend = np.polyfit(range(10), prices[-10:], 1)[0]
-            older_trend = np.polyfit(range(10), prices[-20:-10], 1)[0] if len(prices) >= 20 else recent_trend
+                        older_trend = np.polyfit(
+                range(10),
+                prices[-20:-10],
+                1)[0] if len(prices
+            )
 
             if (recent_trend > 0 and older_trend < 0) or (recent_trend < 0 and older_trend > 0):
                 regime_scores[MarketRegime.REVERSAL] += 0.7
@@ -262,7 +271,10 @@ class DynamicRiskManager:
 
         # Check daily risk limits
         if self.daily_risk_used + position_size > self.current_balance * self.max_daily_risk:
-            remaining_daily_risk = max(0, self.current_balance * self.max_daily_risk - self.daily_risk_used)
+                        remaining_daily_risk = max(
+                0,
+                self.current_balance * self.max_daily_risk - self.daily_risk_used
+            )
             position_size = min(position_size, remaining_daily_risk)
 
         # Minimum position size check
@@ -391,7 +403,8 @@ class DynamicRiskManager:
         # Maximum drawdown stop
         if self.current_drawdown >= 0.15:  # 15% max drawdown
             self.emergency_stop = True
-            self.logger.error(f"🚨 EMERGENCY STOP: Max drawdown reached ({self.current_drawdown:.1%})")
+            f"🚨 EMERGENCY STOP: Max drawdown reached ({self.current_drawdown:.1%}"
+            f""
 
         # Daily loss limit
         daily_loss = self.daily_risk_used - sum(t['profit_loss'] for t in self.trade_history[-10:] if t['profit_loss'] > 0)
@@ -402,7 +415,8 @@ class DynamicRiskManager:
         # Consecutive losses stop
         if self.consecutive_losses >= 5:
             self.emergency_stop = True
-            self.logger.error(f"🚨 EMERGENCY STOP: Too many consecutive losses ({self.consecutive_losses})")
+            f"🚨 EMERGENCY STOP: Too many consecutive losses ({self.consecutive_losses}"
+            f""
 
     def reset_daily_limits(self):
         """Reset daily risk limits (call at start of new day)"""
@@ -461,7 +475,10 @@ class StrategySelector:
         """Select best strategy for current market regime"""
 
         # Get suitable strategies for current regime
-        suitable_strategies = self.regime_strategy_mapping.get(market_regime, [TradingStrategy.MOMENTUM])
+                suitable_strategies = self.regime_strategy_mapping.get(
+            market_regime,
+            [TradingStrategy.MOMENTUM]
+        )
 
         # If regime confidence is low, stick with current strategy
         if regime_confidence < 0.7:
@@ -482,7 +499,8 @@ class StrategySelector:
         current_performance = self._get_strategy_performance(self.current_strategy)
         if best_performance > current_performance * 1.1 or regime_confidence > 0.9:
             if best_strategy != self.current_strategy:
-                self.logger.info(f"🔄 Strategy change: {self.current_strategy.value} → {best_strategy.value}")
+                f"🔄 Strategy change: {self.current_strategy.value}"
+                f"→ {best_strategy.value}"
 
                 self.strategy_history.append({
                     'timestamp': datetime.now().isoformat(),
@@ -564,7 +582,12 @@ class MultiStrategyOrchestrator:
         logger.setLevel(logging.INFO)
         return logger
 
-    def update_market_data(self, price: float, volume: Optional[float] = None, timestamp: Optional[int] = None):
+        def update_market_data(
+        self,
+        price: float,
+        volume: Optional[float] = None,
+        timestamp: Optional[int] = None
+    )
         """Update market data for all components"""
         self.regime_detector.update_market_data(price, volume, timestamp)
 
@@ -579,10 +602,17 @@ class MultiStrategyOrchestrator:
         regime_confidence = regime_info['confidence']
 
         # Select appropriate strategy
-        selected_strategy = self.strategy_selector.select_strategy(current_regime, regime_confidence)
+                selected_strategy = self.strategy_selector.select_strategy(
+            current_regime,
+            regime_confidence
+        )
 
         # Get base prediction (this would be replaced with actual strategy implementation)
-        base_prediction = self._get_strategy_prediction(selected_strategy, indicators, price_history)
+                base_prediction = self._get_strategy_prediction(
+            selected_strategy,
+            indicators,
+            price_history
+        )
 
         # Calculate dynamic position size
         volatility = regime_info['market_metrics'].get('volatility', 0.01)
@@ -684,7 +714,8 @@ class MultiStrategyOrchestrator:
         current_regime = MarketRegime(regime_info['current_regime'])
 
         # Update risk manager
-        self.risk_manager.update_trade_result(position_size, profit_loss, trade_result, current_regime)
+                self.risk_manager.update_trade_result(
+            position_size, profit_loss, trade_result, current_regime)
 
         # Update strategy performance
         if strategy_used:

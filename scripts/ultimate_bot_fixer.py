@@ -50,7 +50,13 @@ class UltimateBotFixer:
 
             for cmd in commands:
                 try:
-                    result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10)
+                                        result = subprocess.run(
+                        cmd,
+                        shell=True,
+                        capture_output=True,
+                        text=True,
+                        timeout=10
+                    )
                     if result.returncode == 0:
                         logger.info("✅ Firewall rule added successfully")
                     else:

@@ -123,7 +123,8 @@ class DerivAPIFixer:
 
                     print("✅ Authorization successful!")
                     print(f"📧 Email: {result['details']['email']}")
-                    print(f"💰 Balance: {result['details']['balance']} {result['details']['currency']}")
+                    f"💰 Balance: {result['details']['balance']}"
+                    f"{result['details']['currency']}"
                     print(f"🆔 Login ID: {result['details']['loginid']}")
                     print(f"🔑 Scopes: {result['details']['scopes']}")
 

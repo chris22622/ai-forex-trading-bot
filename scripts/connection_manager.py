@@ -129,7 +129,8 @@ class DerivConnectionManager:
                 error = data["error"]
                 return {
                     "success": False,
-                    "error": f"{error.get('code', 'Unknown')}: {error.get('message', 'Unknown error')}"
+                    f"{error.get('code', 'Unknown')}"
+                    f" {error.get('message', 'Unknown error')}"
                 }
             else:
                 return {
@@ -166,7 +167,8 @@ class DerivConnectionManager:
                 if result.get("details"):
                     details = result["details"]
                     print(f"Account: {details.get('loginid', 'N/A')}")
-                    print(f"Balance: {details.get('balance', 'N/A')} {details.get('currency', 'N/A')}")
+                    f"Balance: {details.get('balance', 'N/A')}"
+                    f"{details.get('currency', 'N/A')}"
                     print(f"Email: {details.get('email', 'N/A')}")
                 return result
 
@@ -199,7 +201,8 @@ class DerivConnectionManager:
                 if auth_result.get("details"):
                     details = auth_result["details"]
                     print(f"💰 Account: {details.get('loginid', 'N/A')}")
-                    print(f"💵 Balance: {details.get('balance', 'N/A')} {details.get('currency', 'N/A')}")
+                    f"💵 Balance: {details.get('balance', 'N/A')}"
+                    f"{details.get('currency', 'N/A')}"
 
                 return True
             else:

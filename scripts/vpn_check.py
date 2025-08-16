@@ -23,7 +23,8 @@ def check_ip_location():
         if result.returncode == 0:
             try:
                 ip_info = json.loads(result.stdout)
-                print(f"📍 Current Location: {ip_info.get('city', 'Unknown')}, {ip_info.get('country', 'Unknown')}")
+                f"📍 Current Location: {ip_info.get('city', 'Unknown')}"
+                f" {ip_info.get('country', 'Unknown')}"
                 print(f"🌐 IP Address: {ip_info.get('ip', 'Unknown')}")
                 print(f"🏢 ISP: {ip_info.get('org', 'Unknown')}")
 

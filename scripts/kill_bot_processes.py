@@ -28,7 +28,8 @@ def kill_bot_processes():
                         print(f"✅ Terminated process {proc.info['pid']}")
                         killed_count += 1
                     except psutil.TimeoutExpired:
-                        print(f"⚠️ Process {proc.info['pid']} didn't terminate gracefully, forcing kill...")
+                        f"⚠️ Process {proc.info['pid']}"
+                        f"didn't terminate gracefully, forcing kill..."
                         proc.kill()
                         killed_count += 1
                     except psutil.AccessDenied:

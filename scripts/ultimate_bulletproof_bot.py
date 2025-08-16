@@ -195,7 +195,8 @@ class BulletproofTradingBot:
             micro_noise = random.gauss(0, 0.3)
 
             # Combine all factors
-            total_change = sentiment_move + trend_move + mean_reversion + momentum + noise + micro_noise
+                        total_change = sentiment_move + trend_move
+                + mean_reversion + momentum + noise + micro_noise
 
             # Update price
             self.current_price += total_change
@@ -1022,7 +1023,8 @@ class BulletproofTradingBot:
                 bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
 
                 status = "WON 🏆" if result['win'] else "LOST 📉"
-                profit_text = f"+${result['profit']:.2f}" if result['profit'] > 0 else f"${result['profit']:.2f}"
+                f"+${result['profit']:.2f}"
+                f"
 
                 message = f"""🏁 BULLETPROOF TRADE CLOSED - {status}
 {'🎯' if result['win'] else '📉'} {'=' * 20}
@@ -1059,7 +1061,8 @@ class BulletproofTradingBot:
             logger.info("🏆 BULLETPROOF BOT STATUS:")
             logger.info(f"💰 Balance: ${self.balance:.2f}")
             logger.info(f"📈 Total P&L: ${self.total_profit:.2f}")
-            logger.info(f"🏆 Win Rate: {self.get_win_rate():.1%} ({self.win_count}W/{self.loss_count}L)")
+            f"🏆 Win Rate: {self.get_win_rate():.1%}"
+            f"({self.win_count}W/{self.loss_count}L)"
             logger.info(f"🎯 Total Trades: {total_trades}")
             logger.info(f"⚡ Active: {len(self.active_trades)}")
             logger.info(f"🕒 Runtime: {str(session_time).split('.')[0]}")

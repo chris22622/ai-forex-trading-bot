@@ -48,7 +48,12 @@ class TelegramNotifier:
                 print("⚠️ Telegram token not configured - disabling Telegram notifications")
             self.enabled = False
 
-    async def send_message(self, message: str, parse_mode: Optional[str] = "HTML", disable_notification: bool = False) -> bool:
+        async def send_message(
+        self,
+        message: str,
+        parse_mode: Optional[str] = "HTML",
+        disable_notification: bool = False
+    )
         """Send a message to Telegram with proper HTML formatting and conflict resolution"""
         if not self.enabled or not self.bot:
             print(f"📱 Telegram disabled - Would send: {message}")
@@ -94,7 +99,8 @@ class TelegramNotifier:
                     print("❌ Telegram retry failed. Continuing without this message.")
                     return False
             elif "chat not found" in error_msg:
-                print("❌ Telegram error: Chat not found. Please start the bot by messaging it first.")
+                                print("❌ Telegram error: Chat not found. Please "
+                "start the bot by messaging it first.")
                 # Disable further attempts to avoid spam
                 self.enabled = False
             elif "bot was blocked" in error_msg:
@@ -207,7 +213,8 @@ class TelegramNotifier:
                 action = trade_data.get('action', 'TRADE')
                 symbol = trade_data.get('symbol', 'Unknown')
                 amount = trade_data.get('amount', 0)
-                simple_msg = f"🔔 {action} {symbol} ${amount:.2f} at {datetime.now().strftime('%H:%M:%S')}"
+                f"🔔 {action}"
+                f"{symbol} ${amount:.2f} at {datetime.now().strftime('%H:%M:%S')}"
                 return await self.send_message(simple_msg, parse_mode=None)
             except:
                 return False
@@ -269,7 +276,8 @@ class TelegramNotifier:
             try:
                 result = result_data.get('result', 'CLOSED')
                 profit_loss = result_data.get('profit_loss', 0)
-                simple_msg = f"🔔 Trade {result}: ${profit_loss:.2f} at {datetime.now().strftime('%H:%M:%S')}"
+                f"🔔 Trade {result}"
+                f" ${profit_loss:.2f} at {datetime.now().strftime('%H:%M:%S')}"
                 return await self.send_message(simple_msg, parse_mode=None)
             except:
                 return False
@@ -461,7 +469,8 @@ _Bot is now offline_
 
         try:
             # Send test message
-            test_message = f"🧪 Test message from Deriv Trading Bot\n⏰ {datetime.now().strftime('%H:%M:%S')}"
+            f"🧪 Test message from Deriv Trading Bot\n⏰ {datetime.now().strftime('%H:%M:%S')}"
+            f"
             return self.send_message_sync(test_message)
         except Exception as e:
             print(f"❌ Telegram test failed: {e}")

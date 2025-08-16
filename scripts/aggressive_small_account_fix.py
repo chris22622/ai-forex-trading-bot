@@ -20,18 +20,27 @@ def apply_aggressive_fix():
         content = f.read()
 
     # Find the position sizing method
-    old_method = '''    def _calculate_position_size_for_symbol(self, confidence: float, symbol: str) -> float:
+        old_method = '''    def _calculate_position_size_for_symbol(
+        self,
+        confidence: float,
+        symbol: str
+    )
         """🛡️ ULTRA-SAFE position sizing to prevent large losses"""
         try:
             # �️ MUCH SMALLER positions until consistently profitable
             base_risk = self.current_balance * 0.005  # Only 0.5% risk per trade!'''
 
-    new_method = '''    def _calculate_position_size_for_symbol(self, confidence: float, symbol: str) -> float:
+        new_method = '''    def _calculate_position_size_for_symbol(
+        self,
+        confidence: float,
+        symbol: str
+    )
         """🚀 AGGRESSIVE position sizing for small accounts to enable growth"""
         try:
             # 🚀 SMALL ACCOUNT MODE: MUCH MORE AGGRESSIVE!
             if self.current_balance <= 100:
-                logger.warning(f"🚀 SMALL ACCOUNT MODE: ${self.current_balance:.2f} - Using AGGRESSIVE settings!")
+                f"🚀 SMALL ACCOUNT MODE: ${self.current_balance:.2f}"
+                f"- Using AGGRESSIVE settings!"
                 
                 # For small accounts, use 10-15% risk to enable actual growth
                 if self.current_balance <= 25:
@@ -77,7 +86,8 @@ def apply_aggressive_fix():
             # Replace just the risk calculation
             new_calc = '''# 🚀 SMALL ACCOUNT MODE: MUCH MORE AGGRESSIVE!
             if self.current_balance <= 100:
-                logger.warning(f"🚀 SMALL ACCOUNT MODE: ${self.current_balance:.2f} - Using AGGRESSIVE settings!")
+                f"🚀 SMALL ACCOUNT MODE: ${self.current_balance:.2f}"
+                f"- Using AGGRESSIVE settings!"
                 
                 # For small accounts, use 10-15% risk to enable actual growth
                 if self.current_balance <= 25:
@@ -114,7 +124,8 @@ def apply_aggressive_fix():
             self.max_loss_per_trade = 3.00       # $3 instead of $1.50
             self.max_trade_age_minutes = 30      # 30 minutes instead of 10
             
-        logger.warning(f"🚀 SMALL ACCOUNT TARGETS: Profit=${self.quick_profit_target}, Loss=${self.max_loss_per_trade}, Time={self.max_trade_age_minutes}min")
+        f"🚀 SMALL ACCOUNT TARGETS: Profit=${self.quick_profit_target}"
+        f" Loss=${self.max_loss_per_trade}, Time={self.max_trade_age_minutes}min"
     '''
 
     # Find a good place to add this - look for __init__ method

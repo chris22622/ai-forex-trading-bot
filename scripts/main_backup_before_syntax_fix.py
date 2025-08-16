@@ -58,9 +58,17 @@ from safe_logger import get_safe_logger
 logger = get_safe_logger(__name__)
 
 # Define fallback values for configuration constants with safe imports
-AI_CONFIDENCE_THRESHOLD = getattr(config, "AI_CONFIDENCE_THRESHOLD", 0.65)  # Ultra-careful but still trades!
+AI_CONFIDENCE_THRESHOLD = getattr(
+    config,
+    "AI_CONFIDENCE_THRESHOLD",
+    0.65
+)
 MIN_TRADE_INTERVAL = getattr(config, "MIN_TRADE_INTERVAL", 60)  # Default 1 minute between trades
-PRICE_BUFFER_SIZE = getattr(config, "PRICE_BUFFER_SIZE", 100)  # Default buffer size for price history
+PRICE_BUFFER_SIZE = getattr(
+    config,
+    "PRICE_BUFFER_SIZE",
+    100
+)
 
 # 📊 ULTRA-CAREFUL TRADING SETTINGS
 ULTRA_CAREFUL_MODE = True       # Enable ultra-careful analysis
@@ -79,7 +87,11 @@ MAX_DAILY_LOSS = getattr(config, "MAX_DAILY_LOSS", 100.0)
 # 🛡️ LOSS PROTECTION SETTINGS (Fixed naming and logic)
 LOSS_PROTECTION_ENABLED = getattr(config, "LOSS_PROTECTION_ENABLED", True)
 LOSS_PROTECTION_THRESHOLD = getattr(config, "LOSS_PROTECTION_THRESHOLD", 2.0)  # Stop at $2 LOSS
-LOSS_PROTECTION_MAX_THRESHOLD = getattr(config, "LOSS_PROTECTION_MAX_THRESHOLD", 5.0)  # Emergency stop at $5 LOSS
+LOSS_PROTECTION_MAX_THRESHOLD = getattr(
+    config,
+    "LOSS_PROTECTION_MAX_THRESHOLD",
+    5.0
+)
 
 # 🚨 EMERGENCY TRADING CONTROLS
 ENABLE_EMERGENCY_TRADING = getattr(config, "ENABLE_EMERGENCY_TRADING", False)  # Default OFF
@@ -214,7 +226,10 @@ class GodlikeAIEnsemble:
                 float(np.sum(np.diff(price_data[-10:]) > 0) / 9) if len(price_data) >= 10 else 0.5,
                 float(np.mean(np.abs(np.diff(price_data[-10:])))) if len(price_data) >= 10 else 0.01,
                 len([p for p in price_data[-20:] if p > np.mean(price_data[-20:])]) / 20 if len(price_data) >= 20 else 0.5,
-                float(np.corrcoef(range(10), price_data[-10:])[0, 1]) if len(price_data) >= 10 else 0.0,
+                                float(
+                    np.corrcoef(range(10), price_data[-10:])[0,
+                    1]) if len(price_data
+                )
                 float((np.max(price_data[-5:]) - np.min(price_data[-5:])) / np.mean(price_data[-5:])) if len(price_data) >= 5 else 0.01
             ])
             
@@ -433,10 +448,16 @@ class AdvancedPositionSizer:
                 # where b = average_win/average_loss, p = win_probability, q = 1-p
                 b = abs(average_win / average_loss)
                 kelly_fraction = (b * win_probability - (1 - win_probability)) / b
-                kelly_fraction = max(0, min(kelly_fraction * self.kelly_multiplier, 0.1))  # Cap at 10%
+                                kelly_fraction = max(
+                    0,
+                    min(kelly_fraction * self.kelly_multiplier, 0.1)
+                )
             
             # Volatility adjustment - reduce size in high volatility
-            volatility_multiplier = max(0.5, 1.0 - (recent_volatility * 10))  # Scale volatility impact
+                        volatility_multiplier = max(
+                0.5,
+                1.0 - (recent_volatility * 10)
+            )
             
             # Confidence adjustment - increase size with higher confidence
             confidence_multiplier = 0.5 + (confidence / 100.0) * 0.5  # 0.5x to 1.0x based on confidence
@@ -448,7 +469,8 @@ class AdvancedPositionSizer:
             optimal_size = max(self.min_position_size, 
                              min(self.max_position_size, base_size))
             
-            logger.info(f"📊 OPTIMAL POSITION: {optimal_size:.2f} lots (Kelly: {kelly_fraction:.4f}, "
+            f"📊 OPTIMAL POSITION: {optimal_size:.2f}"
+            f"lots (Kelly: {kelly_fraction:.4f}, "
                        f"Vol: {volatility_multiplier:.3f}, Conf: {confidence_multiplier:.3f})")
             
             return optimal_size
@@ -508,7 +530,8 @@ class NanosecondProfitEngine:
             
             # Nanosecond-level profit decisions
             if current_profit >= self.profit_target:
-                logger.info(f"🎯 NANOSECOND PROFIT TARGET HIT: ${current_profit:.2f} in 1ms monitoring")
+                f"🎯 NANOSECOND PROFIT TARGET HIT: ${current_profit:.2f}"
+                f"in 1ms monitoring"
                 return {
                     'action': 'close_position', 
                     'profit': current_profit,
@@ -520,7 +543,8 @@ class NanosecondProfitEngine:
             for micro_target in self.micro_profit_targets:
                 if current_profit >= micro_target and not self.profit_acceleration_mode:
                     self.profit_acceleration_mode = True
-                    logger.info(f"⚡ PROFIT ACCELERATION: ${current_profit:.2f} - switching to nano-monitoring")
+                    f"⚡ PROFIT ACCELERATION: ${current_profit:.2f}"
+                    f"- switching to nano-monitoring"
                     break
             
             self.last_price_check = current_time_ms
@@ -611,7 +635,8 @@ class ProfessionalAIEnsemble:
                 else:
                     final_prediction = 'HOLD'
                 
-                logger.info(f"🎯 PROFESSIONAL AI ENSEMBLE: {final_prediction} at {weighted_confidence:.1f}% confidence")
+                f"🎯 PROFESSIONAL AI ENSEMBLE: {final_prediction}"
+                f"at {weighted_confidence:.1f}% confidence"
                 return {
                     'prediction': final_prediction,
                     'confidence': weighted_confidence,
@@ -865,7 +890,11 @@ class ProfessionalAIEnsemble:
         except:
             return prices[-1] if prices else 0
     
-    def _calculate_bollinger_bands(self, prices: List[float], period: int = 20) -> Tuple[float, float]:
+        def _calculate_bollinger_bands(
+        self,
+        prices: List[float],
+        period: int = 20
+    )
         """Calculate Bollinger Bands"""
         try:
             if len(prices) < period:
@@ -908,7 +937,8 @@ class TradingBot:
         self.loss_protection_threshold = LOSS_PROTECTION_THRESHOLD
         self.loss_protection_triggered = False
         
-        logger.info(f"🛡️ Loss Protection: {'ENABLED' if self.loss_protection_enabled else 'DISABLED'} at -${self.loss_protection_threshold} LOSS")
+        f"🛡️ Loss Protection: {'ENABLED' if self.loss_protection_enabled else 'DISABLED'}"
+        f"at -${self.loss_protection_threshold} LOSS"
         
         # 🚨 ULTRA-CONSERVATIVE RISK MANAGEMENT - MARGIN PROTECTION
         self.max_loss_per_trade = 0.75      # Tight stop losses: $0.75 max (adjusted for $0.20 target)!
@@ -1119,7 +1149,8 @@ class TradingBot:
                         'worst_trade': 0.0  # Added for better tracking
                     }
                     
-                logger.info(f"✅ Initialized {len(self.active_symbols)} symbols for multi-symbol trading")
+                f"✅ Initialized {len(self.active_symbols)}"
+                f"symbols for multi-symbol trading"
             else:
                 self.active_symbols = [default_symbol]
                 logger.info(f"📊 Single symbol trading: {default_symbol}")
@@ -1280,7 +1311,8 @@ class TradingBot:
                 self.loss_protection_threshold = LOSS_PROTECTION_THRESHOLD
                 
                 logger.info(f"✅ MT5 connected! Balance: ${self.current_balance:.2f}")
-                logger.info(f"🛡️ Loss Protection: {'ENABLED' if self.loss_protection_enabled else 'DISABLED'} at -${self.loss_protection_threshold} LOSS")
+                f"🛡️ Loss Protection: {'ENABLED' if self.loss_protection_enabled else 'DISABLED'}"
+                f"at -${self.loss_protection_threshold} LOSS"
                 
                 # Log symbol constraints for debugging
                 try:
@@ -1536,7 +1568,8 @@ class TradingBot:
                     if symbol in self.price_cache:
                         stale_price = self.price_cache[symbol].get('price')
                         if stale_price is not None and stale_price > 0:
-                            logger.warning(f"📊 Using fallback cached price for {symbol}: {stale_price}")
+                            f"📊 Using fallback cached price for {symbol}"
+                            f" {stale_price}"
                             return stale_price
                     
                     return None
@@ -1560,7 +1593,8 @@ class TradingBot:
                 if symbol in self.price_cache:
                     stale_price = self.price_cache[symbol].get('price')
                     if stale_price is not None:
-                        logger.warning(f"📊 Using emergency cached price for {symbol}: {stale_price}")
+                        f"📊 Using emergency cached price for {symbol}"
+                        f" {stale_price}"
                         return stale_price
                 
                 return None
@@ -1574,7 +1608,8 @@ class TradingBot:
                 if symbol in self.price_cache:
                     stale_price = self.price_cache[symbol].get('price')
                     if stale_price is not None:
-                        logger.warning(f"📊 Using emergency fallback price for {symbol}: {stale_price}")
+                        f"📊 Using emergency fallback price for {symbol}"
+                        f" {stale_price}"
                         return stale_price
             except:
                 pass
@@ -1597,14 +1632,17 @@ class TradingBot:
             # 🚨 ULTRA-CAREFUL: Need MORE data for confidence (but still reasonable)
             if len(price_history) < MIN_DATA_POINTS:
                 if len(price_history) % 5 == 0:
-                    logger.info(f"📊 ULTRA-CAREFUL: Collecting data for {symbol}: {len(price_history)}/{MIN_DATA_POINTS} points needed")
+                    f"📊 ULTRA-CAREFUL: Collecting data for {symbol}"
+                    f" {len(price_history)}/{MIN_DATA_POINTS} points needed"
                 return
             
             # Log when we have enough data to start trading
             if len(price_history) == 5:
-                logger.info(f"🚀 {symbol} has enough data ({len(price_history)} points) - Starting AI analysis!")
+                f"🚀 {symbol}"
+                f"has enough data ({len(price_history)} points) - Starting AI analysis!"
             elif len(price_history) % 20 == 0:  # Log every 20th analysis
-                logger.info(f"� {symbol} AI analysis running with {len(price_history)} price points")
+                f"� {symbol}"
+                f"AI analysis running with {len(price_history)} price points"
             
             # Update indicators with current price (using symbol's price history)
             # Temporarily replace the indicators' price data with this symbol's data
@@ -1669,7 +1707,8 @@ class TradingBot:
                 return
             
             # FORCE LOG AI prediction attempt
-            logger.warning(f"🧠 GODLIKE AI ANALYSIS for {symbol} with {len(price_history)} price points")
+            f"🧠 GODLIKE AI ANALYSIS for {symbol}"
+            f"with {len(price_history)} price points"
             
             # 🧠 GODLIKE AI PREDICTION
             try:
@@ -1677,7 +1716,10 @@ class TradingBot:
                 godlike_indicator_data = self._get_godlike_indicator_data(price_history)
                 
                 # Use GODLIKE AI ensemble
-                ai_prediction = self.godlike_ai.predict_godlike(price_history, godlike_indicator_data)
+                                ai_prediction = self.godlike_ai.predict_godlike(
+                    price_history,
+                    godlike_indicator_data
+                )
                 action = ai_prediction['prediction']
                 confidence = ai_prediction['confidence']
                 _reason = ai_prediction.get('reason', 'Godlike AI')
@@ -1693,13 +1735,15 @@ class TradingBot:
                 # Calculate final confidence
                 final_confidence = min(0.95, confidence * regime_multiplier + timeframe_boost)
                 
-                logger.warning(f"🧠 GODLIKE {symbol}: {action} (Base: {confidence:.2f}, Regime: {regime_multiplier:.2f}, Final: {final_confidence:.2f})")
+                f"🧠 GODLIKE {symbol}"
+                f" {action} (Base: {confidence:.2f}, Regime: {regime_multiplier:.2f}, Final: {final_confidence:.2f})"
                 
                 # Use final confidence
                 confidence = final_confidence
                 
             except Exception as ai_error:
-                logger.warning(f"⚠️ Godlike AI failed for {symbol}: {ai_error}, using enhanced fallback")
+                f"⚠️ Godlike AI failed for {symbol}"
+                f" {ai_error}, using enhanced fallback"
                 
                 # Enhanced fallback with pattern detection
                 pattern_signal = self._detect_godlike_patterns(price_history)
@@ -1707,18 +1751,21 @@ class TradingBot:
                     action = pattern_signal['action']
                     confidence = pattern_signal['confidence']
                     _reason = 'Pattern Recognition'
-                    logger.warning(f"🔥 PATTERN FALLBACK: {symbol} → {action} (confidence: {confidence:.2f})")
+                    f"🔥 PATTERN FALLBACK: {symbol}"
+                    f"→ {action} (confidence: {confidence:.2f})"
                 else:
                     action = 'HOLD'
                     confidence = 0.0
                     _reason = 'No Signal'
             
             # FORCE LOG every prediction
-            logger.warning(f"🧠 {symbol} Final Decision: {action} (confidence: {confidence:.2f}, threshold: {AI_CONFIDENCE_THRESHOLD})")
+            f"🧠 {symbol}"
+            f"Final Decision: {action} (confidence: {confidence:.2f}, threshold: {AI_CONFIDENCE_THRESHOLD})"
             
             # 🚨 EMERGENCY TRADING: Enhanced multi-factor analysis for profitable trades
             if confidence <= 0.01:  # AI not working properly
-                logger.warning(f"� EMERGENCY TRADING MODE: AI failed for {symbol}, forcing ultra-aggressive trades!")
+                f"� EMERGENCY TRADING MODE: AI failed for {symbol}"
+                f" forcing ultra-aggressive trades!"
                 
                 # 🚨 EMERGENCY: Force trades based on ANY price movement
                 if len(price_history) >= 2:
@@ -1743,7 +1790,8 @@ class TradingBot:
                         import random
                         action = 'BUY' if random.random() > 0.5 else 'SELL'
                         confidence = 0.30  # Above threshold
-                        logger.warning(f"🎲 FORCED RANDOM TRADE: {symbol} → {action} (no movement detected)")
+                        f"🎲 FORCED RANDOM TRADE: {symbol}"
+                        f"→ {action} (no movement detected)"
                 else:
                     # Not enough price history: Force a BUY trade
                     action = 'BUY'
@@ -1758,11 +1806,13 @@ class TradingBot:
                     if rsi < 55:  # ULTRA AGGRESSIVE - Much more sensitive!
                         action = 'BUY'
                         confidence = 0.65  # High confidence for technical signal
-                        logger.warning(f"🚀 ULTRA-AGGRESSIVE BUY: {symbol} RSI={rsi:.1f} (< 55) → BUY")
+                        f"🚀 ULTRA-AGGRESSIVE BUY: {symbol}"
+                        f"RSI={rsi:.1f} (< 55) → BUY"
                     elif rsi > 45:  # ULTRA AGGRESSIVE - Much more sensitive!
                         action = 'SELL'
                         confidence = 0.65  # High confidence for technical signal
-                        logger.warning(f"📉 ULTRA-AGGRESSIVE SELL: {symbol} RSI={rsi:.1f} (> 45) → SELL")
+                        f"📉 ULTRA-AGGRESSIVE SELL: {symbol}"
+                        f"RSI={rsi:.1f} (> 45) → SELL"
                     else:
                         # If RSI is in the tiny neutral zone (48-52), check momentum
                         if len(price_history) >= 3:
@@ -1772,13 +1822,16 @@ class TradingBot:
                             if price_change_pct > 0.01:  # ULTRA AGGRESSIVE - 5x more sensitive!
                                 action = 'BUY'
                                 confidence = 0.65  # High confidence for momentum
-                                logger.warning(f"🚀 MOMENTUM SIGNAL: {symbol} +{price_change_pct:.2f}% → BUY")
+                                f"🚀 MOMENTUM SIGNAL: {symbol}"
+                                f"+{price_change_pct:.2f}% → BUY"
                             elif price_change_pct < -0.01:  # ULTRA AGGRESSIVE - 5x more sensitive!
                                 action = 'SELL'
                                 confidence = 0.65  # High confidence for momentum
-                                logger.warning(f"📉 MOMENTUM SIGNAL: {symbol} {price_change_pct:.2f}% → SELL")
+                                f"📉 MOMENTUM SIGNAL: {symbol}"
+                                f"{price_change_pct:.2f}% → SELL"
                             else:
-                                logger.info(f"📊 TECHNICAL: {symbol} RSI={rsi:.1f}, Momentum={price_change_pct:.2f}% (All Neutral) → HOLD")
+                                f"📊 TECHNICAL: {symbol}"
+                                f"RSI={rsi:.1f}, Momentum={price_change_pct:.2f}% (All Neutral) → HOLD"
                                 # Restore original indicator state  
                                 self.indicators.price_data = original_history
                                 return
@@ -1786,7 +1839,8 @@ class TradingBot:
                             # Not enough price history - force a BUY trade anyway for activity
                             action = 'BUY'
                             confidence = 0.25  # Lower confidence but still above threshold
-                            logger.warning(f"� FORCE TRADE: {symbol} RSI={rsi:.1f} (Insufficient history) → BUY")
+                            f"� FORCE TRADE: {symbol}"
+                            f"RSI={rsi:.1f} (Insufficient history) → BUY"
                 else:
                     # No RSI data - force a momentum-based trade for activity
                     if len(price_history) >= 2:
@@ -1794,11 +1848,13 @@ class TradingBot:
                         if recent_change > 0:
                             action = 'BUY'
                             confidence = 0.25
-                            logger.warning(f"🚀 FORCE MOMENTUM BUY: {symbol} +{recent_change:.2f}% → BUY")
+                            f"🚀 FORCE MOMENTUM BUY: {symbol}"
+                            f"+{recent_change:.2f}% → BUY"
                         else:
                             action = 'SELL'
                             confidence = 0.25
-                            logger.warning(f"📉 FORCE MOMENTUM SELL: {symbol} {recent_change:.2f}% → SELL")
+                            f"📉 FORCE MOMENTUM SELL: {symbol}"
+                            f"{recent_change:.2f}% → SELL"
                     else:
                         # Last resort - random trade to generate activity
                         import random
@@ -1819,7 +1875,8 @@ class TradingBot:
             
             # Check confidence threshold (now applies to both AI and technical signals)
             if confidence < AI_CONFIDENCE_THRESHOLD:
-                logger.warning(f"⚠️ {symbol} Confidence too low: {confidence:.2f} < {AI_CONFIDENCE_THRESHOLD}")
+                f"⚠️ {symbol}"
+                f"Confidence too low: {confidence:.2f} < {AI_CONFIDENCE_THRESHOLD}"
                 # Restore original indicator state
                 self.indicators.price_data = original_history
                 return
@@ -1953,7 +2010,8 @@ class TradingBot:
                     ai_confidence = ai_result['confidence']
                     ai_prediction = ai_result['prediction']
                     
-                    logger.info(f"🎯 PROFESSIONAL AI: {ai_prediction} at {ai_confidence:.1f}% confidence")
+                    f"🎯 PROFESSIONAL AI: {ai_prediction}"
+                    f"at {ai_confidence:.1f}% confidence"
                     
                     # Boost score if AI agrees with technical analysis
                     if ai_prediction == 'BUY' and signals.get('bullish'):
@@ -1971,7 +2029,8 @@ class TradingBot:
                     # AI didn't meet professional standards
                     signals['ai_confidence'] = ai_result['confidence']
                     signals['professional_grade'] = False
-                    logger.info(f"🔍 AI Analysis: {ai_result['confidence']:.1f}% (Below professional threshold)")
+                    f"🔍 AI Analysis: {ai_result['confidence']:.1f}"
+                    f" (Below professional threshold)"
                     
             except Exception as ai_error:
                 logger.debug(f"Professional AI error: {ai_error}")
@@ -2152,7 +2211,8 @@ class TradingBot:
             
             # Check if we have sufficient price data
             if not hasattr(self.indicators, 'price_data') or len(self.indicators.price_data) < 5:
-                logger.warning(f"⚠️ Insufficient price data for indicators: {len(getattr(self.indicators, 'price_data', []))} points")
+                                logger.warning(f"⚠️ Insufficient price data for indicators: {len(getattr(self.indicators, "
+                "'price_data', []))} points")
                 return {}
             
             # Helper function to convert numpy values to Python floats
@@ -2258,7 +2318,8 @@ class TradingBot:
         try:
             # Check if we have sufficient price history
             if not hasattr(self, 'price_history') or len(self.price_history) < 20:
-                logger.debug(f"Insufficient price history for market analysis: {len(getattr(self, 'price_history', []))}")
+                                logger.debug(f"Insufficient price history for market analysis: "
+                "{len(getattr(self, 'price_history', []))}")
                 return
             
             recent_prices = self.price_history[-20:]
@@ -2312,7 +2373,8 @@ class TradingBot:
                     
                 # Log market condition occasionally
                 if hasattr(self, '_loop_counter') and self._loop_counter % 120 == 0:
-                    logger.debug(f"📈 Market condition: {self.market_condition.value}, Trend: {trend:.6f}, Volatility: {volatility:.4f}")
+                    f"📈 Market condition: {self.market_condition.value}"
+                    f" Trend: {trend:.6f}, Volatility: {volatility:.4f}"
                     
             except Exception as e:
                 logger.debug(f"Market condition assignment error: {e}")
@@ -2379,17 +2441,20 @@ class TradingBot:
                     # Rule 1: Max loss per trade
                     if current_profit <= -self.max_loss_per_trade:
                         should_close = True
-                        close_reason = f"Max loss exceeded: ${current_profit:.2f} <= -${self.max_loss_per_trade:.2f}"
+                        f"Max loss exceeded: ${current_profit:.2f}"
+                        f"<= -${self.max_loss_per_trade:.2f}"
                     
                     # Rule 2: Trade age limit
                     elif trade_age_minutes >= self.max_trade_age_minutes:
                         should_close = True
-                        close_reason = f"Trade too old: {trade_age_minutes:.0f} >= {self.max_trade_age_minutes} minutes"
+                        f"Trade too old: {trade_age_minutes:.0f}"
+                        f">= {self.max_trade_age_minutes} minutes"
                     
                     # Rule 3: Portfolio protection (if losing)
                     elif current_profit < 0 and portfolio_loss >= self.max_portfolio_loss:
                         should_close = True
-                        close_reason = f"Portfolio protection: Total loss ${portfolio_loss:.2f} >= ${self.max_portfolio_loss:.2f}"
+                        f"Portfolio protection: Total loss ${portfolio_loss:.2f}"
+                        f">= ${self.max_portfolio_loss:.2f}"
                     
                     # Close trade if any rule triggered
                     if should_close:
@@ -2414,21 +2479,24 @@ class TradingBot:
                                 symbol, current_profit, close_reason, trades_closed
                             )
                             
-                            logger.info(f"✅ Risk Management: Closed {symbol} trade - saved ${abs(current_profit):.2f}")
+                            f"✅ Risk Management: Closed {symbol}"
+                            f"trade - saved ${abs(current_profit):.2f}"
                         else:
                             logger.error(f"❌ Failed to close {symbol} trade {mt5_ticket}")
                     
                     else:
                         # Log healthy trades occasionally
                         if hasattr(self, '_loop_counter') and self._loop_counter % 120 == 0:
-                            logger.debug(f"📊 {symbol} trade healthy: P&L ${current_profit:.2f}, Age {trade_age_minutes:.0f}m")
+                            f"📊 {symbol}"
+                            f"trade healthy: P&L ${current_profit:.2f}, Age {trade_age_minutes:.0f}m"
                 
                 except Exception as trade_error:
                     logger.error(f"Error checking trade {trade_id}: {trade_error}")
             
             # Portfolio Emergency Protection
             if portfolio_loss >= self.max_portfolio_loss:
-                logger.error(f"🚨 PORTFOLIO EMERGENCY: Total loss ${portfolio_loss:.2f} >= ${self.max_portfolio_loss:.2f}")
+                f"🚨 PORTFOLIO EMERGENCY: Total loss ${portfolio_loss:.2f}"
+                f">= ${self.max_portfolio_loss:.2f}"
                 await self._emergency_close_all_losing_trades(portfolio_loss)
             
             # Update risk management statistics
@@ -2451,13 +2519,16 @@ class TradingBot:
                 logger.warning(f"🛡️ RISK MANAGEMENT SUMMARY:")
                 logger.warning(f"   Trades closed: {trades_closed}")
                 logger.warning(f"   Potential loss saved: ${total_saved:.2f}")
-                logger.warning(f"   Total trades auto-closed: {self.risk_management_stats['trades_auto_closed']}")
-                logger.warning(f"   Total saved this session: ${self.risk_management_stats['total_saved_loss']:.2f}")
+                f"   Total trades auto-closed: {self.risk_management_stats['trades_auto_closed']}"
+                f"
+                f"   Total saved this session: ${self.risk_management_stats['total_saved_loss']:.2f}"
+                f"
             
         except Exception as e:
             logger.error(f"Smart risk management check error: {e}")
     
-    async def _send_risk_management_notification(self, symbol: str, profit: float, reason: str, total_closed: int):
+        async def _send_risk_management_notification(
+        self, symbol: str, profit: float, reason: str, total_closed: int):
         """Send risk management notification"""
         try:
             msg = f"""🚨 RISK MANAGEMENT ACTION
@@ -2499,7 +2570,8 @@ class TradingBot:
                             if close_result:
                                 del self.active_trades[trade_id]
                                 trades_closed += 1
-                                logger.warning(f"🚨 Emergency closed trade {mt5_ticket}: ${current_profit:.2f}")
+                                f"🚨 Emergency closed trade {mt5_ticket}"
+                                f" ${current_profit:.2f}"
                 
                 except Exception as e:
                     logger.error(f"Error in emergency close {trade_id}: {e}")
@@ -2536,7 +2608,8 @@ class TradingBot:
             if current_profit > 0:
                 # Log progress but NEVER stop for profits
                 if hasattr(self, '_loop_counter') and self._loop_counter % 60 == 0:
-                    logger.info(f"💰 PROFIT MODE: +${current_profit:.2f} - Bot continues indefinitely!")
+                    f"💰 PROFIT MODE: +${current_profit:.2f}"
+                    f"- Bot continues indefinitely!"
                 return True  # Always allow trading when profitable!
             
             # 🛡️ LOSS PROTECTION - Only check loss limits
@@ -2547,7 +2620,8 @@ class TradingBot:
                 # Emergency stop at max loss threshold
                 self.loss_protection_triggered = True
                 logger.error(f"🚨 EMERGENCY LOSS PROTECTION TRIGGERED!")
-                logger.error(f"� Loss reached: ${current_profit:.2f} <= -${emergency_loss_threshold:.2f}")
+                f"� Loss reached: ${current_profit:.2f}"
+                f"<= -${emergency_loss_threshold:.2f}"
                 logger.error(f"🛑 BOT STOPPED! Check your account and consider reducing risk!")
                 
                 # Send emergency notification
@@ -2558,7 +2632,8 @@ class TradingBot:
                 # Standard loss protection trigger
                 self.loss_protection_triggered = True
                 logger.warning(f"🛡️ LOSS PROTECTION TRIGGERED!")
-                logger.warning(f"� Loss limit reached: ${current_profit:.2f} <= -${loss_threshold:.2f}")
+                f"� Loss limit reached: ${current_profit:.2f}"
+                f"<= -${loss_threshold:.2f}"
                 logger.warning(f"🛑 BOT STOPPED! Protecting remaining capital!")
                 logger.warning(f"📊 Starting balance: ${self.starting_balance:.2f}")
                 logger.warning(f"📊 Current balance: ${self.current_balance:.2f}")
@@ -2572,7 +2647,8 @@ class TradingBot:
             if current_profit < 0:
                 progress_pct = abs(current_profit / loss_threshold) * 100
                 if hasattr(self, '_loop_counter') and self._loop_counter % 60 == 0:
-                    logger.info(f"🛡️ Loss Protection: ${current_profit:.2f}/-${loss_threshold:.2f} ({progress_pct:.0f}%)")
+                    f"🛡️ Loss Protection: ${current_profit:.2f}"
+                    f"-${loss_threshold:.2f} ({progress_pct:.0f}%)"
             
             return True  # Allow trading
             
@@ -2580,7 +2656,11 @@ class TradingBot:
             logger.error(f"Loss protection check error: {e}")
             return True  # Allow trading if check fails
     
-    async def _send_loss_protection_notification(self, current_loss: float, emergency: bool = False):
+        async def _send_loss_protection_notification(
+        self,
+        current_loss: float,
+        emergency: bool = False
+    )
         """Send loss protection notification"""
         try:
             emoji = "🚨" if emergency else "🛡️"
@@ -2609,7 +2689,11 @@ class TradingBot:
         except Exception as e:
             logger.warning(f"Loss protection notification failed: {e}")
 
-    async def _send_loss_protection_notification(self, current_profit: float, emergency: bool = False):
+        async def _send_loss_protection_notification(
+        self,
+        current_profit: float,
+        emergency: bool = False
+    )
         """Send profit protection notification (legacy - now redirects to loss protection)"""
         # This method is kept for compatibility but redirects to loss protection
         await self._send_loss_protection_notification(current_profit, emergency)
@@ -2657,17 +2741,20 @@ class TradingBot:
             
             # Check daily loss
             if self.daily_profit < -max_daily_loss:
-                logger.warning(f"Daily loss limit reached: ${self.daily_profit:.2f} < -${max_daily_loss}")
+                f"Daily loss limit reached: ${self.daily_profit:.2f}"
+                f"< -${max_daily_loss}"
                 return False
             
             # Check consecutive losses with BULLETPROOF logic
             if self.consecutive_losses >= max_consecutive_losses:
-                logger.warning(f"🚨 CONSECUTIVE LOSS LIMIT: {self.consecutive_losses}/{max_consecutive_losses}")
+                f"🚨 CONSECUTIVE LOSS LIMIT: {self.consecutive_losses}"
+                f"{max_consecutive_losses}"
                 logger.warning(f"🔧 Current config MAX_CONSECUTIVE_LOSSES: {max_consecutive_losses}")
                 
                 # EMERGENCY AUTO-RESET if limit is unreasonably low
                 if max_consecutive_losses < 50:
-                    logger.error(f"🚨 DETECTED LOW LIMIT ({max_consecutive_losses}) - APPLYING EMERGENCY RESET!")
+                    f"🚨 DETECTED LOW LIMIT ({max_consecutive_losses}"
+                    f" - APPLYING EMERGENCY RESET!"
                     old_count = self.consecutive_losses
                     self.consecutive_losses = 0
                     logger.info(f"🔧 EMERGENCY: Reset {old_count} → 0 due to unreasonably low limit")
@@ -2677,11 +2764,13 @@ class TradingBot:
             else:
                 # Log current status occasionally with actual limit
                 if self.consecutive_losses > 0 and self.consecutive_losses % 25 == 0:
-                    logger.info(f"📊 Consecutive losses: {self.consecutive_losses}/{max_consecutive_losses}")
+                    f"📊 Consecutive losses: {self.consecutive_losses}"
+                    f"{max_consecutive_losses}"
             
             # Check balance
             if self.current_balance < trade_amount * 2:
-                logger.warning(f"Insufficient balance: ${self.current_balance:.2f} < ${trade_amount * 2:.2f}")
+                f"Insufficient balance: ${self.current_balance:.2f}"
+                f"< ${trade_amount * 2:.2f}"
                 return False
             
             return True
@@ -2696,14 +2785,16 @@ class TradingBot:
             # �️ MARGIN-SAFE CONCURRENT TRADING - Only 1 trade for small accounts!
             if self.current_balance <= 100:
                 max_concurrent_trades = 1  # ONLY 1 trade for small accounts!
-                logger.info(f"🛡️ MARGIN-SAFE: Small account ${self.current_balance:.2f} - max 1 trade")
+                f"🛡️ MARGIN-SAFE: Small account ${self.current_balance:.2f}"
+                f"- max 1 trade"
             else:
                 max_concurrent_trades = 3  # Maximum 3 for larger accounts
                 
             current_open_trades = len(self.active_trades)
             
             if current_open_trades >= max_concurrent_trades:
-                logger.warning(f"📊 Max concurrent trades reached: {current_open_trades}/{max_concurrent_trades}")
+                f"📊 Max concurrent trades reached: {current_open_trades}"
+                f"{max_concurrent_trades}"
                 
                 # 🚨 AUTO-FIX: Check for stale trades if limit reached
                 logger.warning("🔧 Auto-checking for stale trades to free up slots...")
@@ -2719,7 +2810,8 @@ class TradingBot:
                         
                         # If trade is older than 2 hours, it might be stale
                         if age_hours > 2:
-                            logger.warning(f"🗑️ Removing old trade {trade_id} (age: {age_hours:.1f}h)")
+                            f"🗑️ Removing old trade {trade_id}"
+                            f"(age: {age_hours:.1f}h)"
                             del self.active_trades[trade_id]
                             stale_found += 1
                             
@@ -2731,16 +2823,19 @@ class TradingBot:
                 
                 if stale_found > 0:
                     new_count = len(self.active_trades)
-                    logger.warning(f"🧹 Removed {stale_found} stale trades. New count: {new_count}/{max_concurrent_trades}")
+                    f"🧹 Removed {stale_found}"
+                    f"stale trades. New count: {new_count}/{max_concurrent_trades}"
                     
                     # Check again after cleanup
                     if new_count < max_concurrent_trades:
-                        logger.warning(f"✅ SLOTS FREED! Can now trade again: {new_count}/{max_concurrent_trades}")
+                        f"✅ SLOTS FREED! Can now trade again: {new_count}"
+                        f"{max_concurrent_trades}"
                         return True
                 
                 return False
             
-            logger.info(f"✅ Concurrent trades OK: {current_open_trades}/{max_concurrent_trades} - {max_concurrent_trades - current_open_trades} slots available!")
+            f"✅ Concurrent trades OK: {current_open_trades}"
+            f"{max_concurrent_trades} - {max_concurrent_trades - current_open_trades} slots available!"
             return True
             
         except Exception as e:
@@ -2755,7 +2850,10 @@ class TradingBot:
                 return True  # Allow trading if MT5 unavailable
                 
             # Get current account info from MT5
-            account_info: Any = mt5.account_info() if hasattr(mt5, 'account_info') else None  # type: ignore
+                        account_info: Any = mt5.account_info(
+                ) if hasattr(mt5,
+                'account_info'
+            )
             if account_info is None:
                 logger.error("❌ Cannot get account info for margin check")
                 return False
@@ -2770,24 +2868,29 @@ class TradingBot:
             DANGER_ZONE = 300           # Warning zone
             MINIMUM_FREE_MARGIN = 10    # Must have $10 free margin minimum
             
-            logger.info(f"💰 Margin Check: Balance=${balance:.2f}, Equity=${equity:.2f}, Free=${free_margin:.2f}, Level={margin_level:.1f}%")
+            f"💰 Margin Check: Balance=${balance:.2f}"
+            f" Equity=${equity:.2f}, Free=${free_margin:.2f}, Level={margin_level:.1f}%"
             
             # 🚨 EMERGENCY STOP CONDITIONS
             if margin_level < MARGIN_CALL_LEVEL:
-                logger.error(f"🚨 MARGIN CALL DANGER! Level {margin_level:.1f}% < {MARGIN_CALL_LEVEL}% - STOPPING ALL TRADING!")
+                f"🚨 MARGIN CALL DANGER! Level {margin_level:.1f}"
+                f" < {MARGIN_CALL_LEVEL}% - STOPPING ALL TRADING!"
                 return False
             
             if free_margin < MINIMUM_FREE_MARGIN:
-                logger.error(f"🚨 LOW FREE MARGIN! ${free_margin:.2f} < ${MINIMUM_FREE_MARGIN} - STOPPING ALL TRADING!")
+                f"🚨 LOW FREE MARGIN! ${free_margin:.2f}"
+                f"< ${MINIMUM_FREE_MARGIN} - STOPPING ALL TRADING!"
                 return False
             
             # Warning zone
             if margin_level < DANGER_ZONE:
-                logger.warning(f"⚠️ MARGIN WARNING: Level {margin_level:.1f}% < {DANGER_ZONE}% - Trading with extreme caution!")
+                f"⚠️ MARGIN WARNING: Level {margin_level:.1f}"
+                f" < {DANGER_ZONE}% - Trading with extreme caution!"
                 return True  # Still allow trading but with warning
             
             # All good
-            logger.info(f"✅ MARGIN SAFE: Level {margin_level:.1f}% > {DANGER_ZONE}%, Free=${free_margin:.2f}")
+            f"✅ MARGIN SAFE: Level {margin_level:.1f}"
+            f" > {DANGER_ZONE}%, Free=${free_margin:.2f}"
             return True
             
         except Exception as e:
@@ -2799,22 +2902,36 @@ class TradingBot:
         while self.running:
             try:
                 if self.active_trades and self.mt5_interface and mt5_available and mt5 is not None:
-                    account_info = mt5.account_info() if hasattr(mt5, 'account_info') else None  # type: ignore
+                                        account_info = mt5.account_info(
+                        ) if hasattr(mt5,
+                        'account_info'
+                    )
                     if account_info:
-                        margin_level = getattr(account_info, 'margin_level', 999999) or 999999  # type: ignore
-                        free_margin = getattr(account_info, 'margin_free', 0.0) or 0.0  # type: ignore
+                                                margin_level = getattr(
+                            account_info,
+                            'margin_level',
+                            999999
+                        )
+                                                free_margin = getattr(
+                            account_info,
+                            'margin_free',
+                            0.0
+                        )
                         
                         # 🚨 EMERGENCY: Close all trades if margin drops dangerously
                         if margin_level < 300:  # Danger zone
-                            logger.error(f"🚨 MARGIN EMERGENCY: {margin_level:.1f}% - CLOSING ALL TRADES!")
+                            f"🚨 MARGIN EMERGENCY: {margin_level:.1f}"
+                            f" - CLOSING ALL TRADES!"
                             await self._emergency_close_all_trades("Margin Emergency")
                             
                         elif margin_level < 500:  # Warning zone
-                            logger.warning(f"⚠️ MARGIN WARNING: {margin_level:.1f}% - Monitoring closely")
+                            f"⚠️ MARGIN WARNING: {margin_level:.1f}"
+                            f" - Monitoring closely"
                             
                         # 🚨 EMERGENCY: Free margin too low
                         if free_margin < 20:  # $20 minimum
-                            logger.error(f"🚨 LOW FREE MARGIN: ${free_margin:.2f} - CLOSING ALL TRADES!")
+                            f"🚨 LOW FREE MARGIN: ${free_margin:.2f}"
+                            f"- CLOSING ALL TRADES!"
                             await self._emergency_close_all_trades("Low Free Margin")
                 
                 await asyncio.sleep(10)  # Check every 10 seconds
@@ -2875,7 +2992,8 @@ class TradingBot:
                 logger.error(f"🚨 MAXIMUM DRAWDOWN REACHED!")
                 logger.error(f"   Starting: ${self.starting_balance:.2f}")
                 logger.error(f"   Current: ${self.current_balance:.2f}")
-                logger.error(f"   Drawdown: ${current_drawdown:.2f} (Max: ${max_allowed_drawdown:.2f})")
+                f"   Drawdown: ${current_drawdown:.2f}"
+                f"(Max: ${max_allowed_drawdown:.2f})"
                 logger.error(f"🛑 STOPPING ALL TRADING TO PRESERVE CAPITAL!")
                 
                 # Trigger emergency shutdown
@@ -2899,7 +3017,10 @@ class TradingBot:
             
             # Get current free margin
             if mt5_available and mt5 is not None:
-                account_info = mt5.account_info() if hasattr(mt5, 'account_info') else None  # type: ignore
+                                account_info = mt5.account_info(
+                    ) if hasattr(mt5,
+                    'account_info'
+                )
                 if account_info:
                     free_margin = getattr(account_info, 'margin_free', 0.0) or 0.0  # type: ignore
                     
@@ -2911,8 +3032,10 @@ class TradingBot:
                         max_safe_lots = (free_margin / 3) / (1000 * 100)
                         safe_lot_size = max(0.01, min(lot_size, max_safe_lots))
                         
-                        logger.warning(f"🛡️ MARGIN SAFETY: Reduced {symbol} from {lot_size} to {safe_lot_size} lots")
-                        logger.warning(f"   Free Margin: ${free_margin:.2f}, Required: ${margin_required:.2f}")
+                        f"🛡️ MARGIN SAFETY: Reduced {symbol}"
+                        f"from {lot_size} to {safe_lot_size} lots"
+                        f"   Free Margin: ${free_margin:.2f}"
+                        f" Required: ${margin_required:.2f}"
                         
                         return safe_lot_size
             
@@ -2928,7 +3051,10 @@ class TradingBot:
             if not self.mt5_interface or not mt5_available or mt5 is None:
                 return False
                 
-            tick = mt5.symbol_info_tick(symbol) if hasattr(mt5, 'symbol_info_tick') else None  # type: ignore
+                        tick = mt5.symbol_info_tick(
+                symbol) if hasattr(mt5,
+                'symbol_info_tick'
+            )
             if not tick:
                 return False
                 
@@ -2947,11 +3073,13 @@ class TradingBot:
             symbol_max_spread = max_spread.get(symbol, 10.0)  # Default 10 points
             
             # 🚨 EMERGENCY TRADING: DISABLE SPREAD PROTECTION FOR AGGRESSIVE MODE
-            logger.warning(f"🚨 EMERGENCY: Ignoring spread check - {symbol} spread {spread_points:.1f} points (aggressive mode)")
+            f"🚨 EMERGENCY: Ignoring spread check - {symbol}"
+            f"spread {spread_points:.1f} points (aggressive mode)"
             return True  # ALWAYS allow trades in emergency mode
             
             if spread_points > symbol_max_spread:
-                logger.warning(f"🚫 SPREAD TOO WIDE: {symbol} spread {spread_points:.1f} > {symbol_max_spread} points")
+                f"🚫 SPREAD TOO WIDE: {symbol}"
+                f"spread {spread_points:.1f} > {symbol_max_spread} points"
                 return False
                 
             return True
@@ -2979,13 +3107,15 @@ class TradingBot:
             # 🚨 Rule 1: Maximum 1 position per symbol for small accounts
             if self.current_balance <= 100:
                 if new_symbol in symbol_exposure and symbol_exposure[new_symbol] >= 1:
-                    logger.warning(f"🚫 CORRELATION: Already have {symbol_exposure[new_symbol]} {new_symbol} position(s)")
+                    f"🚫 CORRELATION: Already have {symbol_exposure[new_symbol]}"
+                    f"{new_symbol} position(s)"
                     return False
             
             # 🚨 Rule 2: Maximum 2 positions in same direction for small accounts
             if self.current_balance <= 100:
                 if direction_exposure[new_action] >= 2:
-                    logger.warning(f"🚫 CORRELATION: Already have {direction_exposure[new_action]} {new_action} positions")
+                    f"🚫 CORRELATION: Already have {direction_exposure[new_action]}"
+                    f"{new_action} positions"
                     return False
             
             return True
@@ -3002,7 +3132,10 @@ class TradingBot:
             try:
                 if self.mt5_interface and mt5_available and mt5 is not None:
                     # Test connection with simple account info request
-                    account_info = mt5.account_info() if hasattr(mt5, 'account_info') else None  # type: ignore
+                                        account_info = mt5.account_info(
+                        ) if hasattr(mt5,
+                        'account_info'
+                    )
                     
                     if account_info is None:
                         consecutive_failures += 1
@@ -3027,7 +3160,8 @@ class TradingBot:
                             
                     else:
                         if consecutive_failures > 0:
-                            logger.info(f"✅ MT5 connection restored after {consecutive_failures} failures")
+                            f"✅ MT5 connection restored after {consecutive_failures}"
+                            f"failures"
                             consecutive_failures = 0
                             self.mt5_connected = True
                 
@@ -3082,11 +3216,13 @@ class TradingBot:
             
             # Check limits
             if self.weekly_profit <= -self.max_weekly_loss:
-                logger.error(f"🚨 WEEKLY LOSS LIMIT: ${self.weekly_profit:.2f} <= -${self.max_weekly_loss}")
+                f"🚨 WEEKLY LOSS LIMIT: ${self.weekly_profit:.2f}"
+                f"<= -${self.max_weekly_loss}"
                 return False
                 
             if self.monthly_profit <= -self.max_monthly_loss:
-                logger.error(f"🚨 MONTHLY LOSS LIMIT: ${self.monthly_profit:.2f} <= -${self.max_monthly_loss}")
+                f"🚨 MONTHLY LOSS LIMIT: ${self.monthly_profit:.2f}"
+                f"<= -${self.max_monthly_loss}"
                 return False
                 
             return True
@@ -3103,7 +3239,8 @@ class TradingBot:
             allow_same_direction = True      # FORCE ENABLE stacking!
             
             if not enable_hedge_prevention:
-                logger.info(f"🚀 AGGRESSIVE MODE: {new_action} position ALWAYS allowed - no hedge restrictions!")
+                f"🚀 AGGRESSIVE MODE: {new_action}"
+                f"position ALWAYS allowed - no hedge restrictions!"
                 return True  # Allow ALL trades for maximum profit potential!
             
             # This code below will never execute due to disabled hedge prevention
@@ -3117,12 +3254,14 @@ class TradingBot:
             has_sell = 'SELL' in existing_actions
             
             if (new_action == 'BUY' and has_sell) or (new_action == 'SELL' and has_buy):
-                logger.info(f"� HEDGE ALLOWED: {new_action} position with opposite direction for diversification!")
+                f"� HEDGE ALLOWED: {new_action}"
+                f"position with opposite direction for diversification!"
                 return True  # Allow hedging for maximum opportunities
             
             # Check for same direction stacking - ALWAYS ALLOWED
             if new_action in existing_actions and not allow_same_direction:
-                logger.info(f"� STACKING ALLOWED: Multiple {new_action} positions for compound profits!")
+                f"� STACKING ALLOWED: Multiple {new_action}"
+                f"positions for compound profits!"
                 return True  # Always allow stacking
             
             logger.info(f"✅ Hedge Check Passed: {new_action} position allowed")
@@ -3166,7 +3305,8 @@ class TradingBot:
             
             # Exit after 6 minutes if slightly profitable (take small profits!)
             if elapsed_minutes >= 6 and current_profit >= self.min_profit_threshold:
-                return True, f"Time + Small Profit: {elapsed_minutes:.1f}min, +${current_profit:.2f}"
+                f"Time + Small Profit: {elapsed_minutes:.1f}"
+                f"in, +${current_profit:.2f}"
             
             # Exit after 10 minutes regardless (prevent large losses on volatility)
             if elapsed_minutes >= self.max_trade_age_minutes:
@@ -3175,7 +3315,8 @@ class TradingBot:
             # 📊 Profit locking - if we were profitable but now declining
             if hasattr(trade, 'max_profit') and trade.get('max_profit', 0) > 1.0:
                 if current_profit < trade['max_profit'] * 0.7:  # Lock in 70% of max profit
-                    return True, f"Profit Lock: ${current_profit:.2f} (was ${trade['max_profit']:.2f})"
+                    f"Profit Lock: ${current_profit:.2f}"
+                    f"(was ${trade['max_profit']:.2f})"
             
             # Track maximum profit achieved
             if not hasattr(trade, 'max_profit') or current_profit > trade.get('max_profit', 0):
@@ -3238,7 +3379,10 @@ class TradingBot:
             
             # 🛡️ PROTECTION 6: Calculate and validate position size
             base_position_size = self._calculate_position_size_for_symbol(confidence, symbol)
-            base_position_size = await self._validate_position_size_against_margin(symbol, base_position_size)
+                        base_position_size = await self._validate_position_size_against_margin(
+                symbol,
+                base_position_size
+            )
             
             # 🚀 HFT UPGRADE: Use Advanced Position Sizer with Kelly Criterion
             account_info = mt5.account_info()  # type: ignore
@@ -3265,14 +3409,16 @@ class TradingBot:
             try:
                 _, adjusted_size = await self.mt5_interface.validate_lot_size(symbol, position_size)
                 if adjusted_size != position_size:
-                    logger.info(f"📏 Lot size adjusted for {symbol}: {position_size} → {adjusted_size}")
+                    f"📏 Lot size adjusted for {symbol}"
+                    f" {position_size} → {adjusted_size}"
                     position_size = adjusted_size
             except Exception as validation_error:
                 logger.warning(f"⚠️ Lot validation failed for {symbol}: {validation_error}")
                 # Use conservative fallback
                 position_size = 0.01
             
-            logger.info(f"🚀 PLACING HFT TRADE: {action} on {symbol}: {position_size} lots (Confidence: {confidence:.0%})")
+            f"🚀 PLACING HFT TRADE: {action}"
+            f"on {symbol}: {position_size} lots (Confidence: {confidence:.0%})"
             
             # 🚀 HFT UPGRADE: Use Ultra-Fast Order Manager for sub-5ms execution
             result: Dict[str, Any] = {}
@@ -3310,7 +3456,8 @@ class TradingBot:
                         symbol=symbol,
                         amount=position_size
                     )
-                    result = fallback_result if fallback_result else {'ticket': f"fallback_{int(time.time())}", 'price': 0.0}
+                    f"fallback_{int(time.time())}"
+                    f"
             else:
                 # No HFT manager available, use standard interface
                 fallback_result = await self.mt5_interface.place_trade(
@@ -3318,7 +3465,8 @@ class TradingBot:
                     symbol=symbol,
                     amount=position_size
                 )
-                result = fallback_result if fallback_result else {'ticket': f"fallback_{int(time.time())}", 'price': 0.0}
+                f"fallback_{int(time.time())}"
+                f"
             
             if result:
                 # Store trade - Fix: Use the correct ticket field from MT5 result
@@ -3406,7 +3554,8 @@ class TradingBot:
             
             # NEVER increase lot size regardless of confidence or consecutive losses
             # This prevents the margin call disaster that happened before
-            logger.warning(f"🛡️ MARGIN-SAFE: ${base_risk:.2f} risk → {lot_size} lots (MARGIN PROTECTED)")
+            f"🛡️ MARGIN-SAFE: ${base_risk:.2f}"
+            f"risk → {lot_size} lots (MARGIN PROTECTED)"
             return lot_size
             
         except Exception as e:
@@ -3437,7 +3586,8 @@ class TradingBot:
         """Send trade notification"""
         await self._send_trade_notification_for_symbol(action, amount, confidence, DEFAULT_SYMBOL)
     
-    async def _send_trade_notification_for_symbol(self, action: str, amount: float, confidence: float, symbol: str):
+        async def _send_trade_notification_for_symbol(
+        self, action: str, amount: float, confidence: float, symbol: str):
         """Send trade notification for specific symbol - LEGACY"""
         try:
             msg = f"""🚀 New Trade Placed
@@ -3469,7 +3619,11 @@ class TradingBot:
                 confidence=confidence,
                 strategy="AI + Technical",
                 reason=f"High confidence {action.lower()} signal",
-                win_rate_at_time=self.session_stats.get('wins', 0) / max(1, self.session_stats.get('total_trades', 1)) * 100,
+                                win_rate_at_time=self.session_stats.get(
+                    'wins',
+                    0) / max(1,
+                    self.session_stats.get('total_trades', 1)
+                )
                 mt5_ticket=str(trade_id)
             )
             
@@ -3518,13 +3672,20 @@ class TradingBot:
                         current_profit = float(getattr(position_info, 'profit', 0.0))
                         
                         # Enhanced closure conditions
-                        should_close, reason = await self._should_close_trade_enhanced(trade, position_info)
+                                                should_close, reason = await self._should_close_trade_enhanced(
+                            trade,
+                            position_info
+                        )
                         
                         if should_close:
-                            logger.warning(f"🔒 ENHANCED CLOSE: {mt5_ticket} - {reason} (Profit: ${current_profit:.2f})")
+                            f"🔒 ENHANCED CLOSE: {mt5_ticket}"
+                            f"- {reason} (Profit: ${current_profit:.2f})"
                             
                             # Use enhanced close method
-                            close_result = await self._enhanced_force_close_trade(mt5_ticket, reason)
+                                                        close_result = await self._enhanced_force_close_trade(
+                                mt5_ticket,
+                                reason
+                            )
                             
                             if close_result and close_result.get('closed'):
                                 await self._handle_trade_completion(trade_id, trade, close_result)
@@ -3606,11 +3767,13 @@ class TradingBot:
             # Exit after symbol-specific time limit if slightly profitable
             half_time = time_limit / 2
             if elapsed_minutes >= half_time and current_profit >= (profit_target * 0.25):
-                return True, f"Half-Time Small Profit: {elapsed_minutes:.1f}min, +${current_profit:.2f}"
+                f"Half-Time Small Profit: {elapsed_minutes:.1f}"
+                f"in, +${current_profit:.2f}"
             
             # Exit after full time limit regardless
             if elapsed_minutes >= time_limit:
-                return True, f"Symbol Time Limit: {elapsed_minutes:.1f}min >= {time_limit}min, P&L: ${current_profit:.2f}"
+                f"Symbol Time Limit: {elapsed_minutes:.1f}"
+                f"in >= {time_limit}min, P&L: ${current_profit:.2f}"
             
             return False, ""
             
@@ -3665,7 +3828,8 @@ class TradingBot:
             # ✅ ADD DETAILED LOGGING FOR DEBUGGING
             trade_symbol = trade.get('symbol', 'Unknown')
             mt5_ticket = trade.get('mt5_ticket', 'Unknown')
-            logger.info(f"🔍 Auto-Management Check - Ticket: {mt5_ticket}, Symbol: {trade_symbol}, Profit: ${current_profit:.2f}")
+            f"🔍 Auto-Management Check - Ticket: {mt5_ticket}"
+            f" Symbol: {trade_symbol}, Profit: ${current_profit:.2f}"
             
             # Check take profit
             if current_profit >= auto_take_profit:
@@ -3683,15 +3847,19 @@ class TradingBot:
             
             if elapsed_minutes >= auto_time_limit:
                 if current_profit >= min_profit_threshold:
-                    logger.info(f"⏰ TIME + PROFIT TRIGGER: {elapsed_minutes:.1f}min, +${current_profit:.2f}")
-                    return True, f"Time Limit + Profitable: {elapsed_minutes:.1f}min, +${current_profit:.2f}"
+                    f"⏰ TIME + PROFIT TRIGGER: {elapsed_minutes:.1f}"
+                    f"in, +${current_profit:.2f}"
+                    f"Time Limit + Profitable: {elapsed_minutes:.1f}"
+                    f"in, +${current_profit:.2f}"
                 elif elapsed_minutes >= auto_time_limit * 1.5:  # Extended time for losses
                     logger.info(f"⏰ EXTENDED TIME TRIGGER: {elapsed_minutes:.1f}min")
-                    return True, f"Extended Time Limit: {elapsed_minutes:.1f}min, P&L: ${current_profit:.2f}"
+                    f"Extended Time Limit: {elapsed_minutes:.1f}"
+                    f"in, P&L: ${current_profit:.2f}"
             
             # Log current status every 5 minutes
             if int(elapsed_minutes) % 5 == 0:
-                logger.debug(f"📊 Trade Status - {mt5_ticket}: {elapsed_minutes:.1f}min, P&L: ${current_profit:.2f}")
+                f"📊 Trade Status - {mt5_ticket}"
+                f" {elapsed_minutes:.1f}min, P&L: ${current_profit:.2f}"
             
             return False, ""
             
@@ -3749,8 +3917,10 @@ class TradingBot:
                 tick = mt5.symbol_info_tick(symbol)  # type: ignore
                 if tick:
                     # Force close at market price
-                    order_type = mt5.ORDER_TYPE_SELL if position_type == 0 else mt5.ORDER_TYPE_BUY  # type: ignore
-                    price = tick.bid if order_type == mt5.ORDER_TYPE_SELL else tick.ask  # type: ignore
+                                        order_type = mt5.ORDER_TYPE_SELL if position_type == 0
+                        else mt5.ORDER_TYPE_BUY  # type: ignore
+                                        price = tick.bid if order_type == mt5.ORDER_TYPE_SELL
+                        else tick.ask  # type: ignore
                     
                     request = {  # type: ignore
                         "action": mt5.TRADE_ACTION_DEAL,  # type: ignore
@@ -3779,7 +3949,8 @@ class TradingBot:
                 logger.error(f"❌ Method 3 failed: {force_error}")
             
             # Method 4: Mark as closed and remove from tracking
-            logger.error(f"❌ ALL METHODS FAILED for {mt5_ticket} - marking as closed to prevent loop")
+            f"❌ ALL METHODS FAILED for {mt5_ticket}"
+            f"- marking as closed to prevent loop"
             return {
                 'profit': getattr(position_check, 'profit', 0.0),
                 'closed': True,
@@ -3851,10 +4022,13 @@ class TradingBot:
                             logger.info(f"🔍 Emergency check - Ticket {mt5_ticket}: ${profit:.2f}")
                             
                             if profit > 0:  # Any positive profit
-                                logger.info(f"🔒 Emergency closing profitable trade {mt5_ticket}: ${profit:.2f}")
-                                close_result = await self._force_close_trade(mt5_ticket, f"Emergency Close: +${profit:.2f}")
+                                f"🔒 Emergency closing profitable trade {mt5_ticket}"
+                                f" ${profit:.2f}"
+                                f"Emergency Close: +${profit:.2f}"
+                                f"
                                 if close_result:
-                                    await self._handle_trade_completion(trade_id, trade, close_result)
+                                                                        await self._handle_trade_completion(
+                                        trade_id, trade, close_result)
                                     closed_count += 1
                                 
                 except Exception as e:
@@ -3889,7 +4063,8 @@ class TradingBot:
                 if self.mt5_interface:
                     position_info = await self.mt5_interface.get_position_info(mt5_ticket)
                     if not position_info:
-                        logger.info(f"🗑️ Removing orphaned trade {trade_id} (MT5 ticket: {mt5_ticket})")
+                        f"🗑️ Removing orphaned trade {trade_id}"
+                        f"(MT5 ticket: {mt5_ticket})"
                         trades_to_remove.append(trade_id)
                         
             except Exception as e:
@@ -3905,7 +4080,8 @@ class TradingBot:
                 logger.error(f"Error removing trade {trade_id}: {e}")
                 
         if trades_to_remove:
-            logger.info(f"🧹 Startup cleanup complete: Removed {len(trades_to_remove)} orphaned trades")
+            f"🧹 Startup cleanup complete: Removed {len(trades_to_remove)}"
+            f"orphaned trades"
         else:
             logger.info("✅ No orphaned trades found")
     
@@ -3941,10 +4117,12 @@ class TradingBot:
                 self.win_rate_tracker.append('LOSS')
                 self.consecutive_losses += 1
                 result = "LOSS"
-                logger.warning(f"📉 LOSS! Consecutive losses: {self.consecutive_losses}/{MAX_CONSECUTIVE_LOSSES}")
+                f"📉 LOSS! Consecutive losses: {self.consecutive_losses}"
+                f"{MAX_CONSECUTIVE_LOSSES}"
             
             # Send enhanced notification
-            await self._send_enhanced_completion_notification(trade_id, trade, profit, result, reason)
+                        await self._send_enhanced_completion_notification(
+                trade_id, trade, profit, result, reason)
             
             # Store result for AI learning (simple tracking)
             try:
@@ -3965,7 +4143,14 @@ class TradingBot:
         except Exception as e:
             logger.error(f"Trade completion error: {e}")
     
-    async def _send_completion_notification(self, trade: Dict[str, Any], profit: float, result: str, reason: str = "Natural"):
+        async def _send_completion_notification(
+        self,
+        trade: Dict[str,
+        Any],
+        profit: float,
+        result: str,
+        reason: str = "Natural"
+    )
         """Send completion notification - LEGACY"""
         try:
             emoji = "🟢" if result == "WIN" else "🔴"
@@ -4035,17 +4220,21 @@ class TradingBot:
                         
                         # Log balance changes with profit tracking
                         if abs(new_balance - old_balance) > 0.01:  # Only log significant changes
-                            logger.info(f"💰 Balance: ${old_balance:.2f} → ${new_balance:.2f} (Profit: ${current_profit:+.2f})")
+                            f"💰 Balance: ${old_balance:.2f}"
+                            f"→ ${new_balance:.2f} (Profit: ${current_profit:+.2f})"
                         
                         # Early warning at 80% of loss threshold
                         warning_threshold = LOSS_PROTECTION_THRESHOLD * 0.8
-                        if current_profit <= -warning_threshold and current_profit > -LOSS_PROTECTION_THRESHOLD:
+                                                if current_profit <= -warning_threshold
+                            and current_profit > -LOSS_PROTECTION_THRESHOLD:
                             if hasattr(self, '_loss_warning_sent'):
                                 if not self._loss_warning_sent:
-                                    logger.warning(f"⚠️ Loss Warning: ${current_profit:.2f}/-${LOSS_PROTECTION_THRESHOLD:.2f} (80% of loss limit)")
+                                    f"⚠️ Loss Warning: ${current_profit:.2f}"
+                                    f"-${LOSS_PROTECTION_THRESHOLD:.2f} (80% of loss limit)"
                                     self._loss_warning_sent = True
                             else:
-                                logger.warning(f"⚠️ Loss Warning: ${current_profit:.2f}/-${LOSS_PROTECTION_THRESHOLD:.2f} (80% of loss limit)")
+                                f"⚠️ Loss Warning: ${current_profit:.2f}"
+                                f"-${LOSS_PROTECTION_THRESHOLD:.2f} (80% of loss limit)"
                                 self._loss_warning_sent = True
         except Exception as e:
             logger.error(f"Balance update error: {e}")
@@ -4261,7 +4450,8 @@ class TradingBot:
             final_size = min(final_size, max_size_by_balance, 0.1)  # Never exceed 0.1 lots
             final_size = max(final_size, 0.01)  # Never below minimum
             
-            logger.info(f"🎯 GODLIKE SIZE: {symbol} = {final_size:.3f} lots (Conf: {confidence:.2f}, Wins: {self.profit_amplifier['consecutive_wins']}, Balance: ${self.current_balance:.2f})")
+            f"🎯 GODLIKE SIZE: {symbol}"
+            f"= {final_size:.3f} lots (Conf: {confidence:.2f}, Wins: {self.profit_amplifier['consecutive_wins']}, Balance: ${self.current_balance:.2f})"
             
             return final_size
             
@@ -4269,7 +4459,8 @@ class TradingBot:
             logger.debug(f"Position sizing error: {e}")
             return 0.01
 
-    async def _place_godlike_trade(self, action: str, confidence: float, symbol: str, position_size: float, reason: str) -> None:
+        async def _place_godlike_trade(
+        self, action: str, confidence: float, symbol: str, position_size: float, reason: str) -> None:
         """Place trade with godlike enhancements"""
         try:
             # Use existing trade placement method
@@ -4277,7 +4468,8 @@ class TradingBot:
                 await self._place_trade_for_symbol(action, confidence, symbol)
             else:
                 # Fallback to basic trade placement
-                logger.warning(f"🚀 GODLIKE TRADE: {action} {symbol} at {position_size} lots (would place here)")
+                f"🚀 GODLIKE TRADE: {action}"
+                f"{symbol} at {position_size} lots (would place here)"
                 
         except Exception as e:
             logger.error(f"Godlike trade placement error: {e}")
@@ -4343,7 +4535,8 @@ class TradingBot:
                 
                 # Temporarily set a higher limit in memory (don't reload config!)
                 config.MAX_CONSECUTIVE_LOSSES = 100
-                logger.warning(f"🔧 AUTO-FIX: Increased MAX_CONSECUTIVE_LOSSES to 100 for this session")
+                                logger.warning(f"🔧 AUTO-FIX: Increased MAX_CONSECUTIVE_LOSSES "
+                "to 100 for this session")
                 
                 # Set flag to prevent repeating this fix
                 self._limits_already_fixed = True
@@ -4389,7 +4582,8 @@ class TradingBot:
                 old_count = self.consecutive_losses
                 self.consecutive_losses = max(0, self.consecutive_losses - 25)  # Reduce by 25
                 
-                logger.info(f"🔄 Auto-reset: Consecutive losses reduced {old_count} → {self.consecutive_losses} (time-based)")
+                f"🔄 Auto-reset: Consecutive losses reduced {old_count}"
+                f"→ {self.consecutive_losses} (time-based)"
                 
         except Exception as e:
             logger.error(f"Auto-reset error: {e}")
@@ -4423,7 +4617,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
         self.consecutive_losses = 0
         self.daily_profit = 0.0
         
-        logger.info(f"🚨 FORCE RESET: Consecutive losses {old_consecutive} → 0, Daily P&L ${old_daily:.2f} → $0.00")
+        f"🚨 FORCE RESET: Consecutive losses {old_consecutive}"
+        f"→ 0, Daily P&L ${old_daily:.2f} → $0.00"
         print(f"🚨 FORCE RESET APPLIED: {old_consecutive} consecutive losses cleared!")
         
         return True
@@ -4457,7 +4652,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                             profit = nano_result['profit']
                             symbol = trade.get('symbol', 'Unknown')
                             
-                            logger.warning(f"⚡ NANOSECOND PROFIT: {symbol} ${profit:.2f} - INSTANT CLOSE!")
+                            f"⚡ NANOSECOND PROFIT: {symbol}"
+                            f"${profit:.2f} - INSTANT CLOSE!"
                             
                             close_success = await self._ultra_fast_close(mt5_ticket, profit)
                             
@@ -4465,8 +4661,10 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                                 if trade_id in self.active_trades:
                                     del self.active_trades[trade_id]
                                     nanosecond_trades.discard(trade_id)
-                                await self._nanosecond_profit_notification(symbol, mt5_ticket, profit)
-                                logger.error(f"⚡ NANOSECOND PROFIT SECURED: {symbol} +${profit:.2f}")
+                                                                await self._nanosecond_profit_notification(
+                                    symbol, mt5_ticket, profit)
+                                f"⚡ NANOSECOND PROFIT SECURED: {symbol}"
+                                f"+${profit:.2f}"
                                 
                                 # Update position sizer with trade result
                                 self.advanced_position_sizer.update_trade_result(profit, True)
@@ -4482,7 +4680,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                         # Add to nanosecond tracking if not already there
                         if trade_id not in nanosecond_trades:
                             nanosecond_trades.add(trade_id)
-                            logger.info(f"⚡ NANOSECOND TRACKING: {trade.get('symbol')} now at 1ms monitoring")
+                            f"⚡ NANOSECOND TRACKING: {trade.get('symbol')}"
+                            f"now at 1ms monitoring"
                         
                         # Fallback: Check with standard method if nanosecond fails
                         if nano_result['action'] == 'error':
@@ -4501,19 +4700,26 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                                 
                                 # 🎯 FALLBACK: $0.20 PROFIT RULE
                                 if current_profit >= 0.20:
-                                    logger.error(f"🎯 FALLBACK $0.20: {symbol} ${current_profit:.2f} - CLOSING!")
+                                    f"🎯 FALLBACK $0.20: {symbol}"
+                                    f"${current_profit:.2f} - CLOSING!"
                                     
-                                    close_success = await self._simple_force_close(mt5_ticket, current_profit)
+                                                                        close_success = await self._simple_force_close(
+                                        mt5_ticket,
+                                        current_profit
+                                    )
                                     
                                     if close_success:
                                         if trade_id in self.active_trades:
                                             del self.active_trades[trade_id]
                                             nanosecond_trades.discard(trade_id)
-                                        await self._simple_profit_notification(symbol, mt5_ticket, current_profit)
-                                        logger.error(f"✅ FALLBACK PROFIT: {symbol} +${current_profit:.2f}")
+                                                                                await self._simple_profit_notification(
+                                            symbol, mt5_ticket, current_profit)
+                                        f"✅ FALLBACK PROFIT: {symbol}"
+                                        f"+${current_profit:.2f}"
                                         
                                         # Update position sizer
-                                        self.advanced_position_sizer.update_trade_result(current_profit, True)
+                                                                                self.advanced_position_sizer.update_trade_result(
+                                            current_profit, True)
                     
                     except Exception as trade_error:
                         logger.error(f"Nanosecond monitor trade error: {trade_error}")
@@ -4531,7 +4737,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
             if self.mt5_interface:
                 result = await self.mt5_interface.close_position(mt5_ticket)
                 if result:
-                    logger.info(f"⚡ NANOSECOND CLOSE: Ticket {mt5_ticket} closed at ${current_profit:.2f}")
+                    f"⚡ NANOSECOND CLOSE: Ticket {mt5_ticket}"
+                    f"closed at ${current_profit:.2f}"
                     return True
                 else:
                     logger.warning(f"❌ NANOSECOND CLOSE FAILED: {result}")
@@ -4566,7 +4773,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
             if self.mt5_interface:
                 result = await self.mt5_interface.close_position(mt5_ticket)
                 if result:
-                    logger.info(f"✅ SIMPLE CLOSE: Ticket {mt5_ticket} closed at ${current_profit:.2f}")
+                    f"✅ SIMPLE CLOSE: Ticket {mt5_ticket}"
+                    f"closed at ${current_profit:.2f}"
                     return True
                 else:
                     logger.warning(f"❌ SIMPLE CLOSE FAILED: {result}")
@@ -4592,7 +4800,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
         except Exception as e:
             logger.warning(f"Simple notification error: {e}")
 
-    async def _send_optimal_profit_notification(self, symbol: str, ticket: int, profit: float, target: float):
+        async def _send_optimal_profit_notification(
+        self, symbol: str, ticket: int, profit: float, target: float):
         """Send optimal profit notification"""
         try:
             speed_rating = "⚡⚡⚡" if profit >= target * 1.5 else "⚡⚡" if profit >= target * 1.2 else "⚡"
@@ -4640,7 +4849,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                                     
                                     # 🚨 EMERGENCY CLOSE if $0.20 profit target reached
                                     if current_profit >= profit_target:
-                                        logger.error(f"🚨 EMERGENCY CLOSE: {symbol} {mt5_ticket} hit ${current_profit:.2f} >= $0.20")
+                                        f"🚨 EMERGENCY CLOSE: {symbol}"
+                                        f"{mt5_ticket} hit ${current_profit:.2f} >= $0.20"
                                         
                                         # Force close immediately
                                         close_result = await self._enhanced_force_close_trade(
@@ -4649,18 +4859,22 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                                         )
                                         
                                         if close_result and close_result.get('closed'):
-                                            await self._handle_trade_completion(trade_id, trade, close_result)
+                                                                                        await self._handle_trade_completion(
+                                                trade_id, trade, close_result)
                                             if trade_id in self.active_trades:
                                                 del self.active_trades[trade_id]
-                                            logger.error(f"🚨 EMERGENCY SECURED: {symbol} +${current_profit:.2f}")
+                                            f"🚨 EMERGENCY SECURED: {symbol}"
+                                            f"+${current_profit:.2f}"
                                             
                                             # Send urgent notification
-                                            await self._send_emergency_profit_notification(symbol, mt5_ticket, current_profit, profit_target)
+                                                                                        await self._send_emergency_profit_notification(
+                                                symbol, mt5_ticket, current_profit, profit_target)
                                         else:
                                             logger.error(f"❌ EMERGENCY CLOSE FAILED: {mt5_ticket}")
                         
                         except Exception as trade_error:
-                            logger.error(f"Emergency protection error for {trade_id}: {trade_error}")
+                            f"Emergency protection error for {trade_id}"
+                            f" {trade_error}"
                 
                 # Check every 100ms for emergencies
                 await asyncio.sleep(0.1)
@@ -4669,7 +4883,8 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                 logger.error(f"Emergency profit protection error: {e}")
                 await asyncio.sleep(1.0)
 
-    async def _send_emergency_profit_notification(self, symbol: str, ticket: int, profit: float, target: float):
+        async def _send_emergency_profit_notification(
+        self, symbol: str, ticket: int, profit: float, target: float):
         """Send emergency profit securing notification"""
         try:
             msg = f"""🚨 EMERGENCY PROFIT SECURED!
@@ -4711,23 +4926,28 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                                     current_profit = float(getattr(position_info, 'profit', 0.0))
                                     symbol = trade.get('symbol', 'Unknown')
                                     
-                                    # ⚡ ULTRA-AGGRESSIVE: Close at $0.19 (95% of $0.20) to catch profits early
+                                                                        # ⚡ ULTRA-AGGRESSIVE: Close at $0.19 (
+                                        95% of $0.20) to catch profits early
                                     aggressive_target = 0.19  # 95% of $0.20
                                     
                                     if current_profit >= aggressive_target:
-                                        logger.error(f"⚡ ULTRA-AGGRESSIVE: {symbol} {mt5_ticket} hit ${current_profit:.2f} >= $0.19 (95% of $0.20)")
+                                        f"⚡ ULTRA-AGGRESSIVE: {symbol}"
+                                        f"{mt5_ticket} hit ${current_profit:.2f} >= $0.19 (95% of $0.20)"
                                         
                                         # Immediate force close
                                         close_result = await self._enhanced_force_close_trade(
                                             mt5_ticket,
-                                            f"ULTRA-AGGRESSIVE: 95% Target ${current_profit:.2f} >= $0.19"
+                                            f"ULTRA-AGGRESSIVE: 95% Target ${current_profit:.2f}"
+                                            f">= $0.19"
                                         )
                                         
                                         if close_result and close_result.get('closed'):
-                                            await self._handle_trade_completion(trade_id, trade, close_result)
+                                                                                        await self._handle_trade_completion(
+                                                trade_id, trade, close_result)
                                             if trade_id in self.active_trades:
                                                 del self.active_trades[trade_id]
-                                            logger.error(f"⚡ ULTRA-AGGRESSIVE SECURED: {symbol} +${current_profit:.2f}")
+                                            f"⚡ ULTRA-AGGRESSIVE SECURED: {symbol}"
+                                            f"+${current_profit:.2f}"
                         
                         except Exception as trade_error:
                             logger.debug(f"Ultra-aggressive monitor error: {trade_error}")
@@ -4780,26 +5000,33 @@ Status: {'✅ Ready to Trade' if self._check_risk_limits() else '⚠️ Trading 
                                         profit_history[mt5_ticket]['peak_profit'] = current_profit
                                         peak_profit = current_profit
                                     
-                                    # Log ultra-sensitive changes (every $0.01 change for maximum sensitivity!)
+                                                                        # Log ultra-sensitive changes (
+                                        every $0.01 change for maximum sensitivity!)
                                     profit_change: float = current_profit - last_profit
                                     if abs(profit_change) >= 0.01:
                                         direction = "📈" if profit_change > 0 else "📉"
-                                        logger.info(f"{direction} {current_time} | {symbol} {mt5_ticket}: ${last_profit:.2f} → ${current_profit:.2f} (Peak: ${peak_profit:.2f})")
+                                        f"{direction}"
+                                        f"{current_time} | {symbol} {mt5_ticket}: ${last_profit:.2f} → ${current_profit:.2f} (Peak: ${peak_profit:.2f})"
                                     
                                     # Alert when approaching target (75% of $0.20 = $0.15)
                                     approach_threshold = 0.15  # 75% of $0.20
-                                    if current_profit >= approach_threshold and last_profit < approach_threshold:
+                                                                        if current_profit >= approach_threshold
+                                        and last_profit < approach_threshold:
                                         remaining = profit_target - current_profit
-                                        logger.warning(f"⚡ APPROACHING $0.20 TARGET: {symbol} {mt5_ticket} = ${current_profit:.2f} (${remaining:.2f} to go!)")
+                                        f"⚡ APPROACHING $0.20 TARGET: {symbol}"
+                                        f"{mt5_ticket} = ${current_profit:.2f} (${remaining:.2f} to go!)"
                                     
                                     # 🚨 CRITICAL ALERT when hitting exact $0.20 target
-                                    if current_profit >= profit_target and last_profit < profit_target:
-                                        logger.error(f"🚨 $0.20 TARGET HIT: {symbol} {mt5_ticket} = ${current_profit:.2f} - SHOULD CLOSE IMMEDIATELY!")
+                                                                        if current_profit >= profit_target
+                                        and last_profit < profit_target:
+                                        f"🚨 $0.20 TARGET HIT: {symbol}"
+                                        f"{mt5_ticket} = ${current_profit:.2f} - SHOULD CLOSE IMMEDIATELY!"
                                         
                                     # 🚨 MAJOR ALERT when $0.20 target exceeded
                                     if current_profit > profit_target:
                                         excess = current_profit - profit_target
-                                        logger.error(f"🚨 $0.20 TARGET EXCEEDED: {symbol} {mt5_ticket} = ${current_profit:.2f} (+${excess:.2f} over $0.20 target) - WHY NOT CLOSED?")
+                                        f"🚨 $0.20 TARGET EXCEEDED: {symbol}"
+                                        f"{mt5_ticket} = ${current_profit:.2f} (+${excess:.2f} over $0.20 target) - WHY NOT CLOSED?"
                                     
                                     # Update last profit
                                     profit_history[mt5_ticket]['last_profit'] = current_profit
@@ -4941,7 +5168,8 @@ async def debug_current_trades():
                     
                     # Check if this trade should be closed
                     if profit >= 2.0:
-                        print(f"🚨 WARNING: Trade {mt5_ticket} should be closed! (${profit:.2f} >= $2.00)")
+                        f"🚨 WARNING: Trade {mt5_ticket}"
+                        f"should be closed! (${profit:.2f} >= $2.00)"
             else:
                 print(f"⚠️ MT5 interface not available for {trade_id}")
                 
@@ -5003,7 +5231,8 @@ def check_loss_protection_status() -> Optional[Dict[str, Union[bool, float]]]:
         print(f"   Current Profit: ${current_profit:+.2f}")
         print(f"   Loss Threshold: -${LOSS_PROTECTION_THRESHOLD:.2f}")
         print(f"   Emergency Threshold: -${LOSS_PROTECTION_MAX_THRESHOLD:.2f}")
-        print(f"   Loss Status: {('SAFE' if current_profit > -LOSS_PROTECTION_THRESHOLD else 'AT RISK')}")
+                print(f"   Loss Status: {('SAFE' if current_profit > "
+        "-LOSS_PROTECTION_THRESHOLD else 'AT RISK')}")
         
         return {
             'enabled': bot.loss_protection_enabled,

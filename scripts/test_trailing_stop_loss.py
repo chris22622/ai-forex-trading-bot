@@ -33,7 +33,8 @@ async def test_trailing_stop_loss():
             trail_step=5.0
         )
 
-        print(f"📈 BUY Position: Entry={entry_price:.5f}, Initial Stop={trailing_stop.stop_loss:.5f}")
+        f"📈 BUY Position: Entry={entry_price:.5f}"
+        f" Initial Stop={trailing_stop.stop_loss:.5f}"
 
         # Test price movements
         test_prices = [
@@ -48,7 +49,8 @@ async def test_trailing_stop_loss():
         for price in test_prices:
             result = trailing_stop.update(price)
             pips_move = (price - entry_price) * 10000
-            print(f"   Price: {price:.5f} ({pips_move:+.1f} pips) - Stop: {trailing_stop.stop_loss:.5f}")
+            f"   Price: {price:.5f}"
+            f"({pips_move:+.1f} pips) - Stop: {trailing_stop.stop_loss:.5f}"
             if result['reason']:
                 print(f"   📊 {result['reason']}")
             if result['should_close']:
@@ -77,7 +79,8 @@ async def test_trailing_stop_loss():
         for price in sell_test_prices:
             result = trailing_stop_sell.update(price)
             pips_move = (1.1000 - price) * 10000
-            print(f"   Price: {price:.5f} ({pips_move:+.1f} pips) - Stop: {trailing_stop_sell.stop_loss:.5f}")
+            f"   Price: {price:.5f}"
+            f"({pips_move:+.1f} pips) - Stop: {trailing_stop_sell.stop_loss:.5f}"
             if result['reason']:
                 print(f"   📊 {result['reason']}")
             if result['should_close']:

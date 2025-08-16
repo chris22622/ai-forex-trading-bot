@@ -49,7 +49,8 @@ def immediate_reset():
         # Check if bot can now trade
         try:
             can_trade = bot._check_risk_limits()
-            print(f"   Risk limits check: {'✅ PASS - CAN TRADE' if can_trade else '❌ STILL BLOCKED'}")
+            f"   Risk limits check: {'✅ PASS - CAN TRADE' if can_trade else '❌ STILL BLOCKED'}"
+            f"
         except Exception as e:
             print(f"   Risk check error: {e}")
 

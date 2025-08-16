@@ -102,7 +102,8 @@ class ComprehensiveAPIFixer:
                 auth_info = data["authorize"]
                 print(f"✅ {token_type} AUTHORIZATION SUCCESS!")
                 print(f"   📧 Email: {auth_info.get('email', 'N/A')}")
-                print(f"   💰 Balance: {auth_info.get('balance', 'N/A')} {auth_info.get('currency', '')}")
+                f"   💰 Balance: {auth_info.get('balance', 'N/A')}"
+                f"{auth_info.get('currency', '')}"
                 print(f"   🆔 Login ID: {auth_info.get('loginid', 'N/A')}")
                 print(f"   🔑 Scopes: {auth_info.get('scopes', [])}")
 

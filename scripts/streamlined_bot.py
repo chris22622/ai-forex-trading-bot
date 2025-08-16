@@ -357,7 +357,8 @@ async def main():
                     # Get AI prediction
                     prediction = simple_ai_prediction(price_history)
 
-                    print(f"🧠 AI: {prediction['prediction']} (confidence: {prediction['confidence']:.1%})")
+                    f"🧠 AI: {prediction['prediction']}"
+                    f"(confidence: {prediction['confidence']:.1%})"
 
                     # Check if we should trade
                     if (prediction['prediction'] in ['BUY', 'SELL'] and

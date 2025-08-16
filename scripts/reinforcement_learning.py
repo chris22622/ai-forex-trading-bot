@@ -233,7 +233,8 @@ class DQNAgent:
                  learning_rate: float = 0.001, memory_size: int = 10000):
 
         if not HAS_TENSORFLOW:
-            raise ImportError("TensorFlow required for DQN agent. Please install tensorflow or use Q-Learning instead.")
+                        raise ImportError("TensorFlow required for DQN agent. Please install "
+            "tensorflow or use Q-Learning instead.")
 
         self.state_size = state_size
         self.action_size = action_size

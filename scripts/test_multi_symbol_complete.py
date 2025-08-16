@@ -45,7 +45,8 @@ async def test_multi_symbol_capabilities():
         test_confidence = 0.75
         base_amount = 10.0
         dynamic_size = bot.calculate_dynamic_position_size(base_amount, test_confidence)
-        print(f"✅ POSITION SIZING: ${base_amount} → ${dynamic_size:.2f} (conf: {test_confidence:.0%})")
+        f"✅ POSITION SIZING: ${base_amount}"
+        f"→ ${dynamic_size:.2f} (conf: {test_confidence:.0%})"
 
         # Test symbol data structure
         sample_symbols = ["R_50", "R_75", "EURUSD", "XAUUSD", "BTCUSD"]

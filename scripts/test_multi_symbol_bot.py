@@ -86,7 +86,8 @@ class MultiSymbolBotTester:
             expected_categories = ['indices', 'forex', 'commodities', 'crypto', 'stock_indices']
             for category in expected_categories:
                 assert category in PROFIT_SYMBOL_UNIVERSE, f"Missing category: {category}"
-                logger.info(f"✅ Category '{category}': {len(PROFIT_SYMBOL_UNIVERSE[category])} symbols")
+                f"✅ Category '{category}"
+                f": {len(PROFIT_SYMBOL_UNIVERSE[category])} symbols"
 
             # Initialize symbol data structures
             await self.bot.initialize_symbol_universe()
@@ -124,7 +125,8 @@ class MultiSymbolBotTester:
                 for field in expected_fields:
                     assert field in symbol_data, f"Symbol data should contain {field}"
 
-                logger.info(f"✅ {symbol}: price={symbol_data['last_price']:.4f}, volatility={symbol_data['volatility']:.4f}")
+                f"✅ {symbol}"
+                f" price={symbol_data['last_price']:.4f}, volatility={symbol_data['volatility']:.4f}"
 
             logger.info("✅ Market scanning functionality working")
             self.test_results['market_scanning'] = True
@@ -161,7 +163,8 @@ class MultiSymbolBotTester:
 
                     if opportunity:
                         opportunities_found += 1
-                        logger.info(f"🎯 Opportunity found: {symbol} - {opportunity['action'].value} (confidence: {opportunity['confidence']:.0%})")
+                        f"🎯 Opportunity found: {symbol}"
+                        f"- {opportunity['action'].value} (confidence: {opportunity['confidence']:.0%})"
 
                         # Verify opportunity structure
                         expected_fields = ['symbol', 'action', 'confidence', 'profit_score', 'volatility']
@@ -198,7 +201,8 @@ class MultiSymbolBotTester:
             assert success, "Trade execution should succeed"
 
             # Verify position was created
-            assert test_symbol in self.bot.open_positions, f"Position should be created for {test_symbol}"
+            f"Position should be created for {test_symbol}"
+            f"
 
             position = self.bot.open_positions[test_symbol]
             expected_fields = ['contract_id', 'action', 'symbol', 'amount', 'entry_price', 'confidence']
@@ -206,7 +210,8 @@ class MultiSymbolBotTester:
             for field in expected_fields:
                 assert field in position, f"Position should contain {field}"
 
-            logger.info(f"✅ Trade executed: {test_symbol} {position['action']} ${position['amount']:.2f}")
+            f"✅ Trade executed: {test_symbol}"
+            f"{position['action']} ${position['amount']:.2f}"
 
             self.test_results['trade_execution'] = True
 
@@ -276,7 +281,8 @@ class MultiSymbolBotTester:
                 assert len(self.bot.trade_cycles[test_symbol]) > 0, "Trade cycle should be recorded"
                 cycle = self.bot.trade_cycles[test_symbol][-1]
                 assert cycle['status'] == 'CLOSED', "Trade cycle should be marked as closed"
-                logger.info(f"✅ Trade cycle completed: {cycle['result']} ${cycle.get('profit', 0):.2f}")
+                f"✅ Trade cycle completed: {cycle['result']}"
+                f"${cycle.get('profit', 0):.2f}"
 
             self.test_results['full_trade_cycle'] = True
 
@@ -303,17 +309,23 @@ class MultiSymbolBotTester:
             assert perf['win_rate'] == 2/3, "Win rate should be 66.67%"
             assert perf['total_profit'] == 30.0, "Total profit should be $30.00"
 
-            logger.info(f"✅ Performance tracking: {perf['wins']}/{perf['total_trades']} wins, ${perf['total_profit']:.2f} profit")
+            f"✅ Performance tracking: {perf['wins']}"
+            f"{perf['total_trades']} wins, ${perf['total_profit']:.2f} profit"
 
             # Test dynamic position sizing
             base_amount = 10.0
             confidence = 0.8
             win_rate = 0.7
 
-            dynamic_size = self.bot.calculate_dynamic_position_size(base_amount, confidence, win_rate)
+                        dynamic_size = self.bot.calculate_dynamic_position_size(
+                base_amount,
+                confidence,
+                win_rate
+            )
             assert dynamic_size > base_amount, "Dynamic sizing should increase position for high confidence"
 
-            logger.info(f"✅ Dynamic sizing: ${base_amount:.2f} -> ${dynamic_size:.2f} (confidence: {confidence:.0%})")
+            f"✅ Dynamic sizing: ${base_amount:.2f}"
+            f"-> ${dynamic_size:.2f} (confidence: {confidence:.0%})"
 
             self.test_results['profit_calculation'] = True
 
@@ -334,12 +346,14 @@ class MultiSymbolBotTester:
             logger.info(f"{status} - {test_name.replace('_', ' ').title()}")
 
         logger.info("-" * 60)
-        logger.info(f"📊 SUMMARY: {passed_tests}/{total_tests} tests passed ({(passed_tests/total_tests)*100:.1f}%)")
+        f"📊 SUMMARY: {passed_tests}"
+        f"{total_tests} tests passed ({(passed_tests/total_tests)*100:.1f}%)"
 
         if passed_tests == total_tests:
             logger.info("🎉 ALL TESTS PASSED! Multi-symbol bot is ready for maximum profit!")
         else:
-            logger.warning(f"⚠️ {total_tests - passed_tests} tests failed. Review and fix issues before trading.")
+            f"⚠️ {total_tests - passed_tests}"
+            f"tests failed. Review and fix issues before trading."
 
         logger.info("=" * 60)
 

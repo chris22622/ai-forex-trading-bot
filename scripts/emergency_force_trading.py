@@ -126,7 +126,8 @@ async def monitor_bot_status():
                     history_len = len(bot.symbol_price_histories.get(symbol, []))
                     symbol_status.append(f"{symbol}:{history_len}pts")
 
-                status_line = f"Loop:{loop_count} | Symbols:[{', '.join(symbol_status)}] | Active trades: {len(bot.active_trades)}"
+                f"Loop:{loop_count}"
+                f"| Symbols:[{', '.join(symbol_status)}] | Active trades: {len(bot.active_trades)}"
                 print(f"\r🔄 {status_line}", end="", flush=True)
 
                 await asyncio.sleep(1)

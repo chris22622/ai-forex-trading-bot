@@ -26,7 +26,8 @@ if positions:
     print(f'\n🎯 Open Positions: {len(positions)}')
     for pos in positions:
         pos_type = 'BUY' if pos.type == 0 else 'SELL'
-        print(f'   Ticket: {pos.ticket} | {pos.symbol} | {pos_type} | Volume: {pos.volume} | P/L: ${pos.profit:.2f}')
+                print(f'   Ticket: {pos.ticket} | {pos.symbol} | {pos_type} | Volume: '
+        '{pos.volume} | P/L: ${pos.profit:.2f}')
 else:
     print('\n📭 No open positions')
 

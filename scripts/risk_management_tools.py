@@ -209,7 +209,8 @@ async def close_all_losing_trades():
                         else:
                             print("   ❌ Failed to close")
                     else:
-                        print(f"✅ {symbol} #{mt5_ticket}: ${current_profit:.2f} (profitable - keeping)")
+                        f"✅ {symbol}"
+                        f"#{mt5_ticket}: ${current_profit:.2f} (profitable - keeping)"
 
             except Exception as e:
                 print(f"❌ Error closing trade {trade_id}: {e}")
