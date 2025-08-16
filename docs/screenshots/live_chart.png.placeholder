@@ -1,0 +1,9 @@
+# This is a placeholder for live_chart.png
+# Replace this file with an actual screenshot of the live price chart
+
+To generate this screenshot:
+1. Run: streamlit run ui/streamlit_app.py
+2. Start Demo mode
+3. Wait for chart to populate with data
+4. Take a screenshot of the price chart section
+5. Save as live_chart.png in this directory

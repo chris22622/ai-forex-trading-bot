@@ -1,0 +1,7 @@
+# This is a placeholder for streamlit_dashboard.png
+# Replace this file with an actual screenshot of the Streamlit dashboard
+
+To generate this screenshot:
+1. Run: streamlit run ui/streamlit_app.py
+2. Take a screenshot of the main dashboard
+3. Save as streamlit_dashboard.png in this directory

@@ -1,0 +1,9 @@
+# This is a placeholder for ai_signals.png
+# Replace this file with an actual screenshot of the AI trading signals in logs
+
+To generate this screenshot:
+1. Run: streamlit run ui/streamlit_app.py
+2. Start Demo mode
+3. Wait for AI signals to appear in the logs section
+4. Take a screenshot showing the trading signals
+5. Save as ai_signals.png in this directory

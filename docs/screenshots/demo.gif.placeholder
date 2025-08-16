@@ -1,0 +1,18 @@
+# This is a placeholder for demo.gif
+# Replace this file with an actual GIF recording of the Streamlit UI
+
+To generate this GIF:
+1. Use screen recording software (OBS Studio, LICEcap, etc.)
+2. Run: streamlit run ui/streamlit_app.py
+3. Record 15-20 seconds of:
+   - Starting Demo mode
+   - Chart updating with live data
+   - AI signals appearing in logs
+   - UI interactions
+4. Export as demo.gif and save in this directory
+
+Recommended recording settings:
+- Duration: 15-20 seconds
+- Resolution: 800px width max
+- Frame rate: 10-15 fps
+- File size: <2MB for GitHub
