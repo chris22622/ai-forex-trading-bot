@@ -20,6 +20,12 @@ from typing import Any, Deque, Dict, List, Optional, Tuple, Union
 import numpy as np
 from numpy.typing import NDArray
 
+# Safe MetaTrader5 import (prevents crashes on Linux)
+try:
+    import MetaTrader5 as mt5  # type: ignore
+except Exception:
+    mt5 = None
+
 import config
 
 # Try to import joblib for model persistence

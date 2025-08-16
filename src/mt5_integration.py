@@ -152,9 +152,18 @@ class MT5TradingInterface:
         self.magic_number = 234000  # Unique identifier for our bot trades
         self.slippage = 3  # Price slippage tolerance
 
+        # Check MT5 availability
+        if not mt5_available or mt5 is None:
+            logger.warning("⚠️ MetaTrader5 not available on this platform. Demo mode recommended.")
+
     async def initialize(self) -> bool:
         """Initialize MetaTrader 5 connection with proper async handling"""
         try:
+            # Check if MT5 is available
+            if not mt5_available or mt5 is None:
+                logger.error("❌ MetaTrader5 not available on this platform. Use Windows for live trading.")
+                return False
+
             logger.info("🔄 Initializing MetaTrader 5 connection...")
 
             # Run blocking MT5 calls in thread pool
