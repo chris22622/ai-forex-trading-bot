@@ -41,9 +41,10 @@ def log(msg: str):
     with LOG_FILE.open("a", encoding="utf-8") as f:
         f.write(line + "\n")
     try:
-        st.session_state.log_q.put_nowait(line)
-    except queue.Full:
-        pass
+        if hasattr(st.session_state, 'log_q') and st.session_state.log_q is not None:
+            st.session_state.log_q.put_nowait(line)
+    except (AttributeError, queue.Full):
+        pass  # Ignore session state errors in background threads
 
 
 # --- Demo engine (no MT5 required) ---
@@ -130,9 +131,9 @@ with st.sidebar:
     st.divider()
     st.markdown("**Notes**")
     st.markdown(
-                "- Demo works anywhere.\n- Live requires Windows +
-            MetaTrader5 installed +
-            your bot configured."
+        "- Demo works anywhere.\n- Live requires Windows + "
+        "MetaTrader5 installed + "
+        "your bot configured."
     )
 
 # --- Start/Stop handlers ---
