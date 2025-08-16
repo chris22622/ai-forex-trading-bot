@@ -8,16 +8,28 @@ This guide helps you optimize your GitHub repository settings for maximum visibi
 Set this in your GitHub repository settings:
 
 ```
-AI-powered MT5 trading bot with ensemble ML models, Streamlit UI, and advanced risk management.
+AI-powered MT5 trading bot with Streamlit UI & risk controls.
 ```
 
 ### 🏷️ Repository Topics
 Add these topics to help people discover your repository:
 
+**Primary Topics:**
 ```
 python
+streamlit  
 trading-bot
+ai
+automation
+```
+
+**Additional Suggested Topics:**
+```
+forex
+machine-learning
 metatrader5
+risk-management
+algorithmic-trading
 ai
 streamlit
 machine-learning
