@@ -5,6 +5,18 @@
 The AI Forex Trading Bot follows a clean, modular architecture with clear separation of concerns:
 
 ```
+    [ Streamlit UI ]
+            ↓
+      config → main bot engine
+            ↙       ↘
+      AI models   Risk manager
+            ↘       ↙
+      MT5 API (LIVE mode)
+```
+
+**Detailed Architecture:**
+
+```
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │   Data In   │───▶│ Indicators  │───▶│     AI      │───▶│    Risk     │───▶│    MT5      │
 │  (MT5 API)  │    │  /Features  │    │  Ensemble   │    │  Manager    │    │   Exec      │
