@@ -9,7 +9,14 @@ import time
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
-import MetaTrader5 as mt5  # type: ignore
+# Import MetaTrader5 conditionally for cross-platform compatibility
+try:
+    import MetaTrader5 as mt5  # type: ignore
+    mt5_available = True
+except ImportError:
+    mt5_available = False
+    mt5 = None
+
 import pandas as pd
 
 # Use standard logging to avoid potential circular imports
