@@ -734,7 +734,8 @@ class MT5TradingInterface:
 
                 if symbol_info is None:
                     logger.error(
-                        f"❌ Symbol {effective_symbol} not available in MT5 - tried all alternatives"
+                        f"❌ Symbol {effective_symbol} not available in MT5 - "
+                        f"tried all alternatives"
                     )
                     return None
 
@@ -958,8 +959,8 @@ class MT5TradingInterface:
                             f"failed: {result.retcode} - {error_msg} (Filling: {filling_type})"
                         )
 
-                                                # 🎯 ROBUST FILLING TYPE HANDLING
-                            - Continue trying other filling types for 10030
+                        # 🎯 ROBUST FILLING TYPE HANDLING
+                        # Continue trying other filling types for 10030
                         if result.retcode == 10030:  # Invalid order filling type
                             logger.info(
                                 f"🔄 Filling type {filling_type} not supported, trying next..."
@@ -1108,8 +1109,8 @@ class MT5TradingInterface:
                 # Use risk amount as a base but ensure proper minimum lot sizes
                 lot_size = risk_amount / 50.0  # More reasonable calculation for volatility indices
 
-                                # Ensure reasonable minimum for volatility indices (
-                    Deriv typically needs at least 0.1)
+                # Ensure reasonable minimum for volatility indices
+                # (Deriv typically needs at least 0.1)
                 lot_size = max(lot_size, 0.1)  # Increased minimum for Deriv compatibility
 
             elif "Boom" in effective_symbol or "Crash" in effective_symbol:
@@ -1427,10 +1428,7 @@ class MT5TradingInterface:
                     logger.error(f"❌ All close methods failed for {ticket}")
                     logger.error(f"   Method 1 error: {result.retcode}")
                     logger.error(f"   Method 2 error: {result2.retcode if result2 else 'None'}")
-                    logger.error(
-                        f"   Method 3 error: {result3.retcode if 'result3' in locals() and result3 else 'None'}"
-                        f"
-                    )
+                    logger.error(f"   Method 3 error: {result3.retcode if 'result3' in locals() and result3 else 'None'}")
                     return False
 
         except Exception as e:

@@ -173,8 +173,10 @@ def enhanced_demo_engine(stop: threading.Event, config: Dict):
                     ignore_index=True
                 )
                 
-                f"💰 {action}"
-                f"{symbol} @ {current_price:.4f} | Profit: ${profit:+.2f} | Confidence: {confidence:.1%}"
+                log(
+                    f"💰 {action} "
+                    f"{symbol} @ {current_price:.4f} | Profit: ${profit:+.2f} | Confidence: {confidence:.1%}"
+                )
             
             time.sleep(random.uniform(2, 8))  # Variable delay
             

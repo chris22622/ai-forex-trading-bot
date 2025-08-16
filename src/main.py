@@ -428,7 +428,7 @@ def filter_tradeable_symbols(available_symbols: List[str], max_safe_lot: float =
     if tradeable_symbols:
         logger.info(
             f"🎯 Using safe symbols: {tradeable_symbols[:3]}"
-            f"'...' if len(tradeable_symbols) > 3 else ''}"
+            f"{'...' if len(tradeable_symbols) > 3 else ''}"
         )
     else:
         logger.warning(
@@ -1798,8 +1798,8 @@ class TradingBot:
         # 🚀 PROFESSIONAL HFT COMPONENTS - PHASE 1 INTEGRATION
         self.ultra_fast_order_manager = None  # Will be initialized after MT5 interface
         self.advanced_position_sizer = AdvancedPositionSizer()
-                # 🧠 PRODUCTION FIX 3: Intelligent adaptive monitoring (
-            replaces CPU-pegging nanosecond engine)
+        
+        # 🧠 PRODUCTION FIX 3: Intelligent adaptive monitoring (replaces CPU-pegging nanosecond engine)
         self.intelligent_profit_monitor = IntelligentProfitMonitor()
 
         # 🛡️ PRODUCTION FIX 5: Throttled MT5 request manager (all MT5 calls through async interface)
@@ -3306,8 +3306,7 @@ class TradingBot:
             # Check if we have sufficient price data
             if not hasattr(self.indicators, "price_data") or len(self.indicators.price_data) < 5:
                 logger.warning(
-                                        f"⚠️ Insufficient price data for indicators: {len(getattr(self.indicators, "
-                    "'price_data', []))} points"
+                    f"⚠️ Insufficient price data for indicators: {len(getattr(self.indicators, 'price_data', []))} points"
                 )
                 return {}
 
@@ -3634,11 +3633,9 @@ class TradingBot:
                 logger.warning(f"   Potential loss saved: ${total_saved:.2f}")
                 logger.warning(
                     f"   Total trades auto-closed: {self.risk_management_stats['trades_auto_closed']}"
-                    f"
                 )
                 logger.warning(
                     f"   Total saved this session: ${self.risk_management_stats['total_saved_loss']:.2f}"
-                    f"
                 )
 
         except Exception as e:
@@ -7454,8 +7451,7 @@ def check_loss_protection_status() -> Optional[Dict[str, Union[bool, float]]]:
         print(f"   Loss Threshold: -${LOSS_PROTECTION_THRESHOLD:.2f}")
         print(f"   Emergency Threshold: -${LOSS_PROTECTION_MAX_THRESHOLD:.2f}")
         print(
-                        f"   Loss Status: {('SAFE' if current_profit > "
-            "-LOSS_PROTECTION_THRESHOLD else 'AT RISK')}"
+            f"   Loss Status: {('SAFE' if current_profit > -LOSS_PROTECTION_THRESHOLD else 'AT RISK')}"
         )
 
         return {
@@ -7532,8 +7528,7 @@ def is_demo_training_mode() -> bool:
         print(f"🎯 Demo Training Mode: {'ACTIVE' if is_demo else 'INACTIVE'}")
         if is_demo:
             print(
-                f"🧠 AI Learning: {getattr(bot, 'session_stats', {}"
-                f".get('total_trades', 0)} trades completed"
+                f"🧠 AI Learning: {getattr(bot, 'session_stats', {}).get('total_trades', 0)} trades completed"
             )
             print(f"📊 Current P&L: ${bot.current_balance - bot.starting_balance:+.2f}")
 
